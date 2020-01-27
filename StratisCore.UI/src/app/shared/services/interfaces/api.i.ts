@@ -136,11 +136,6 @@ export interface StakingInfo {
   expectedTime: number;
 }
 
-export interface ColdStakingInfo {
-  coldWalletAccountExists: boolean;
-  hotWalletAccountExists: boolean;
-}
-
 export interface GeneralInfo {
   walletName: string;
   walletFilePath: string;
@@ -155,3 +150,36 @@ export interface GeneralInfo {
   percentSynced? : number;
 }
 
+export interface GetColdStakingInfo {
+  coldWalletAccountExists: boolean;
+  hotWalletAccountExists: boolean;
+}
+
+export interface PostColdStakingAccount {
+  walletName: string;
+  walletPassword: string;
+  isColdWalletAccount: boolean;
+}
+
+export interface PostSetupColdStaking {
+  coldWalletAddress: string;
+  hotWalletAddress: string;
+  walletName: string;
+  walletPassword: string;
+  walletAccount: string;
+  amount: string;
+  fees: string;
+}
+
+export interface PostColdStakingWithdrawal {
+  receivingAddress: string;
+  walletName: string;
+  walletPassword: string;
+  amount: string;
+  fees: string;
+}
+
+export interface GetColdStakingAddress {
+  walletName: string;
+  isColdWalletAddress: boolean;
+}

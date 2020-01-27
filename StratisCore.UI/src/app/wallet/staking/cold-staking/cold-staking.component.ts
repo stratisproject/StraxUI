@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ColdStakingService } from '@shared/services/cold-staking-service';
-import { ColdStakingInfo } from '@shared/services/interfaces/api.i';
+import { GetColdStakingInfo } from '@shared/services/interfaces/api.i';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class ColdStakingComponent implements OnInit {
 
-  public coldStakingInfo: Observable<ColdStakingInfo>;
+  public coldStakingInfo: Observable<GetColdStakingInfo>;
   public isHot: boolean;
   public isCold: boolean;
 
