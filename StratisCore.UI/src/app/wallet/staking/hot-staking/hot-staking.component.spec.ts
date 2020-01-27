@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StakingOverviewComponent } from './overview.component';
+import { HotStakingComponent } from './hot-staking.component';
 
-describe('StakingOverviewComponent', () => {
-  let component: StakingOverviewComponent;
-  let fixture: ComponentFixture<StakingOverviewComponent>;
+describe('HotStakingComponent', () => {
+  let component: HotStakingComponent;
+  let fixture: ComponentFixture<HotStakingComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StakingOverviewComponent ]
+      declarations: [ HotStakingComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StakingOverviewComponent);
+    fixture = TestBed.createComponent(HotStakingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

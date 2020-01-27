@@ -1,0 +1,39 @@
+<div class="card card-staking" [attr.disabledcard]="!coldStakingService.hasColdStakingSetup">
+  <div class="stake-type text-right">
+    <span class="badge badge-cold ml-auto">Cold Wallet
+      <span data-placement="top" class="lnr lnr-question-circle ml-2"></span>
+    </span>
+  </div>
+  <div class="card-header">Balance</div>
+  <div class="card-body">
+    <p class="lead">
+      <strong>{{ 0 | coinNotation }}</strong>
+    </p>
+  </div>
+  <div class="card-header">
+    <h1 class="text-center soon-text">Coming soon</h1>
+  </div>
+  <div class="card-header">Spendable</div>
+  <div class="card-body">
+    <p class="sub">{{ 0 | coinNotation}}</p>
+  </div>
+  <div class="card-header">isHot</div>
+  <div class="card-body">
+    <p class="sub">{{ isHot }}</p>
+  </div>
+  <div class="card-header">isCold</div>
+  <div class="card-body">
+    <p class="sub">{{ isCold }}</p>
+  </div>
+  <div class="card-footer">
+    <div class="row justify-content-center">
+      <button [disabled]="true" type="button" class="btn btn-outline-primary col-4"
+              (click)="withdrawClicked()">Withdraw
+      </button>
+      <button [disabled]="true" type="button" class="btn btn-outline-primary col-7 ml-2"
+              (click)="unusedAddressClicked()">Get
+        first unused address
+      </button>
+    </div>
+  </div>
+</div>

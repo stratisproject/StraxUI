@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardService } from 'ngx-clipboard';
 
-import { ColdStakingServiceBase } from '../../../cold-staking.service';
 import { GlobalService } from '@shared/services/global.service';
+import { ColdStakingService } from '@shared/services/cold-staking-service';
 
 @Component({
     selector: 'app-create-address',
@@ -12,14 +12,14 @@ import { GlobalService } from '@shared/services/global.service';
 })
 export class ColdStakingCreateAddressComponent implements OnInit {
 
-    constructor(private globalService: GlobalService, private stakingService: ColdStakingServiceBase,
+    constructor(private globalService: GlobalService, private coldStakingService: ColdStakingService,
         private activeModal: NgbActiveModal, private clipboardService: ClipboardService) { }
 
     address = '';
     addressCopied = false;
 
     ngOnInit(): void {
-        this.stakingService.GetAddress(this.globalService.getWalletName()).subscribe(x => this.address = x);
+        //this.coldStakingService.GetAddress(this.globalService.getWalletName()).subscribe(x => this.address = x);
     }
 
     closeClicked(): void {

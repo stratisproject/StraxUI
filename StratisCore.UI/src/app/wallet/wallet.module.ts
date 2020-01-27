@@ -26,13 +26,6 @@ import { WalletSelectorComponent } from './wallet-selector/wallet-selector.compo
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { SnackbarModule } from 'ngx-snackbar';
 import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
-import { ColdStakingServiceBase, FakeColdStakingService } from './cold-staking/cold-staking.service';
-import { ColdStakingOverviewComponent } from './cold-staking/components/overview/overview.component';
-import { ColdStakingWalletComponent } from './cold-staking/components/overview/wallet/wallet.component';
-import { ColdStakingCreateAddressComponent } from './cold-staking/components/modals/create-address/create-address.component';
-import { ColdStakingWithdrawComponent } from './cold-staking/components/modals/withdraw/withdraw.component';
-import { ColdStakingCreateComponent } from './cold-staking/components/modals/create/create.component';
-import { ColdStakingCreateSuccessComponent } from './cold-staking/components/modals/create-success/create-success.component';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { SideBarItem, SimpleSideBarItem } from '@shared/components/side-bar/side-bar-item-base';
 import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
@@ -40,6 +33,9 @@ import { AddressBookCardComponent } from './address-book-card/address-book-card.
 import { AddNodeComponent } from './advanced/components/add-node/add-node.component';
 import { TransactionDetailsModalComponent } from './transaction-details-modal/transaction-details-modal.component';
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
+import { StakingComponent } from './staking/staking.component';
+import { HotStakingComponent } from './staking/hot-staking/hot-staking.component';
+import { ColdStakingComponent } from './staking/cold-staking/cold-staking.component';
 
 @NgModule({
   imports: [
@@ -70,19 +66,15 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
     TransactionsComponent,
     WalletSelectorComponent,
     BlockExplorerComponent,
-    ColdStakingOverviewComponent,
-    ColdStakingWalletComponent,
-    ColdStakingCreateAddressComponent,
-    ColdStakingWithdrawComponent,
-    ColdStakingCreateComponent,
-    ColdStakingCreateSuccessComponent,
     AddressBookCardComponent,
     AddNodeComponent,
-    TransactionDetailsModalComponent
+    TransactionDetailsModalComponent,
+    StakingComponent,
+    HotStakingComponent,
+    ColdStakingComponent
   ],
   providers: [
     AccountSelectedGuard,
-    { provide: ColdStakingServiceBase, useClass: FakeColdStakingService },
     AccountSidebarItem,
     StakingSidebarItem
   ],
@@ -93,11 +85,7 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
     TransactionDetailsComponent,
     LogoutConfirmationComponent,
     AddNodeComponent,
-    ResyncComponent,
-    ColdStakingCreateAddressComponent,
-    ColdStakingWithdrawComponent,
-    ColdStakingCreateComponent,
-    ColdStakingCreateSuccessComponent
+    ResyncComponent
   ]
 })
 

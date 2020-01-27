@@ -136,6 +136,11 @@ export interface StakingInfo {
   expectedTime: number;
 }
 
+export interface ColdStakingInfo {
+  coldWalletAccountExists: boolean;
+  hotWalletAccountExists: boolean;
+}
+
 export interface GeneralInfo {
   walletName: string;
   walletFilePath: string;

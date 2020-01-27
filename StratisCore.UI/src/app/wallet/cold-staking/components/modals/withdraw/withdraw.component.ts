@@ -1,10 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
-
-import { ColdStakingServiceBase } from '../../../cold-staking.service';
-
-type FeeType = { id: number; display: string };
+import { ColdStakingService } from '@shared/services/cold-staking-service';
 
 @Component({
     selector: 'app-withdraw',
@@ -20,15 +17,8 @@ export class ColdStakingWithdrawComponent implements OnInit {
     amountSpendableFormatted = '';
     passwordValid = false;
     canWithdraw = false;
-    feeTypes: FeeType[] = [
-        { id: 0, display: 'Low - 0.0001 STRAT' },
-        { id: 1, display: 'Medium - 0.001 STRAT' },
-        { id: 2, display: 'High - 0.01 STRAT' },
-    ];
-    selectedFeeType: FeeType;
 
-    constructor(private globalService: GlobalService, private stakingService: ColdStakingServiceBase, private activeModal: NgbActiveModal) {
-        this.selectedFeeType = this.feeTypes[1];
+    constructor(private globalService: GlobalService, private coldStakingService: ColdStakingService, private activeModal: NgbActiveModal) {
     }
 
     @Input()
@@ -67,10 +57,10 @@ export class ColdStakingWithdrawComponent implements OnInit {
     ngOnInit(): void {
         this.setCanWithdraw();
 
-        this.stakingService.GetInfo(this.globalService.getWalletName()).subscribe(x => {
-            this._amountSpendable = x.coldWalletAmount;
-            this.amountSpendableFormatted = this._amountSpendable.toLocaleString();
-        });
+        // this.coldStakingService.GetInfo(this.globalService.getWalletName()).subscribe(x => {
+        //     this._amountSpendable = x.coldWalletAmount;
+        //     this.amountSpendableFormatted = this._amountSpendable.toLocaleString();
+        // });
     }
 
     withdrawClicked(): void {

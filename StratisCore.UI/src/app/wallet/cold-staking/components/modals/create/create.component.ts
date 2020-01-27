@@ -1,13 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { GlobalService } from '@shared/services/global.service';
-
-import { ColdStakingServiceBase } from '../../../cold-staking.service';
-import { ColdStakingCreateSuccessComponent } from '../create-success/create-success.component';
 import { Router } from '@angular/router';
 
-type FeeType = { id: number; display: string };
+import { GlobalService } from '@shared/services/global.service';
+import { ColdStakingService } from '@shared/services/cold-staking-service';
+import { ColdStakingCreateSuccessComponent } from '../create-success/create-success.component';
+
 enum HotColdWallet { Hot = 1, Cold }
 
 @Component({
@@ -23,18 +21,11 @@ export class ColdStakingCreateComponent {
     passwordValid = false;
     canCreate = false;
     opacity = 1;
-    feeTypes: FeeType[] = [
-        { id: 0, display: 'Low - 0.0001 STRAT' },
-        { id: 1, display: 'Medium - 0.001 STRAT' },
-        { id: 2, display: 'High - 0.01 STRAT' },
-    ];
-    selectedFeeType: FeeType;
     HotColdWalletEnum = HotColdWallet;
     hotColdWalletSelection = HotColdWallet.Hot;
 
-    constructor(private globalService: GlobalService, private stakingService: ColdStakingServiceBase,
+    constructor(private globalService: GlobalService, private coldStakingService: ColdStakingService,
         private activeModal: NgbActiveModal, private modalService: NgbModal, private routerService: Router) {
-        this.selectedFeeType = this.feeTypes[1];
         this.setCanCreate();
     }
 
@@ -72,14 +63,14 @@ export class ColdStakingCreateComponent {
     }
 
     public createClicked(): void {
-        this.stakingService.CreateColdstaking(this.globalService.getWalletName())
-            .subscribe(success => {
-                if (success) {
-                    this.opacity = .5;
-                    this.modalService.open(ColdStakingCreateSuccessComponent, { backdrop: 'static' }).result
-                        .then(() => this.activeModal.close());
-                }
-            });
+        // this.coldStakingService.CreateColdstaking(this.globalService.getWalletName())
+        //     .subscribe(success => {
+        //         if (success) {
+        //             this.opacity = .5;
+        //             this.modalService.open(ColdStakingCreateSuccessComponent, { backdrop: 'static' }).result
+        //                 .then(() => this.activeModal.close());
+        //         }
+        //     });
     }
 
     closeClicked = (): void => this.activeModal.close();
