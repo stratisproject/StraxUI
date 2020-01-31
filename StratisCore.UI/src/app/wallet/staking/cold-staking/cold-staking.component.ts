@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ColdStakingService } from '@shared/services/cold-staking-service';
 import { GetColdStakingInfo } from '@shared/services/interfaces/api.i';
 import { Observable } from 'rxjs';
+import { DeploymentInfo } from '@shared/models/deployment-info';
 
 @Component({
   selector: 'app-cold-staking',
@@ -11,16 +12,12 @@ import { Observable } from 'rxjs';
 export class ColdStakingComponent implements OnInit {
 
   public coldStakingInfo: Observable<GetColdStakingInfo>;
-  public isHot: boolean;
-  public isCold: boolean;
+  public coldStakingDeploymentInfo: Observable<DeploymentInfo>;
 
   constructor(public coldStakingService: ColdStakingService) { }
 
   ngOnInit(): void {
     this.coldStakingInfo = this.coldStakingService.coldStakingInfo();
-    this.coldStakingInfo.subscribe(response => {
-      this.isHot = response.hotWalletAccountExists;
-      this.isCold = response.coldWalletAccountExists;
-    })
+    this.coldStakingDeploymentInfo = this.coldStakingService.coldStakingDeploymentInfo();
   }
 }

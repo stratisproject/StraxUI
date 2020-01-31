@@ -86,7 +86,7 @@ export class WalletService extends RestApi {
         this.refreshWallet();
       });
 
-    nodeService.generalInfo().subscribe(generalInfo => {
+    this.nodeService.generalInfo().subscribe(generalInfo => {
       if (generalInfo.percentSynced === 100 && this.rescanInProgress) {
         this.rescanInProgress = false;
         this.snackbarService.add({
@@ -231,6 +231,12 @@ export class WalletService extends RestApi {
     });
     const set = existingItems.concat(newItems);
     subject.next(set.sort((a, b) => b.timestamp - a.timestamp));
+  }
+
+  public broadcastTransaction(transactionHex: string): Observable<string> {
+    return this.post('wallet/send-transaction', new TransactionSending(transactionHex)).pipe(
+        catchError(err => this.handleHttpError(err))
+      );
   }
 
   public sendTransaction(transaction: Transaction): Promise<TransactionResponse> {

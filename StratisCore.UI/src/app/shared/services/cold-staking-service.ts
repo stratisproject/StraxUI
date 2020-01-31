@@ -11,28 +11,56 @@ import {
   ColdStakingInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
 import { catchError } from 'rxjs/operators';
+import { ConsensusService } from '@shared/services/consensus-service';
+import { DeploymentInfo } from '@shared/models/deployment-info';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ColdStakingService extends RestApi {
   private coldStakingInfoUpdatedSubject = new BehaviorSubject<GetColdStakingInfo>(null);
-  public hasColdStakingSetup = new BehaviorSubject<boolean>(false);
+  private coldStakingDeploymentInfoSubject: BehaviorSubject<DeploymentInfo> = new BehaviorSubject<DeploymentInfo>({
+    deploymentName: '',
+    deploymentIndex: 0,
+    stateValue: 0,
+    thresholdState: '',
+    height: 0,
+    sinceHeight: 0,
+    confirmationPeriod: 0,
+    periodStartHeight: 0,
+    periodEndHeight: 0,
+    votes: 0,
+    blocks: 0,
+    versions: {
+      '': 0
+    },
+    threshold: 0,
+    timeStart: '',
+    timeTimeOut: ''
+  });
+  public coldStakingActivated = false;
+  public hasColdStakingSetup = false;
   public canStake: boolean;
 
   constructor(
     http: HttpClient,
     globalService: GlobalService,
     signalRService: SignalRService,
+    consensusService: ConsensusService,
     errorService: ErrorService) {
     super(globalService, http, errorService);
 
     this.canStake = !globalService.getSidechainEnabled();
 
+    consensusService.getDeploymentFlags().toPromise().then(response => {
+      const coldStakingDeploymentInfo: DeploymentInfo = response.filter(x => x.deploymentName === "coldstaking")[0]
+      this.coldStakingDeploymentInfoSubject.next(coldStakingDeploymentInfo);
+    })
+
     signalRService.registerOnMessageEventHandler<ColdStakingInfoSignalREvent>(
       SignalREvents.ColdStakingInfo, (coldStakingInfo) => {
         if (coldStakingInfo.coldWalletAccountExists || coldStakingInfo.hotWalletAccountExists) {
-          this.hasColdStakingSetup.next(true);
+          this.hasColdStakingSetup = true;
         }
         this.coldStakingInfoUpdatedSubject.next(coldStakingInfo);
       }
@@ -41,6 +69,10 @@ export class ColdStakingService extends RestApi {
 
   public coldStakingInfo(): Observable<GetColdStakingInfo> {
     return this.coldStakingInfoUpdatedSubject.asObservable();
+  }
+
+  public coldStakingDeploymentInfo(): Observable<any> {
+    return this.coldStakingDeploymentInfoSubject.asObservable();
   }
 
   private invokePostColdStakingAccountApiCall(data: PostColdStakingAccount): Observable<any> {

@@ -22,6 +22,7 @@ import { SideBarComponent } from '@shared/components/side-bar/side-bar.component
 import { TaskBarComponent } from './components/task-bar/task-bar.component';
 import { TaskBarItemHostDirective } from '@shared/components/task-bar/task-bar-item-host-directive';
 import { TaskBarService } from '@shared/services/task-bar-service';
+import { ConsensusService } from './services/consensus-service';
 
 @NgModule({
   imports: [CommonModule],
@@ -43,7 +44,8 @@ import { TaskBarService } from '@shared/services/task-bar-service';
     WalletService,
     SignalRService,
     StakingService,
-    TaskBarService
+    TaskBarService,
+    ConsensusService
   ],
   exports: [
     CommonModule,
