@@ -20,4 +20,8 @@ export class ColdStakingComponent implements OnInit {
     this.coldStakingInfo = this.coldStakingService.coldStakingInfo();
     this.coldStakingDeploymentInfo = this.coldStakingService.coldStakingDeploymentInfo();
   }
+
+  onSetup(): void {
+    console.log("Setup cold staking");
+  }
 }
