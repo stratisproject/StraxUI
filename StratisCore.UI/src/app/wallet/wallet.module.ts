@@ -36,6 +36,7 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 import { StakingComponent } from './staking/staking.component';
 import { HotStakingComponent } from './staking/hot-staking/hot-staking.component';
 import { ColdStakingComponent } from './staking/cold-staking/cold-staking.component';
+import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ import { ColdStakingComponent } from './staking/cold-staking/cold-staking.compon
     TransactionDetailsModalComponent,
     StakingComponent,
     HotStakingComponent,
-    ColdStakingComponent
+    ColdStakingComponent,
+    BroadcastTransactionComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -85,7 +87,8 @@ import { ColdStakingComponent } from './staking/cold-staking/cold-staking.compon
     TransactionDetailsComponent,
     LogoutConfirmationComponent,
     AddNodeComponent,
-    ResyncComponent
+    ResyncComponent,
+    BroadcastTransactionComponent
   ]
 })
 
