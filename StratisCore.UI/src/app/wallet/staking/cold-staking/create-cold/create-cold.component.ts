@@ -18,7 +18,7 @@ export class CreateColdComponent implements OnInit, OnDestroy {
   private coldStakingForm: FormGroup;
   private subscriptions: Subscription[] = [];
   public address: string;
-  public fee = 2000; //Stratoshis
+  public fee = 20000; //Stratoshis
   public copied = false;
   public isConfirming = false;
   public confirmed = false;
@@ -26,7 +26,7 @@ export class CreateColdComponent implements OnInit, OnDestroy {
   public coinUnit: string;
   public transactionHex: string;
 
-  constructor(private globalService: GlobalService, private clipBoardService: ClipboardService, private coldStakingService: ColdStakingService, private fb: FormBuilder, public activeModal: NgbActiveModal) {
+  constructor(private globalService: GlobalService, private clipboardService: ClipboardService, private coldStakingService: ColdStakingService, private fb: FormBuilder, public activeModal: NgbActiveModal) {
     this.buildColdStakingForm();
    }
 
@@ -56,14 +56,20 @@ export class CreateColdComponent implements OnInit, OnDestroy {
           this.walletName,
           this.coldStakingForm.get("password").value,
           this.globalService.getWalletAccount(),
-          this.coldStakingForm.get('amount').value,
-          this.fee
+          this.coldStakingForm.get('amount').value - (this.fee / 100000000),
+          this.fee / 100000000
         )
         this.coldStakingService.invokePostSetupColdStakingApiCall(setupData).toPromise().then(response => {
           this.transactionHex = response.transactionHex;
+          this.confirmed = true;
         }, () => this.isConfirming = false)
       }, () => { this.isConfirming = false; })
     }, () => { this.isConfirming = false; });
+  }
+
+  public copyToClipboardClicked(transactionHex: string): void {
+    this.clipboardService.copyFromContent(transactionHex);
+    this.copied = true;
   }
 
   private buildColdStakingForm(): void {
@@ -105,10 +111,11 @@ export class CreateColdComponent implements OnInit, OnDestroy {
   private validationMessages = {
     amount: {
       required: 'Please enter an amount.',
-      min: "The amount can't be less than 0.",
+      min: 'A negative amount is not allowed.'
     },
     hotWalletAddress: {
-      required: 'Please enter your hot wallet address.'
+      required: 'Please enter your hot wallet address.',
+      minlength: 'An address is at least 26 characters long.'
     },
     password: {
       required: 'Please enter your password.'
