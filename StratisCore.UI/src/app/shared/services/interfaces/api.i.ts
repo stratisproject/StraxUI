@@ -155,12 +155,6 @@ export interface GetColdStakingInfo {
   hotWalletAccountExists: boolean;
 }
 
-export interface PostColdStakingAccount {
-  walletName: string;
-  walletPassword: string;
-  isColdWalletAccount: boolean;
-}
-
 export interface PostSetupColdStaking {
   coldWalletAddress: string;
   hotWalletAddress: string;
@@ -177,9 +171,4 @@ export interface PostColdStakingWithdrawal {
   walletPassword: string;
   amount: string;
   fees: string;
-}
-
-export interface GetColdStakingAddress {
-  walletName: string;
-  isColdWalletAddress: boolean;
 }

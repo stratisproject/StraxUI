@@ -52,8 +52,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private buildDecryptForm(): void {
     this.openWalletForm = this.fb.group({
-      'selectWallet': [{value: '', disabled: this.isDecrypting}, Validators.required],
-      'password': [{value: '', disabled: this.isDecrypting}, Validators.required]
+      selectWallet: [{value: '', disabled: this.isDecrypting}, Validators.required],
+      password: [{value: '', disabled: this.isDecrypting}, Validators.required]
     });
 
     this.subscriptions.push(this.openWalletForm.valueChanges

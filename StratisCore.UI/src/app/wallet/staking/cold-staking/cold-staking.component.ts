@@ -3,6 +3,8 @@ import { ColdStakingService } from '@shared/services/cold-staking-service';
 import { GetColdStakingInfo } from '@shared/services/interfaces/api.i';
 import { Observable } from 'rxjs';
 import { DeploymentInfo } from '@shared/models/deployment-info';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CreateSelectComponent } from './create-select/create-select.component';
 
 @Component({
   selector: 'app-cold-staking',
@@ -14,7 +16,7 @@ export class ColdStakingComponent implements OnInit {
   public coldStakingInfo: Observable<GetColdStakingInfo>;
   public coldStakingDeploymentInfo: Observable<DeploymentInfo>;
 
-  constructor(public coldStakingService: ColdStakingService) { }
+  constructor(public coldStakingService: ColdStakingService, public modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.coldStakingInfo = this.coldStakingService.coldStakingInfo();
@@ -22,6 +24,9 @@ export class ColdStakingComponent implements OnInit {
   }
 
   onSetup(): void {
-    console.log("Setup cold staking");
+    this.modalService.open(CreateSelectComponent, {
+      backdrop: 'static',
+      size: 'lg'
+    });
   }
 }
