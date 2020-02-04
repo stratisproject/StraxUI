@@ -15,29 +15,13 @@
     <div class="card-body">
       <p class="sub">{{ 0 | coinNotation}}</p>
     </div>
-    <!-- <div *ngIf="(coldStakingInfo| async) as _coldStakingInfo">
-      <div class="card-header">isHot</div>
-      <div class="card-body">
-        <p class="sub">{{ _coldStakingInfo.hotWalletAccountExists }}</p>
-      </div>
-      <div class="card-header">isCold</div>
-      <div class="card-body" >
-        <p class="sub">{{ _coldStakingInfo.coldWalletAccountExists }}</p>
-      </div>
-      <div class="card-header">hasSetup</div>
-      <div class="card-body">
-        <p class="sub">{{ coldStakingService.hasColdStakingSetup }}</p>
-      </div>
-    </div> -->
-    <div class="card-footer">
+    <div class="card-footer" *ngIf="(coldStakingInfo| async) as _coldStakingInfo">
       <div class="row justify-content-center">
-        <button [disabled]="true" type="button" class="btn btn-outline-primary col-4"
-                (click)="withdrawClicked()">Withdraw
-        </button>
-        <button [disabled]="true" type="button" class="btn btn-outline-primary col-7 ml-2"
+        <button type="button" class="btn btn-outline-primary col-4" (click)="withdrawClicked()">Withdraw</button>
+        <!-- <button *ngIf="_coldStakingInfo.hotWalletAccountExists" type="button" class="btn btn-outline-primary col-7 ml-2"
                 (click)="unusedAddressClicked()">Get
           first unused address
-        </button>
+        </button> -->
       </div>
     </div>
     <div class="row">

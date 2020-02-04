@@ -1,0 +1,62 @@
+<div class="modal-header">
+  <h5 class="modal-title">Withdraw Cold Wallet Funds</h5>
+  <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
+    <i class="lnr lnr-cross-circle"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngIf="!generated; else generated">
+    Use this form to create a transaction hex to withdraw your cold staking funds.
+    <div class="form-group" [formGroup]="withdrawColdFundsForm">
+      <div class="form-group mt-3">
+        <input type="text" class="form-control" placeholder="Enter the amount you want to withdraw" formControlName="amount"
+          [class.is-invalid]="formErrors.amount" [class.is-valid]="!formErrors.amount && withdrawColdFundsForm.get('amount').valid">
+        <div *ngIf="formErrors.amount" class="invalid-feedback"> {{ formErrors.amount }}</div>
+      </div>
+      <div class="form-group mt-3">
+        <input type="text" class="form-control" placeholder="Enter the receive address" formControlName="receiveAddress"
+          [class.is-invalid]="formErrors.receiveAddress" [class.is-valid]="!formErrors.receiveAddress && withdrawColdFundsForm.get('receiveAddress').valid">
+        <div *ngIf="formErrors.receiveAddress" class="invalid-feedback"> {{ formErrors.receiveAddress }}</div>
+      </div>
+      <div class="form-group mt-3">
+        <input type="password" class="form-control" placeholder="Enter your cold wallet password." formControlName="password"
+          [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && withdrawColdFundsForm.get('password').valid">
+        <div *ngIf="formErrors.password" class="invalid-feedback"> {{ formErrors.password }}</div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block" (click)="createWithdrawTx()" [disabled]="!withdrawColdFundsForm.valid" autofocus>
+      Create withdraw transaction
+    </button>
+  </div>
+  <ng-template #generated>
+    <div class="row">
+      <div class="col-9">
+        The transaction has been successfully generated. You can broadcast the transaction below using your hot staking node.
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col">
+        <p class="textWrapper">{{ transactionHex }}</p>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col">
+        <button class="btn btn-primary" (click)="copyToClipboardClicked(transactionHex)">Copy Transaction Hex</button>
+      </div>
+    </div>
+    <div *ngIf="copied" class="row mt-2 justify-content-center">
+      <div class="col">
+        <div class="alert alert-info py-1">
+          <p class="m-0">
+            The transaction hex has been copied to your clipboard.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2 justify-content-center">
+      <div class="col-3">
+        <button type="button" class="btn btn-lg btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
+      </div>
+    </div>
+  </ng-template>
+</div>

@@ -40,6 +40,7 @@ import { BroadcastTransactionComponent } from './advanced/components/broadcast-t
 import { CreateSelectComponent } from './staking/cold-staking/create-select/create-select.component';
 import { CreateHotComponent } from './staking/cold-staking/create-hot/create-hot.component';
 import { CreateColdComponent } from './staking/cold-staking/create-cold/create-cold.component';
+import { WithdrawColdFundsComponent } from './staking/cold-staking/withdraw-cold-funds/withdraw-cold-funds.component';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import { CreateColdComponent } from './staking/cold-staking/create-cold/create-c
     BroadcastTransactionComponent,
     CreateSelectComponent,
     CreateHotComponent,
-    CreateColdComponent
+    CreateColdComponent,
+    WithdrawColdFundsComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -94,7 +96,8 @@ import { CreateColdComponent } from './staking/cold-staking/create-cold/create-c
     BroadcastTransactionComponent,
     CreateSelectComponent,
     CreateHotComponent,
-    CreateColdComponent
+    CreateColdComponent,
+    WithdrawColdFundsComponent
   ]
 })
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { GetColdStakingInfo, PostColdStakingWithdrawal } from '@shared/services/interfaces/api.i';
+import { GetColdStakingInfo } from '@shared/services/interfaces/api.i';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -94,7 +94,7 @@ export class ColdStakingService extends RestApi {
     );
   }
 
-  public invokePostColdStakingWithdrawalApiCall(data: PostColdStakingWithdrawal): Observable<any> {
+  public invokePostColdStakingWithdrawalApiCall(data: ColdStakingWithdrawal): Observable<any> {
     return this.post('coldstaking/cold-staking-withdrawal', data).pipe(
       catchError(err => {
         return this.handleHttpError(err);

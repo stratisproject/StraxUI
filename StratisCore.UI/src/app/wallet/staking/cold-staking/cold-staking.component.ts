@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { DeploymentInfo } from '@shared/models/deployment-info';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateSelectComponent } from './create-select/create-select.component';
+import { WithdrawColdFundsComponent } from './withdraw-cold-funds/withdraw-cold-funds.component';
 
 @Component({
   selector: 'app-cold-staking',
@@ -25,6 +26,13 @@ export class ColdStakingComponent implements OnInit {
 
   onSetup(): void {
     this.modalService.open(CreateSelectComponent, {
+      backdrop: 'static',
+      size: 'lg'
+    });
+  }
+
+  withdrawClicked(): void {
+    this.modalService.open(WithdrawColdFundsComponent, {
       backdrop: 'static',
       size: 'lg'
     });

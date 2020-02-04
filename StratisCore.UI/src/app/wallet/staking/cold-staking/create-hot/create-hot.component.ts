@@ -30,10 +30,6 @@ export class CreateHotComponent implements OnInit, OnDestroy {
     this.walletName = this.globalService.getWalletName();
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
-  }
-
   public confirmSetup(): void {
     this.isConfirming = true;
     const data: ColdStakingAccount = new ColdStakingAccount(
@@ -94,7 +90,6 @@ export class CreateHotComponent implements OnInit, OnDestroy {
     }
   }
 
-
   private formErrors = {
     password: ''
   };
@@ -104,4 +99,8 @@ export class CreateHotComponent implements OnInit, OnDestroy {
       required: 'Please enter your password.'
     }
   };
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
 }
