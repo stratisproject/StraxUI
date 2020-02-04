@@ -12,11 +12,7 @@
       <div class="form-group mt-3">
         <input type="password" class="form-control" placeholder="Enter your wallet password." formControlName="password"
           [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && passwordForm.get('password').valid">
-        <div
-          *ngIf="formErrors.password"
-          class="invalid-feedback text-white">
-          {{ formErrors.password }}
-        </div>
+        <div *ngIf="formErrors.password" class="invalid-feedback text-white"> {{ formErrors.password }}</div>
       </div>
     </div>
     <button type="submit" class="btn btn-primary btn-block" [disabled]="!passwordForm.valid || isConfirming"

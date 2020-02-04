@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ColdStakingService } from '@shared/services/cold-staking-service';
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './create-hot.component.html',
   styleUrls: ['./create-hot.component.scss']
 })
-export class CreateHotComponent implements OnInit {
+export class CreateHotComponent implements OnInit, OnDestroy {
   private passwordForm: FormGroup;
   private subscriptions: Subscription[] = [];
   public copied = false;
@@ -28,6 +28,10 @@ export class CreateHotComponent implements OnInit {
 
   ngOnInit(): void {
     this.walletName = this.globalService.getWalletName();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
   public confirmSetup(): void {
@@ -92,12 +96,12 @@ export class CreateHotComponent implements OnInit {
 
 
   private formErrors = {
-    'password': ''
+    password: ''
   };
 
   private validationMessages = {
-    'password': {
-      'required': 'Please enter your password.'
+    password: {
+      required: 'Please enter your password.'
     }
   };
 }

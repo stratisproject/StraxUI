@@ -1,15 +1,121 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ClipboardService } from 'ngx-clipboard';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ColdStakingService } from '@shared/services/cold-staking-service';
+import { GlobalService } from '@shared/services/global.service';
+import { ColdStakingAccount } from '@shared/models/cold-staking-account';
+import { ColdStakingAddress } from '@shared/models/cold-staking-address';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { ColdStakingSetup } from '@shared/models/cold-staking-setup';
 
 @Component({
   selector: 'app-create-cold',
   templateUrl: './create-cold.component.html',
   styleUrls: ['./create-cold.component.scss']
 })
-export class CreateColdComponent implements OnInit {
+export class CreateColdComponent implements OnInit, OnDestroy {
+  private coldStakingForm: FormGroup;
+  private subscriptions: Subscription[] = [];
+  public address: string;
+  public fee = 2000; //Stratoshis
+  public copied = false;
+  public isConfirming = false;
+  public confirmed = false;
+  public walletName: string;
+  public coinUnit: string;
+  public transactionHex: string;
 
-  constructor() { }
+  constructor(private globalService: GlobalService, private clipBoardService: ClipboardService, private coldStakingService: ColdStakingService, private fb: FormBuilder, public activeModal: NgbActiveModal) {
+    this.buildColdStakingForm();
+   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.walletName = this.globalService.getWalletName();
+    this.coinUnit = this.globalService.getCoinUnit();
   }
 
+  public confirmSetup(): void {
+    this.isConfirming = true;
+    const data: ColdStakingAccount = new ColdStakingAccount(
+      this.walletName,
+      this.coldStakingForm.get("password").value,
+      true
+    )
+    this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(() => {
+      const addressData = new ColdStakingAddress(
+        this.walletName,
+        true
+      )
+      this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
+        this.address = response.address;
+
+        const setupData = new ColdStakingSetup(
+          this.address,
+          this.coldStakingForm.get('hotWalletAddress').value,
+          this.walletName,
+          this.coldStakingForm.get("password").value,
+          this.globalService.getWalletAccount(),
+          this.coldStakingForm.get('amount').value,
+          this.fee
+        )
+        this.coldStakingService.invokePostSetupColdStakingApiCall(setupData).toPromise().then(response => {
+          this.transactionHex = response.transactionHex;
+        }, () => this.isConfirming = false)
+      }, () => { this.isConfirming = false; })
+    }, () => { this.isConfirming = false; });
+  }
+
+  private buildColdStakingForm(): void {
+    this.coldStakingForm = this.fb.group({
+      amount: ['', Validators.compose([Validators.required, Validators.min(0)])],
+      hotWalletAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      password: ['', Validators.required]
+    });
+
+    this.subscriptions.push(this.coldStakingForm.valueChanges
+      .subscribe(() => this.onValueChanged()));
+
+    this.onValueChanged();
+  }
+
+  private onValueChanged(): void {
+    if (!this.coldStakingForm) {
+      return;
+    }
+    const form = this.coldStakingForm;
+    for (const field in this.formErrors) {
+      this.formErrors[field] = '';
+      const control = form.get(field);
+      if (control && control.dirty && !control.valid) {
+        const messages = this.validationMessages[field];
+        for (const key in control.errors) {
+          this.formErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  private formErrors = {
+    amount: '',
+    hotWalletAddress: '',
+    password: ''
+  };
+
+  private validationMessages = {
+    amount: {
+      required: 'Please enter an amount.',
+      min: "The amount can't be less than 0.",
+    },
+    hotWalletAddress: {
+      required: 'Please enter your hot wallet address.'
+    },
+    password: {
+      required: 'Please enter your password.'
+    }
+  };
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
 }

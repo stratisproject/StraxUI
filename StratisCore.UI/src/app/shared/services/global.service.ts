@@ -15,6 +15,7 @@ export class GlobalService {
     this.setTestnetEnabled();
     this.setApiPort();
     this.setDaemonIP();
+    this.setWalletAccount(this.walletAccount);
   }
 
   private applicationVersion = '2.0.0';
@@ -31,6 +32,7 @@ export class GlobalService {
   private network: string;
   private daemonIP: string;
   private version = VERSION;
+  private walletAccount = 'account 0';
 
   public coinUnit: string;
 
@@ -119,6 +121,14 @@ export class GlobalService {
   public setWalletName(currentWalletName: string): void {
     this.currentWalletName = currentWalletName;
     (this.currentWallet as BehaviorSubject<WalletInfo>).next(new WalletInfo(currentWalletName));
+  }
+
+  public getWalletAccount(): string {
+    return this.walletAccount;
+  }
+
+  public setWalletAccount(walletAccount): void {
+    this.walletAccount = walletAccount;
   }
 
   public getCoinUnit(): string {

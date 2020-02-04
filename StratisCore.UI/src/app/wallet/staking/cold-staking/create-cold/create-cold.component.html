@@ -1,1 +1,61 @@
-<p>create-cold works!</p>
+<div class="modal-header">
+  <h5 class="modal-title">Cold Staking Wallet Setup</h5>
+  <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
+    <i class="lnr lnr-cross-circle"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngIf="!confirmed; else isconfirmed">
+    This will set up your current device as a cold staking wallet.
+    Please complete the form to complete the cold staking setup.
+    <div class="form-group" [formGroup]="coldStakingForm">
+      <div class="form-group mt-3">
+        <input type="text" class="form-control" placeholder="Enter the amount you want to stake" formControlName="amount"
+          [class.is-invalid]="formErrors.amount" [class.is-valid]="!formErrors.amount && coldStakingForm.get('amount').valid">
+        <div *ngIf="formErrors.amount" class="invalid-feedback text-white">{{ formErrors.amount }}</div>
+      </div>
+      <div class="form-group mt-3">
+        <input type="text" class="form-control" placeholder="Enter your hot wallet address" formControlName="hotWalletAddress"
+          [class.is-invalid]="formErrors.hotWalletAddress" [class.is-valid]="!formErrors.hotWalletAddress && coldStakingForm.get('hotWalletAddress').valid">
+        <div *ngIf="formErrors.hotWalletAddress" class="invalid-feedback text-white">{{ formErrors.hotWalletAddress }}</div>
+      </div>
+      <div class="form-group mt-3">
+        <input type="password" class="form-control" placeholder="Enter your cold wallet password" formControlName="password"
+          [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && coldStakingForm.get('password').valid">
+        <div *ngIf="formErrors.password" class="invalid-feedback text-white">{{ formErrors.password }}</div>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div>
+        <div class="alert alert-warning py-1">A fee of {{ fee | coinNotation }} {{ coinUnit }} will be used to set up cold staking and will be deducted from the staking amount automatically.</div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="!coldStakingForm.valid || isConfirming"
+      (click)="confirmSetup()" autofocus>
+      Confirm
+    </button>
+  </div>
+  <ng-template #isconfirmed>
+    <div class="row">
+      <div class="col-9">
+        This wallet has now been configured to be used as a cold wallet.
+        Please proceed to broadcast the transaction hex below. There is a tool in the advanced tab of your hot staking node.
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-6">
+        {{ transactionHex }}
+      </div>
+      <div class="col-3">
+        <button class="btn btn-primary" (click)="copyToClipboardClicked(transactionHex)">Copy Transaction Hex</button>
+      </div>
+    </div>
+    <div *ngIf="copied" class="row justify-content-center mt-2">
+      <div class="alert alert-info py-1">
+        <p class="m-0">
+          Transaction hex has been copied to your clipboard.
+        </p>
+      </div>
+    </div>
+  </ng-template>
+</div>
