@@ -140,7 +140,7 @@ export class ApiService extends RestApi implements IApiService {
   private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: string }): HttpParams {
     let params = new HttpParams()
       .set('walletName', walletInfo.walletName)
-      .set('accountName', `account ${walletInfo.account || 0}`);
+      .set('accountName', walletInfo.account || "account 0");
 
     if (extra) {
       Object.keys(extra).forEach(key => params = params.set(key, extra[key]));

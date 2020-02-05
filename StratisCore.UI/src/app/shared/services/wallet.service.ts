@@ -69,7 +69,6 @@ export class WalletService extends RestApi {
 
     globalService.currentWallet.subscribe(wallet => {
       this.currentWallet = wallet;
-
     });
 
     currentAccountService.currentAddress.subscribe((address) => {
@@ -112,7 +111,7 @@ export class WalletService extends RestApi {
         }
 
         if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
-          const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
+          const walletBalance = message.accountsBalances.find(acc => acc.accountName === this.currentWallet.account);
           this.updateWalletForCurrentAddress(walletBalance, historyRefreshed);
         }
       });
@@ -206,7 +205,7 @@ export class WalletService extends RestApi {
 
     this.get<WalletHistory>('wallet/history', this.getWalletParams(this.currentWallet, extra))
       .pipe(map((response) => {
-          return response.history[this.currentWallet.account].transactionsHistory;
+          return response.history[0].transactionsHistory;
         }),
         catchError((err) => {
           this.loadingSubject.next(false);
@@ -299,13 +298,13 @@ export class WalletService extends RestApi {
   }
 
   private getWalletHistorySubject(): BehaviorSubject<TransactionsHistoryItem[]> {
-    if (!this.walletHistorySubjects[this.currentWallet.walletName]) {
-      this.walletHistorySubjects[this.currentWallet.walletName] = new BehaviorSubject<TransactionsHistoryItem[]>([]);
+    if (!this.walletHistorySubjects[this.currentWallet.walletName, this.currentWallet.account]) {
+      this.walletHistorySubjects[this.currentWallet.walletName, this.currentWallet.account] = new BehaviorSubject<TransactionsHistoryItem[]>([]);
 
       // Get initial Wallet History
       this.paginateHistory(40);
     }
-    return this.walletHistorySubjects[this.currentWallet.walletName];
+    return this.walletHistorySubjects[this.currentWallet.walletName, this.currentWallet.account];
   }
 
   private getWalletBalance(data: WalletInfo): Observable<Balances> {
@@ -319,7 +318,7 @@ export class WalletService extends RestApi {
   private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: any }): HttpParams {
     let params = new HttpParams()
       .set('walletName', walletInfo.walletName)
-      .set('accountName', `account ${walletInfo.account || 0}`);
+      .set('accountName', walletInfo.account || "account 0");
 
     if (extra) {
       Object.keys(extra).forEach(key => {

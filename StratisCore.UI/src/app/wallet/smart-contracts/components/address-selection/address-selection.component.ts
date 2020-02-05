@@ -18,6 +18,7 @@ import { AddressBalance } from '@shared/models/address-balance';
 export class AddressSelectionComponent implements OnInit, OnDestroy {
 
   private walletName = '';
+  private walletAccount = '';
   addresses: any[];
   addressChangedSubject: Subject<string>;
   selectedAddress: any;
@@ -32,10 +33,11 @@ export class AddressSelectionComponent implements OnInit, OnDestroy {
 
     this.coinUnit = this.globalService.getCoinUnit();
     this.walletName = this.globalService.getWalletName();
+    this.walletAccount = this.globalService.getWalletAccount();
     this.addressChangedSubject = new Subject();
 
     this.walletService
-      .getAllAddressesForWallet(new WalletInfo(this.walletName))
+      .getAllAddressesForWallet(new WalletInfo(this.walletName, this.walletAccount))
       .pipe(
         catchError(error => {
           Log.error(error);

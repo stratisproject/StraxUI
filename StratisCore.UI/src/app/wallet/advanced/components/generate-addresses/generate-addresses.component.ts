@@ -63,7 +63,7 @@ export class GenerateAddressesComponent implements OnInit {
   }
 
   public onGenerateClicked(): void {
-    const walletInfo = new WalletInfo(this.globalService.getWalletName());
+    const walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getWalletAccount());
     this.apiService.getUnusedReceiveAddresses(walletInfo, this.generateAddressesForm.get('generateAddresses').value)
       .subscribe(
         response => {
