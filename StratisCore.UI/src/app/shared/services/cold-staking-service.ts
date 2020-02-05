@@ -16,6 +16,7 @@ import { DeploymentInfo } from '@shared/models/deployment-info';
 import { ColdStakingAccount } from '@shared/models/cold-staking-account';
 import { ColdStakingAddress } from '@shared/models/cold-staking-address';
 import { ColdStakingSetup } from '@shared/models/cold-staking-setup';
+import { ColdStakingWithdrawal } from '@shared/models/cold-staking-withdrawal';
 
 @Injectable({
   providedIn: 'root'

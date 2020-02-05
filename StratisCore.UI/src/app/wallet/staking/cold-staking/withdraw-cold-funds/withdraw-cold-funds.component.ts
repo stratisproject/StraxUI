@@ -17,10 +17,14 @@ export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
   public transactionHex: string;
   public fee = 20000; //Stratoshi
   public generated = false;
+  public walletName: string;
+  public coinUnit: string;
   private withdrawColdFundsForm: FormGroup;
   private subscriptions: Subscription[] = [];
   constructor(private fb: FormBuilder, private clipboardService: ClipboardService, private coldStakingService: ColdStakingService, private globalService: GlobalService, public activeModal: NgbActiveModal) {
     this.buildWithdrawColdFundsForm();
+    this.walletName = globalService.getWalletName();
+    this.coinUnit = globalService.getCoinUnit();
    }
 
   ngOnInit(): void {
@@ -34,7 +38,7 @@ export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
   public createWithdrawTx(): void {
     const withdrawData = new ColdStakingWithdrawal(
       this.withdrawColdFundsForm.get("receiveAddress").value,
-      this.globalService.getWalletName(),
+      this.walletName,
       this.withdrawColdFundsForm.get("password").value,
       this.withdrawColdFundsForm.get("amount").value,
       this.fee / 100000000
