@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
-import { WalletBalance } from '@shared/services/interfaces/api.i';
+import { WalletBalance, StakingInfo } from '@shared/services/interfaces/api.i';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GlobalService } from '@shared/services/global.service';
 import { StakingService } from '@shared/services/staking-service';
@@ -15,12 +15,14 @@ import { SnackbarService } from 'ngx-snackbar';
 export class HotStakingComponent implements OnInit {
   public wallet: Observable<WalletBalance>;
   public stakingEnabled: Observable<boolean>;
+  public stakingInfo: Observable<StakingInfo>;
   public stakingForm: FormGroup;
 
   constructor(private fb: FormBuilder, public globalService: GlobalService, public stakingService: StakingService, public walletService: WalletService, public snackbarService: SnackbarService) { }
 
   ngOnInit(): void {
     this.wallet = this.walletService.wallet();
+    this.stakingInfo = this.stakingService.stakingInfo();
     this.buildStakingForm();
   }
 
