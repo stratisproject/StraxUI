@@ -18,7 +18,7 @@ export class CreateColdComponent implements OnInit, OnDestroy {
   private coldStakingForm: FormGroup;
   private subscriptions: Subscription[] = [];
   public address: string;
-  public fee = 20000; //Stratoshis
+  public fee = 1000000; //Stratoshis
   public copied = false;
   public isConfirming = false;
   public confirmed = false;
