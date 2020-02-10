@@ -15,8 +15,9 @@ import { GlobalService } from '@shared/services/global.service';
 export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
   public copied = false;
   public transactionHex: string;
-  public fee = 20000; //Stratoshi
+  public fee = 1000000; //Stratoshi
   public generated = false;
+  public isGenerating = false;
   public walletName: string;
   public coinUnit: string;
   private withdrawColdFundsForm: FormGroup;
@@ -36,6 +37,7 @@ export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
   }
 
   public createWithdrawTx(): void {
+    this.isGenerating = true;
     const withdrawData = new ColdStakingWithdrawal(
       this.withdrawColdFundsForm.get("receiveAddress").value,
       this.walletName,
@@ -45,8 +47,12 @@ export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
     );
     this.coldStakingService.invokePostColdStakingWithdrawalApiCall(withdrawData).toPromise().then(response => {
       this.transactionHex = response.transactionHex;
+      this.isGenerating = false;
       this.generated = true;
-    }, () => this.generated = false);
+    }, () => {
+      this.isGenerating = false;
+      this.generated = false;
+    })
   }
 
   private buildWithdrawColdFundsForm(): void {
