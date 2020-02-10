@@ -120,7 +120,6 @@
                   <div class="form-group clearfix">
                     <label for="walletPassword">Wallet Password</label>
                     <input type="password" class="form-control" [class.is-invalid]="sendFormErrors.password"
-                           [class.is-valid]="!sendFormErrors.password && sendForm.get('password').valid"
                            formControlName="password" id="walletPassword"
                            placeholder="Please enter your wallet password.">
                     <div *ngIf="sendFormErrors.password" class="invalid-feedback">{{sendFormErrors.password}}</div>
@@ -252,7 +251,6 @@
                   <div class="form-group clearfix">
                     <label for="walletPassword">Wallet Password</label>
                     <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password"
-                           [class.is-valid]="!sendToSidechainFormErrors.password && sendToSidechainForm.get('password').valid"
                            formControlName="password" id="walletPassword"
                            placeholder="Please enter your wallet password.">
                     <div *ngIf="sendToSidechainFormErrors.password"
@@ -261,7 +259,7 @@
                   <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
                 </form>
                 <div>
-                  <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-right-200"
+                  <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200"
                           [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee"
                           (click)="send(true)">Send
                   </button>
