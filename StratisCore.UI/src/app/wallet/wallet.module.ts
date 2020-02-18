@@ -23,7 +23,6 @@ import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { WalletSelectorComponent } from './wallet-selector/wallet-selector.component';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { SnackbarModule } from 'ngx-snackbar';
 import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
@@ -41,16 +40,17 @@ import { CreateSelectComponent } from './staking/cold-staking/create-select/crea
 import { CreateHotComponent } from './staking/cold-staking/create-hot/create-hot.component';
 import { CreateColdComponent } from './staking/cold-staking/create-cold/create-cold.component';
 import { WithdrawColdFundsComponent } from './staking/cold-staking/withdraw-cold-funds/withdraw-cold-funds.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   imports: [
     SnackbarModule,
-    InfiniteScrollModule,
     SharedModule,
     WalletRoutingModule,
     SmartContractsModule.forRoot(),
     TokensModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    ScrollingModule
   ],
   declarations: [
     WalletComponent,
