@@ -30,6 +30,8 @@ import { SnackbarService } from 'ngx-snackbar';
 import { NodeService } from '@shared/services/node-service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { AddressBookService } from '@shared/services/address-book-service';
+import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
+import { VoteRequest } from '@shared/models/vote-request';
 
 @Injectable({
   providedIn: 'root'
@@ -265,13 +267,19 @@ export class WalletService extends RestApi {
     subject.next(set.sort((a, b) => b.timestamp - a.timestamp));
   }
 
+  public vote(voteRequest: VoteRequest): Observable<string> {
+    return this.post('wallet/vote', voteRequest).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
   public broadcastTransaction(transactionHex: string): Observable<string> {
     return this.post('wallet/send-transaction', new TransactionSending(transactionHex)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
 
-  public sendTransaction(transaction: Transaction): Promise<TransactionResponse> {
+  public sendTransaction(transaction: Transaction | OpreturnTransaction): Promise<TransactionResponse> {
     return this.buildAndSendTransaction(transaction).toPromise();
   }
 
@@ -282,7 +290,7 @@ export class WalletService extends RestApi {
       }), catchError(err => this.handleHttpError(err)));
   }
 
-  private buildAndSendTransaction(transaction: Transaction): Observable<TransactionResponse> {
+  private buildAndSendTransaction(transaction: Transaction | OpreturnTransaction): Observable<TransactionResponse> {
 
     if (this.accountsEnabled) {
       transaction.shuffleOutputs = !this.accountsEnabled;

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AdvancedComponent } from './advanced/advanced.component';
 import { AboutComponent } from './advanced/components/about/about.component';
@@ -14,7 +13,6 @@ import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { ReceiveComponent } from './receive/receive.component';
 import { SendComponent } from './send/send.component';
-import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
 import { StakingComponent } from './staking/staking.component';
 
 const routes: Routes = [
@@ -38,8 +36,7 @@ const routes: Routes = [
       },
       {path: 'smart-contracts', component: SmartContractsComponent, canActivate: [AccountSelectedGuard]},
       {path: 'tokens', component: TokensComponent, canActivate: [AccountSelectedGuard]},
-      {path: 'address-book', component: AddressBookComponent},
-      {path: 'explorer', component: BlockExplorerComponent}
+      {path: 'address-book', component: AddressBookComponent}
     ]
   },
 ];

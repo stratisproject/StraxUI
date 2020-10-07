@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { BsDatepickerModule } from 'ngx-bootstrap';
-
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddNewAddressComponent } from './address-book/modals/add-new-address/add-new-address.component';
 import { AdvancedComponent } from './advanced/advanced.component';
@@ -70,7 +69,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     ResyncComponent,
     TransactionsComponent,
     WalletSelectorComponent,
-    BlockExplorerComponent,
     AddressBookCardComponent,
     AddNodeComponent,
     TransactionDetailsModalComponent,
@@ -97,7 +95,13 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     CreateSelectComponent,
     CreateHotComponent,
     CreateColdComponent,
-    WithdrawColdFundsComponent
+    WithdrawColdFundsComponent,
+    ReceiveComponent,
+    TransactionDetailsComponent,
+    LogoutConfirmationComponent,
+    AddNodeComponent,
+    ResyncComponent,
+    BroadcastTransactionComponent
   ]
 })
 
@@ -118,9 +122,6 @@ export class WalletModule {
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Contacts', '/wallet/address-book', ['side-bar-item-address']));
-
-    // sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-    //   'Explorer', '/wallet/explorer', ['side-bar-item-explorer']));
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
