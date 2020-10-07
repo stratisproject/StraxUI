@@ -1,13 +1,13 @@
 {
-  "name": "stratis-core",
-  "description": "Stratis Core Wallet",
-  "version": "2.0.0",
+  "name": "straxui",
+  "description": "Stratis Staking Wallet",
+  "version": "1.0.0",
   "author": {
     "name": "Stratis Group Ltd.",
     "email": "support@stratisplatform.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/stratisproject/StratisCore",
+  "homepage": "https://github.com/stratisproject/StraxUI",
   "keywords": [
     "fullnode",
     "ui",

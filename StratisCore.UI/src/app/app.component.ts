@@ -92,6 +92,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public openSupport(): void {
-    this.electronService.shell.openExternal('https://github.com/stratisproject/StratisCore/');
+    this.electronService.shell.openExternal('https://github.com/stratisproject/StraxUI/');
   }
 }
