@@ -70,7 +70,7 @@ export class ReceiveComponent implements OnInit {
   }
 
   private getUnusedReceiveAddresses(): void {
-    const walletInfo = new WalletInfo(this.globalService.getWalletName());
+    const walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getWalletAccount());
     this.walletService.getUnusedReceiveAddress(walletInfo)
       .toPromise()
       .then(
@@ -92,7 +92,7 @@ export class ReceiveComponent implements OnInit {
   }
 
   private getAddresses(): void {
-    const walletInfo = new WalletInfo(this.globalService.getWalletName());
+    const walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getWalletAccount());
     this.walletService.getAllAddressesForWallet(walletInfo)
       .toPromise()
       .then(

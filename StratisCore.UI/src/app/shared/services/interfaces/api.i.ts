@@ -150,3 +150,7 @@ export interface GeneralInfo {
   percentSynced? : number;
 }
 
+export interface GetColdStakingInfo {
+  coldWalletAccountExists: boolean;
+  hotWalletAccountExists: boolean;
+}

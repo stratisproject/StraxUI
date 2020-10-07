@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { BsDatepickerModule } from 'ngx-bootstrap';
-
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddNewAddressComponent } from './address-book/modals/add-new-address/add-new-address.component';
 import { AdvancedComponent } from './advanced/advanced.component';
@@ -25,13 +24,6 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { WalletSelectorComponent } from './wallet-selector/wallet-selector.component';
 import { SnackbarModule } from 'ngx-snackbar';
 import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
-import { ColdStakingServiceBase, FakeColdStakingService } from './cold-staking/cold-staking.service';
-import { ColdStakingOverviewComponent } from './cold-staking/components/overview/overview.component';
-import { ColdStakingWalletComponent } from './cold-staking/components/overview/wallet/wallet.component';
-import { ColdStakingCreateAddressComponent } from './cold-staking/components/modals/create-address/create-address.component';
-import { ColdStakingWithdrawComponent } from './cold-staking/components/modals/withdraw/withdraw.component';
-import { ColdStakingCreateComponent } from './cold-staking/components/modals/create/create.component';
-import { ColdStakingCreateSuccessComponent } from './cold-staking/components/modals/create-success/create-success.component';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { SideBarItem, SimpleSideBarItem } from '@shared/components/side-bar/side-bar-item-base';
 import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
@@ -39,12 +31,15 @@ import { AddressBookCardComponent } from './address-book-card/address-book-card.
 import { AddNodeComponent } from './advanced/components/add-node/add-node.component';
 import { TransactionDetailsModalComponent } from './transaction-details-modal/transaction-details-modal.component';
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
+import { StakingComponent } from './staking/staking.component';
+import { HotStakingComponent } from './staking/hot-staking/hot-staking.component';
+import { ColdStakingComponent } from './staking/cold-staking/cold-staking.component';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
+import { CreateSelectComponent } from './staking/cold-staking/create-select/create-select.component';
+import { CreateHotComponent } from './staking/cold-staking/create-hot/create-hot.component';
+import { CreateColdComponent } from './staking/cold-staking/create-cold/create-cold.component';
+import { WithdrawColdFundsComponent } from './staking/cold-staking/withdraw-cold-funds/withdraw-cold-funds.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { SwapComponent } from './swap/swap.component';
-import { SwapConfirmationComponent } from './swap/swap-confirmation/swap-confirmation.component';
-import { VoteComponent } from './vote/vote.component';
-import { VoteModalComponent } from './vote/vote-modal/vote-modal.component';
 
 @NgModule({
   imports: [
@@ -74,43 +69,39 @@ import { VoteModalComponent } from './vote/vote-modal/vote-modal.component';
     ResyncComponent,
     TransactionsComponent,
     WalletSelectorComponent,
-    BlockExplorerComponent,
-    ColdStakingOverviewComponent,
-    ColdStakingWalletComponent,
-    ColdStakingCreateAddressComponent,
-    ColdStakingWithdrawComponent,
-    ColdStakingCreateComponent,
-    ColdStakingCreateSuccessComponent,
     AddressBookCardComponent,
     AddNodeComponent,
     TransactionDetailsModalComponent,
+    StakingComponent,
+    HotStakingComponent,
+    ColdStakingComponent,
     BroadcastTransactionComponent,
-    SwapComponent,
-    SwapConfirmationComponent,
-    VoteComponent,
-    VoteModalComponent
+    CreateSelectComponent,
+    CreateHotComponent,
+    CreateColdComponent,
+    WithdrawColdFundsComponent
   ],
   providers: [
     AccountSelectedGuard,
-    { provide: ColdStakingServiceBase, useClass: FakeColdStakingService },
     AccountSidebarItem,
     StakingSidebarItem
   ],
   entryComponents: [
-    SendComponent,
     SendConfirmationComponent,
-    SwapConfirmationComponent,
+    LogoutConfirmationComponent,
+    AddNodeComponent,
+    ResyncComponent,
+    BroadcastTransactionComponent,
+    CreateSelectComponent,
+    CreateHotComponent,
+    CreateColdComponent,
+    WithdrawColdFundsComponent,
     ReceiveComponent,
     TransactionDetailsComponent,
     LogoutConfirmationComponent,
     AddNodeComponent,
     ResyncComponent,
-    ColdStakingCreateAddressComponent,
-    ColdStakingWithdrawComponent,
-    ColdStakingCreateComponent,
-    ColdStakingCreateSuccessComponent,
-    BroadcastTransactionComponent,
-    VoteModalComponent
+    BroadcastTransactionComponent
   ]
 })
 
@@ -132,19 +123,8 @@ export class WalletModule {
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Contacts', '/wallet/address-book', ['side-bar-item-address']));
 
-    // sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-    //   'Explorer', '/wallet/explorer', ['side-bar-item-explorer']));
-
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
-
-    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-      'Vote', '/wallet/vote', ['side-bar-item-vote']
-    ));
-
-    // sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-    //   'Token Swap', '/wallet/swap', ['side-bar-item-swap']
-    // ));
 
     sidebarItems.setSelected({
       route : '/wallet/dashboard'

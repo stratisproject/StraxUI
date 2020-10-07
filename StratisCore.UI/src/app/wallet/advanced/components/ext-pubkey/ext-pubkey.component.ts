@@ -18,7 +18,7 @@ export class ExtPubkeyComponent implements OnInit {
   public copied = false;
 
   ngOnInit(): void {
-    const walletInfo = new WalletInfo(this.globalService.getWalletName());
+    const walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getWalletAccount());
     this.getExtPubKey(walletInfo);
   }
 

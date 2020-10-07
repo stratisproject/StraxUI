@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { AccountSidebarItem } from '../wallet/side-bar-items/account-sidebar-item';
+import { WalletInfo } from '@shared/models/wallet-info';
 
 
 @Component({
@@ -56,8 +57,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private buildDecryptForm(): void {
     this.openWalletForm = this.fb.group({
-      'selectWallet': [{value: '', disabled: this.isDecrypting}, Validators.required],
-      'password': [{value: '', disabled: this.isDecrypting}, Validators.required]
+      selectWallet: [{value: '', disabled: this.isDecrypting}, Validators.required],
+      password: [{value: '', disabled: this.isDecrypting}, Validators.required]
     });
 
     this.subscriptions.push(this.openWalletForm.valueChanges
@@ -104,7 +105,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public onDecryptClicked(): void {
     this.isDecrypting = true;
-    this.globalService.setWalletName(this.openWalletForm.get('selectWallet').value);
+    this.globalService.setWallet(new WalletInfo(this.openWalletForm.get('selectWallet').value));
     const walletLoad = new WalletLoad(
       this.openWalletForm.get('selectWallet').value,
       this.openWalletForm.get('password').value

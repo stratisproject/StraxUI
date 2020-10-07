@@ -184,7 +184,7 @@ export class SendComponent implements OnInit, OnDestroy {
   // NB: This is not currently used
   public getMaxBalance(): void {
     let balanceResponse;
-    const walletRequest = new WalletInfoRequest(this.globalService.getWalletName(), 0, this.sendForm.get('fee').value);
+    const walletRequest = new WalletInfoRequest(this.globalService.getWalletName(), this.globalService.getWalletAccount(), this.sendForm.get('fee').value);
     this.apiService.getMaximumBalance(walletRequest)
       .pipe(tap(
         response => {
@@ -202,7 +202,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public estimateFee(form: FormGroup, isSideChain: boolean): void {
     const transaction = new FeeEstimation(
       this.globalService.getWalletName(),
-      'account 0',
+      this.globalService.getWalletAccount(),
       form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
       isSideChain ? form.get('destinationAddress').value.trim() : '',
       form.get('amount').value,
@@ -271,7 +271,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
     return new Transaction(
       this.globalService.getWalletName(),
-      'account 0',
+      this.globalService.getWalletAccount(),
       form.get('password').value,
       form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
       form.get('amount').value,

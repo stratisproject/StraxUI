@@ -591,6 +591,15 @@ img {
     user-select: auto !important;
   }
 
+  .textWrapper {
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+  }
+
   .btn-group {
     label {
       color: $white;
@@ -2125,20 +2134,8 @@ app-side-bar {
       content: "\e828";
     }
 
-    .side-bar-item-explorer:before {
-      content: "\e88e";
-    }
-
     .side-bar-item-advanced:before {
       content: "\e810";
-    }
-
-    .side-bar-item-swap:before {
-      content: "\e862";
-    }
-
-    .side-bar-item-vote:before {
-      content: "\e872";
     }
   }
 }

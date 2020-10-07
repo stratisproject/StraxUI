@@ -1,4 +1,4 @@
-import { GeneralInfo, StakingInfo } from '@shared/services/interfaces/api.i';
+import { GeneralInfo, StakingInfo, GetColdStakingInfo } from '@shared/services/interfaces/api.i';
 
 export interface SignalREvent {
   nodeEventType: string;
@@ -13,6 +13,9 @@ export interface WalletInfoSignalREvent extends SignalREvent, GeneralInfo {
 }
 
 export interface StakingInfoSignalREvent extends SignalREvent, StakingInfo {
+}
+
+export interface ColdStakingInfoSignalREvent extends SignalREvent, GetColdStakingInfo {
 }
 
 export enum SignalREvents {

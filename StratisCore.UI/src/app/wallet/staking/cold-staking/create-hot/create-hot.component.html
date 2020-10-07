@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <h5 class="modal-title">Hot Staking Node Setup</h5>
+  <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
+    <i class="lnr lnr-cross-circle"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngIf="!confirmed; else isconfirmed">
+    This will set up your current device as a hot staking node.
+    Enter your wallet password to confirm.
+    <div class="form-group" [formGroup]="passwordForm">
+      <div class="form-group mt-3">
+        <input type="password" class="form-control" placeholder="Enter your wallet password." formControlName="password"
+          [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && passwordForm.get('password').valid">
+        <div *ngIf="formErrors.password" class="invalid-feedback"> {{ formErrors.password }}</div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="!passwordForm.valid || isConfirming"
+      (click)="confirmSetup()" autofocus>
+      Confirm
+    </button>
+  </div>
+  <ng-template #isconfirmed>
+    <div class="row">
+      <div class="col-9">
+        This node has now been configured to be used as a hot staking node.
+        Make sure to copy your hot staking node address below, this will be needed in the cold wallet set up.
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-6">
+        {{ address }}
+      </div>
+      <div class="col-3">
+        <button class="btn btn-primary" (click)="copyToClipboardClicked(address)">Copy Address</button>
+      </div>
+    </div>
+    <div *ngIf="copied" class="row justify-content-center mt-2">
+      <div class="alert alert-info py-1">
+        <p class="m-0">
+          Address {{ address }} has been copied to your clipboard.
+        </p>
+      </div>
+    </div>
+    <button type="button" class="btn btn-lg btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
+  </ng-template>
+</div>

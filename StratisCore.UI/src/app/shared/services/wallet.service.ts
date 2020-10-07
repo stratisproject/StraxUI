@@ -31,7 +31,6 @@ import { NodeService } from '@shared/services/node-service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
-import { VoteRequest } from '@shared/models/vote-request';
 
 @Injectable({
   providedIn: 'root'
@@ -74,7 +73,6 @@ export class WalletService extends RestApi {
 
     globalService.currentWallet.subscribe(wallet => {
       this.currentWallet = wallet;
-
     });
 
     currentAccountService.currentAddress.subscribe((address) => {
@@ -91,7 +89,7 @@ export class WalletService extends RestApi {
         this.refreshWallet();
       });
 
-    nodeService.generalInfo().subscribe(generalInfo => {
+    this.nodeService.generalInfo().subscribe(generalInfo => {
       if (generalInfo.percentSynced === 100 && this.rescanInProgress) {
         this.rescanInProgress = false;
         this.snackbarService.add({
@@ -117,7 +115,7 @@ export class WalletService extends RestApi {
         }
 
         if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
-          const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
+          const walletBalance = message.accountsBalances.find(acc => acc.accountName === this.currentWallet.account);
           this.updateWalletForCurrentAddress(walletBalance, historyRefreshed);
         }
       });
@@ -208,7 +206,7 @@ export class WalletService extends RestApi {
 
     this.get<WalletHistory>('wallet/history', this.getWalletParams(this.currentWallet, extra))
       .pipe(map((response) => {
-          return response.history[this.currentWallet.account].transactionsHistory;
+          return response.history[0].transactionsHistory;
         }),
         catchError((err) => {
           this.loadingSubject.next(false);
@@ -266,12 +264,6 @@ export class WalletService extends RestApi {
     });
     const set = existingItems.concat(newItems);
     subject.next(set.sort((a, b) => b.timestamp - a.timestamp));
-  }
-
-  public vote(voteRequest: VoteRequest): Observable<string> {
-    return this.post('wallet/vote', voteRequest).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
   }
 
   public broadcastTransaction(transactionHex: string): Observable<string> {
@@ -339,14 +331,14 @@ export class WalletService extends RestApi {
   }
 
   private getWalletHistorySubject(): BehaviorSubject<TransactionInfo[]> {
-    if (!this.walletHistorySubjects[this.currentWallet.walletName]) {
-      this.walletHistorySubjects[this.currentWallet.walletName] = new BehaviorSubject<TransactionInfo[]>([]);
+    if (!this.walletHistorySubjects[this.currentWallet.walletName, this.currentWallet.account]) {
+      this.walletHistorySubjects[this.currentWallet.walletName, this.currentWallet.account] = new BehaviorSubject<TransactionInfo[]>([]);
 
       // Get initial Wallet History
       //this.paginateHistory(40);
       this.getHistory();
     }
-    return this.walletHistorySubjects[this.currentWallet.walletName];
+    return this.walletHistorySubjects[this.currentWallet.walletName, this.currentWallet.account];
   }
 
   private getWalletBalance(data: WalletInfo): Observable<Balances> {
@@ -360,7 +352,7 @@ export class WalletService extends RestApi {
   private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: any }): HttpParams {
     let params = new HttpParams()
       .set('walletName', walletInfo.walletName)
-      .set('accountName', `account ${walletInfo.account || 0}`);
+      .set('accountName', walletInfo.account || "account 0");
 
     if (extra) {
       Object.keys(extra).forEach(key => {
