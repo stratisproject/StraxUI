@@ -3,7 +3,7 @@ $submodule_name = "StratisFullNode"
 $temp_branch_name = "submodule-update"
 $branch = "master"
 $temp_folder = 'submodule-update-temp-branch'
-$branch_submodule_to_update = "release/1.0.0.0-rc"
+$branch_submodule_to_update = "release/1.0.0.0"
 
 Write-Host "Cloning..." -foregroundcolor "magenta"
 git clone -b $branch $upstream_repo $temp_folder
