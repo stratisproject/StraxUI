@@ -40,7 +40,8 @@
         <div class="row mx-auto">
           <div class="col-12 text-center my-4">
             <img src="./assets/images/notransactions.svg" alt="Go to the receive page to get a receive address.">
-            <p>You currently have no transactions</p>
+            <p *ngIf="!stakingOnly">You currently have no transactions</p>
+            <p *ngIf="stakingOnly">You currently have no staking transactions</p>
           </div>
         </div>
       </div>
