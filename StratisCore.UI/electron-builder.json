@@ -1,6 +1,6 @@
 {
   "appId": "com.stratisplatform.core",
-  "productName": "Stratis Core",
+  "productName": "Stratis Staking Wallet",
   "publish": null,
   "directories": {
     "output": "app-builds"
