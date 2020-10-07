@@ -23,7 +23,6 @@ import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { WalletSelectorComponent } from './wallet-selector/wallet-selector.component';
 import { SnackbarModule } from 'ngx-snackbar';
-import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { SideBarItem, SimpleSideBarItem } from '@shared/components/side-bar/side-bar-item-base';
 import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
