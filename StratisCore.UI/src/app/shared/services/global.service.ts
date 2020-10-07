@@ -21,8 +21,8 @@ export class GlobalService {
   private gitCommit = "";
   private testnet = false;
   private sidechain = false;
-  private mainApiPort = 37221;
-  private testApiPort = 38221;
+  private mainApiPort = 37103;
+  private testApiPort = 27103;
   private mainSideChainApiPort = 37223;
   private testSideChainApiPort = 38223;
   private apiPort: number;

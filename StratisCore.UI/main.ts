@@ -9,7 +9,7 @@ if (os.arch() === 'arm') {
 
 // Set to true if you want to build Core for sidechains
 const buildForSidechain = false;
-const daemonName = buildForSidechain ? 'Stratis.CirrusD' : 'Stratis.StratisD';
+const daemonName = buildForSidechain ? 'Stratis.CirrusD' : 'Stratis.StraxD';
 
 const args = process.argv.slice(1);
 
@@ -32,9 +32,9 @@ const applicationName = sidechain ? 'Cirrus Core' : 'Stratis Core';
 // Set default API port according to network
 let apiPortDefault;
 if (testnet && !sidechain) {
-  apiPortDefault = 38221;
+  apiPortDefault = 27103;
 } else if (!testnet && !sidechain) {
-  apiPortDefault = 37221;
+  apiPortDefault = 37103;
 } else if (sidechain && testnet) {
   apiPortDefault = 38223;
 } else if (sidechain && !testnet) {
