@@ -1,5 +1,7 @@
-<div *ngIf="(coldStakingDeploymentInfo| async) as _coldStakingDeploymentInfo">
-  <div class="card card-staking" *ngIf="_coldStakingDeploymentInfo.thresholdState === 'Active'; else notActivated">
+<div>
+<!-- <div *ngIf="(coldStakingDeploymentInfo| async) as _coldStakingDeploymentInfo"> -->
+  <!-- /<div class="card card-staking" *ngIf="_coldStakingDeploymentInfo.thresholdState === 'Active'; else notActivated"> -->
+    <div class="card card-staking">
     <div class="stake-type text-right">
       <span class="badge badge-cold ml-auto">Cold Wallet
         <span data-placement="top" class="lnr lnr-question-circle ml-2"></span>
@@ -15,15 +17,15 @@
     <div class="card-body">
       <p class="sub">{{ 0 | coinNotation}}</p>
     </div>
-    <div class="card-footer" *ngIf="(coldStakingInfo| async) as _coldStakingInfo">
+    <!-- <div class="card-footer" *ngIf="(coldStakingInfo| async) as _coldStakingInfo">
       <div class="row justify-content-center">
         <button type="button" class="btn btn-outline-primary col-4" (click)="withdrawClicked()">Withdraw</button>
-        <!-- <button *ngIf="_coldStakingInfo.hotWalletAccountExists" type="button" class="btn btn-outline-primary col-7 ml-2"
+        <button *ngIf="_coldStakingInfo.hotWalletAccountExists" type="button" class="btn btn-outline-primary col-7 ml-2"
                 (click)="unusedAddressClicked()">Get
           first unused address
-        </button> -->
+        </button>
       </div>
-    </div>
+    </div> -->
     <!-- <div class="row">
       <div class="col-12">
           <div class="row d-flex align-items-center">
@@ -35,7 +37,7 @@
       </div>
     </div> -->
   </div>
-  <ng-template #notActivated>
+  <!-- <ng-template #notActivated>
     <div class="card card-staking">
       <div *ngIf="_coldStakingDeploymentInfo.thresholdState === 'LockedIn'; else notLockedIn">
         <div class="stake-type text-right">
@@ -62,5 +64,5 @@
         <div class="card-body">{{ ((_coldStakingDeploymentInfo.votes / _coldStakingDeploymentInfo.blocks) * 100) | number: '1.0-0' }}%</div>
       </ng-template>
     </div>
-  </ng-template>
+  </ng-template> -->
 </div>
