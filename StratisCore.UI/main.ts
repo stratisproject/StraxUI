@@ -27,7 +27,7 @@ if (buildForSidechain) {
   sidechain = true;
 }
 
-const applicationName = sidechain ? 'Cirrus Core' : 'Stratis Staking Wallet';
+const applicationName = sidechain ? 'Cirrus Core' : 'Strax Wallet';
 
 // Set default API port according to network
 let apiPortDefault;
