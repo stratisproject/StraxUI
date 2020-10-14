@@ -34,7 +34,7 @@ let apiPortDefault;
 if (testnet && !sidechain) {
   apiPortDefault = 27103;
 } else if (!testnet && !sidechain) {
-  apiPortDefault = 37103;
+  apiPortDefault = 17103;
 } else if (sidechain && testnet) {
   apiPortDefault = 38223;
 } else if (sidechain && !testnet) {
