@@ -85,9 +85,6 @@ export class SendComponent implements OnInit, OnDestroy {
   public secondTitle: string;
   public sendingTo: string;
 
-  // The opReturnAmount is for compatibility with StratisX, opReturnAmount needs to be greater than 0 to pass the MemPool
-  // Validation rules.
-  public opReturnAmount = 1;
   public confirmationText: string;
   private subscriptions: Subscription[] = [];
   private sendFormErrors: any = {};
@@ -280,7 +277,9 @@ export class SendComponent implements OnInit, OnDestroy {
       true,
       !this.accountsEnabled, // Shuffle Outputs
       isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
-      isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null,
+      null,
+      null,
+      isSideChain
     );
   }
 
@@ -316,9 +315,8 @@ export class SendComponent implements OnInit, OnDestroy {
   private openConfirmationModal(transactionResponse: TransactionResponse): void {
     this.taskBarService.open(SendConfirmationComponent, {
       transaction: transactionResponse.transaction,
-      transactionFee: this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee,
+      transactionFee: transactionResponse.transactionFee,
       sidechainEnabled: this.sidechainEnabled,
-      opReturnAmount: this.opReturnAmount,
       hasOpReturn: transactionResponse.isSideChain
     }, {taskBarWidth: '550px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
