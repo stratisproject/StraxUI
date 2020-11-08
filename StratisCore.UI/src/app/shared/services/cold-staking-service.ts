@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { GetColdStakingInfo } from '@shared/services/interfaces/api.i';
+import { GetColdStakingInfo, TransactionsHistoryItem, WalletHistory } from '@shared/services/interfaces/api.i';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -10,45 +10,32 @@ import {
   SignalREvents,
   ColdStakingInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
-import { catchError } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { ConsensusService } from '@shared/services/consensus-service';
 import { DeploymentInfo } from '@shared/models/deployment-info';
 import { ColdStakingAccount } from '@shared/models/cold-staking-account';
 import { ColdStakingAddress } from '@shared/models/cold-staking-address';
 import { ColdStakingSetup } from '@shared/models/cold-staking-setup';
 import { ColdStakingWithdrawal } from '@shared/models/cold-staking-withdrawal';
+import { TransactionInfo } from '@shared/models/transaction-info';
+import { Transaction } from '@shared/models/transaction';
+import { AddressBookService } from '@shared/services/address-book-service';
+import { ColdStakingComponent } from 'src/app/wallet/staking/cold-staking/cold-staking.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ColdStakingService extends RestApi {
-  private coldStakingInfoUpdatedSubject = new BehaviorSubject<GetColdStakingInfo>(null);
-  private coldStakingDeploymentInfoSubject: BehaviorSubject<DeploymentInfo> = new BehaviorSubject<DeploymentInfo>({
-    deploymentName: '',
-    deploymentIndex: 0,
-    stateValue: 0,
-    thresholdState: '',
-    height: 0,
-    sinceHeight: 0,
-    confirmationPeriod: 0,
-    periodStartHeight: 0,
-    periodEndHeight: 0,
-    votes: 0,
-    blocks: 0,
-    versions: {
-      '': 0
-    },
-    threshold: 0,
-    timeStart: '',
-    timeTimeOut: ''
-  });
-  public coldStakingActivated = false;
+  //private coldStakingInfoUpdatedSubject = new BehaviorSubject<GetColdStakingInfo>(null);
   public hasColdStakingSetup = false;
   public canStake: boolean;
+  private coldStakingHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionInfo[]> } = {};
+  public coldStakingAccount: string;
 
   constructor(
     http: HttpClient,
     globalService: GlobalService,
+    addressBookService: AddressBookService,
     signalRService: SignalRService,
     consensusService: ConsensusService,
     errorService: ErrorService) {
@@ -56,27 +43,96 @@ export class ColdStakingService extends RestApi {
 
     this.canStake = !globalService.getSidechainEnabled();
 
-    consensusService.getDeploymentFlags().toPromise().then(response => {
-      const coldStakingDeploymentInfo: DeploymentInfo = response.filter(x => x.deploymentName === "coldstaking")[0]
-      this.coldStakingDeploymentInfoSubject.next(coldStakingDeploymentInfo);
+    // signalRService.registerOnMessageEventHandler<ColdStakingInfoSignalREvent>(
+    //   SignalREvents.ColdStakingInfo, (coldStakingInfo) => {
+    //     if (coldStakingInfo.coldWalletAccountExists || coldStakingInfo.hotWalletAccountExists) {
+    //       this.hasColdStakingSetup = true;
+    //     }
+    //     this.coldStakingInfoUpdatedSubject.next(coldStakingInfo);
+    //   }
+    // );
+  }
+
+  // public coldStakingInfo(): Observable<GetColdStakingInfo> {
+  //   return this.coldStakingInfoUpdatedSubject.asObservable();
+  // }
+
+  public setStakingAccount(accountName: string) {
+    this.coldStakingAccount = accountName;
+  }
+
+  public getColdStakingInfo(): Observable<any> {
+    const params = new HttpParams()
+      .set('walletName', this.globalService.getWalletName());
+
+    return this.get<GetColdStakingInfo>('coldstaking/cold-staking-info', params).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    )
+  }
+
+  public getColdStakingBalance(accountName: string): Observable<any> {
+    const params = new HttpParams()
+      .set('walletName', this.globalService.getWalletName())
+      .set('accountName', accountName);
+
+    return this.get('wallet/balance', params).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    )
+  }
+
+  public getColdStakingHistory(accountName: string): TransactionInfo[] {
+    const params = new HttpParams()
+      .set('walletName', this.globalService.getWalletName())
+      .set('accountName', accountName);
+
+    const history = this.get<WalletHistory>('wallet/history', params).pipe(
+      map(response => {
+        return response.history[0].transactionsHistory;
+      }),
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    ).toPromise().then(history => {
+      return this.applyHistory(history, accountName);
     })
+    return this.applyHistory(history, accountName);
+  }
 
-    signalRService.registerOnMessageEventHandler<ColdStakingInfoSignalREvent>(
-      SignalREvents.ColdStakingInfo, (coldStakingInfo) => {
-        if (coldStakingInfo.coldWalletAccountExists || coldStakingInfo.hotWalletAccountExists) {
-          this.hasColdStakingSetup = true;
+  private applyHistory(history, accountName): TransactionInfo[] {
+    const subject = this.getColdStakingHistorySubject(accountName);
+    const existingItems = subject.value;
+    const newItems = [];
+    history.forEach(item => {
+      const index = existingItems.findIndex(existing => existing.id === item.id);
+      if (index === -1) {
+        const mapped = TransactionInfo.mapFromTransactionsHistoryItem(item);
+        newItems.push(mapped);
+      } else {
+        if (item.confirmedInBlock && !existingItems[index].transactionConfirmedInBlock) {
+          existingItems.filter(existing => existing.id === item.id).forEach(existing => {
+            existing.transactionConfirmedInBlock = item.confirmedInBlock;
+          });
         }
-        this.coldStakingInfoUpdatedSubject.next(coldStakingInfo);
       }
-    );
+    });
+    const set = existingItems.concat(newItems);
+    subject.next(set.sort((a, b) => b.timestamp - a.timestamp));
+    return set.sort((a, b) => b.timestamp - a.timestamp);
   }
 
-  public coldStakingInfo(): Observable<GetColdStakingInfo> {
-    return this.coldStakingInfoUpdatedSubject.asObservable();
+  public coldStakingHistory(accountName: string): Observable<TransactionInfo[]> {
+    return this.getColdStakingHistorySubject(accountName).asObservable();
   }
 
-  public coldStakingDeploymentInfo(): Observable<any> {
-    return this.coldStakingDeploymentInfoSubject.asObservable();
+  private getColdStakingHistorySubject(accountName: string): BehaviorSubject<TransactionInfo[]> {
+    if (!this.coldStakingHistorySubjects[this.globalService.getWalletName(), accountName]) {
+      this.coldStakingHistorySubjects[this.globalService.getWalletName(), accountName] = new BehaviorSubject<TransactionInfo[]>([]);
+    }
+    return this.coldStakingHistorySubjects[this.globalService.getWalletName(), accountName];
   }
 
   public invokePostColdStakingAccountApiCall(data: ColdStakingAccount): Observable<any> {

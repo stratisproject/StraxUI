@@ -11,7 +11,12 @@ export class StakingComponent implements OnInit {
 
   constructor() { }
 
+  public hotStaking = true;
+
   ngOnInit(): void {
   }
 
+  public switchHistory(hotStaking: boolean) {
+    this.hotStaking = hotStaking;
+  }
 }
