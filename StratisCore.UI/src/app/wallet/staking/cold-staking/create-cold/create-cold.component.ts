@@ -18,7 +18,7 @@ export class CreateColdComponent implements OnInit, OnDestroy {
   private coldStakingForm: FormGroup;
   private subscriptions: Subscription[] = [];
   public address: string;
-  public fee = 1000000; //Stratoshis
+  public estimatedFee: number;
   public copied = false;
   public isConfirming = false;
   public confirmed = false;
@@ -50,14 +50,17 @@ export class CreateColdComponent implements OnInit, OnDestroy {
       this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
         this.address = response.address;
 
-        const setupData = new ColdStakingSetup(
+        console.log(this.estimatedFee);
+        console.log(this.coldStakingForm.get('amount').value)
+
+        let setupData = new ColdStakingSetup(
           this.address,
           this.coldStakingForm.get('hotWalletAddress').value,
           this.walletName,
           this.coldStakingForm.get("password").value,
           this.globalService.getWalletAccount(),
-          this.coldStakingForm.get('amount').value - (this.fee / 100000000),
-          this.fee / 100000000
+          this.coldStakingForm.get('amount').value - (this.estimatedFee / 100000000),
+          this.estimatedFee / 100000000
         )
         this.coldStakingService.invokePostSetupColdStakingApiCall(setupData).toPromise().then(response => {
           this.transactionHex = response.transactionHex;
@@ -65,6 +68,21 @@ export class CreateColdComponent implements OnInit, OnDestroy {
         }, () => this.isConfirming = false)
       }, () => { this.isConfirming = false; })
     }, () => { this.isConfirming = false; });
+  }
+
+  private estimateColdStakingSetupFee(): void {
+    const data = new ColdStakingSetup(
+      this.address,
+      this.coldStakingForm.get('hotWalletAddress').value,
+      this.walletName,
+      this.coldStakingForm.get("password").value,
+      this.globalService.getWalletAccount(),
+      this.coldStakingForm.get('amount').value,
+      0
+    )
+    this.coldStakingService.postColdStakingSetupFeeEstimation(data).toPromise().then(response => {
+      this.estimatedFee = response;
+    });
   }
 
   public copyToClipboardClicked(transactionHex: string): void {
@@ -99,6 +117,10 @@ export class CreateColdComponent implements OnInit, OnDestroy {
           this.formErrors[field] += messages[key] + ' ';
         }
       }
+    }
+
+    if (this.coldStakingForm.valid) {
+      this.estimateColdStakingSetupFee();
     }
   }
 

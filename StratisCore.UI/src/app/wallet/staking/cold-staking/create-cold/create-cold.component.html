@@ -27,7 +27,7 @@
     </div>
     <div class="form-group clearfix">
       <div>
-        <div class="alert alert-warning py-1">A fee of {{ fee | coinNotation }} {{ coinUnit }} will be used to set up cold staking and will be deducted from the staking amount automatically.</div>
+        <div *ngIf="estimatedFee" class="alert alert-warning py-1">A fee of {{ estimatedFee | coinNotation }} {{ coinUnit }} will be used to set up cold staking and will be deducted from the staking amount automatically.</div>
       </div>
     </div>
     <button *ngIf="!isConfirming" type="submit" class="btn btn-primary btn-block" [disabled]="!coldStakingForm.valid || isConfirming"

@@ -135,6 +135,14 @@ export class ColdStakingService extends RestApi {
     return this.coldStakingHistorySubjects[this.globalService.getWalletName(), accountName];
   }
 
+  public postColdStakingSetupFeeEstimation(data: ColdStakingSetup) {
+    return this.post('coldstaking/estimate-cold-staking-setup-tx-fee', data).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    );
+  }
+
   public invokePostColdStakingAccountApiCall(data: ColdStakingAccount): Observable<any> {
     return this.post('coldstaking/cold-staking-account', data).pipe(
       catchError(err => {
