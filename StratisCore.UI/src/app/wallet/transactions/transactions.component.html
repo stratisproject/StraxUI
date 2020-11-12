@@ -41,7 +41,9 @@
           <div class="col-12 text-center my-4">
             <img src="./assets/images/notransactions.svg" alt="Go to the receive page to get a receive address.">
             <p *ngIf="!stakingOnly">You currently have no transactions</p>
+
             <p *ngIf="stakingOnly">You currently have no staking transactions</p>
+            <p>Please note that your transaction history and balances can only show when you are completely synchronized.</p>
           </div>
         </div>
       </div>

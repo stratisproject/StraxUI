@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateHotComponent } from '../create-hot/create-hot.component';
 import { CreateColdComponent } from '../create-cold/create-cold.component';
+import { ColdStakingService } from '@shared/services/cold-staking-service';
 
 @Component({
   selector: 'app-create-select',
@@ -10,9 +11,13 @@ import { CreateColdComponent } from '../create-cold/create-cold.component';
 })
 export class CreateSelectComponent implements OnInit {
 
-  constructor(public activeModal: NgbActiveModal, public modalService: NgbModal) { }
+  constructor(public activeModal: NgbActiveModal, public modalService: NgbModal, public coldStakingService: ColdStakingService) { }
 
+  public hasColdStakingAccount;
+  public hasHotStakingAccount;
   ngOnInit(): void {
+    this.hasColdStakingAccount = this.coldStakingService.getHasColdStakingAccount();
+    this.hasHotStakingAccount = this.coldStakingService.getHasHotStakingAccount();
   }
 
   public openHotStakingCreate(): void {

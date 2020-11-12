@@ -36,9 +36,17 @@ export class ColdStakingComponent implements OnInit {
     this.hasHotStakingAccount = this.coldStakingService.getHasHotStakingAccount();
     if (this.hasColdStakingAccount || this.hasHotStakingAccount) {
       this.hasColdStakingSetup = true;
-      this.stakingWalletAccountName = this.hasColdStakingAccount ? "coldStakingColdAddresses" : "coldStakingHotAddresses";
-      this.coldStakingService.setStakingAccount(this.stakingWalletAccountName);
-      this.startSubscriptions();
+
+      if (this.hasColdStakingAccount) {
+        this.stakingWalletAccountName = "coldStakingColdAddresses";
+      } else if (this.hasHotStakingAccount) {
+        this.stakingWalletAccountName = "coldStakingHotAddresses"
+      }
+
+      if (this.stakingWalletAccountName) {
+        this.coldStakingService.setStakingAccount(this.stakingWalletAccountName);
+        this.startSubscriptions();
+      }
     } else {
       this.hasColdStakingSetup = false;
     }
