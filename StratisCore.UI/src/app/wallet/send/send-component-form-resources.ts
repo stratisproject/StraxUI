@@ -74,18 +74,18 @@ export class SendComponentFormResources {
   }
 
   public static stratisNetworks: Network[] = [
-    { name: 'Cirrus', federationAddress: 'sg3WNvfWFxLJXXPYsvhGDdzpc9bT4uRQsN', description: 'Cirrus Sidechain'}
+    // { name: 'Cirrus', federationAddress: 'sg3WNvfWFxLJXXPYsvhGDdzpc9bT4uRQsN', description: 'Cirrus Sidechain'}
   ];
 
   public static stratisTestNetworks: Network[] = [
-    { name: 'CirrusTest', federationAddress: '2N1wrNv5NDayLrKuph9YDVk8Fip8Wr8F8nX', description: 'Cirrus Test Sidechain'}
+    // { name: 'CirrusTest', federationAddress: '2N1wrNv5NDayLrKuph9YDVk8Fip8Wr8F8nX', description: 'Cirrus Test Sidechain'}
   ];
 
   public static cirrusNetworks: Network[] = [
-    { name: 'Stratis', federationAddress: 'cnYBwudqzHBtGVELyQNUGzviKV4Ym3yiEo', description: 'Stratis Mainnet'}
+    // { name: 'Stratis', federationAddress: 'cnYBwudqzHBtGVELyQNUGzviKV4Ym3yiEo', description: 'Stratis Mainnet'}
   ];
 
   public static cirrusTestNetworks: Network[] = [
-    { name: 'StratisTest', federationAddress: 'xH1GHWVNKwdebkgiFPtQtM4qb3vrvNX2Rg', description: 'Stratis Testnet'}
+    // { name: 'StratisTest', federationAddress: 'xH1GHWVNKwdebkgiFPtQtM4qb3vrvNX2Rg', description: 'Stratis Testnet'}
   ];
 }
