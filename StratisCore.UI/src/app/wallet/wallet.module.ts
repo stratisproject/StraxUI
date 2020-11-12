@@ -39,6 +39,7 @@ import { CreateHotComponent } from './staking/cold-staking/create-hot/create-hot
 import { CreateColdComponent } from './staking/cold-staking/create-cold/create-cold.component';
 import { WithdrawColdFundsComponent } from './staking/cold-staking/withdraw-cold-funds/withdraw-cold-funds.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { UnusedAddressComponent } from './staking/cold-staking/unused-address/unused-address.component';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     CreateSelectComponent,
     CreateHotComponent,
     CreateColdComponent,
-    WithdrawColdFundsComponent
+    WithdrawColdFundsComponent,
+    UnusedAddressComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -100,7 +102,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     LogoutConfirmationComponent,
     AddNodeComponent,
     ResyncComponent,
-    BroadcastTransactionComponent
+    BroadcastTransactionComponent,
+    UnusedAddressComponent
   ]
 })
 

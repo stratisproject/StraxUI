@@ -9,6 +9,7 @@ import { AddressBookService } from '@shared/services/address-book-service';
 import { Animations } from '@shared/animations/animations';
 import { TaskBarService } from '@shared/services/task-bar-service';
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
+import { ColdStakingService } from '@shared/services/cold-staking-service';
 
 @Component({
   selector: 'app-transactions',
@@ -27,6 +28,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   @Input() public maxTransactionCount: number;
   @Input() public title: string;
   @Input() public stakingOnly: boolean;
+  @Input() public coldStaking = false;
   @Output() public rowClicked: EventEmitter<TransactionInfo> = new EventEmitter();
   private last: TransactionInfo;
 
@@ -35,7 +37,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     private snackBarService: SnackbarService,
     private addressBookService: AddressBookService,
     private taskBarService: TaskBarService,
-    public walletService: WalletService) {
+    public walletService: WalletService,
+    public coldStakingService: ColdStakingService) {
 
     this.paginationConfig = {
       itemsPerPage: 7,
@@ -70,7 +73,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.transactions = this.walletService.walletHistory()
+    if(!this.coldStaking) {
+      this.transactions = this.walletService.walletHistory()
       .pipe(
         map((items) => {
           return this.stakingOnly ? items.filter(i => i.transactionType === 'staked') : items;
@@ -79,6 +83,17 @@ export class TransactionsComponent implements OnInit, OnDestroy {
           const history = items;
           this.last = history && history.length > 0 ? history[history.length - 1] : {} as TransactionInfo;
         }));
+    } else {
+      this.transactions = this.coldStakingService.coldStakingHistory(this.coldStakingService.coldStakingAccount)
+      .pipe(
+        map((items) => {
+          return items;
+        }),
+        tap(items => {
+          const history = items;
+          this.last = history && history.length > 0 ? history[history.length - 1] : {} as TransactionInfo;
+        }));
+    }
   }
 
   // public toggleExpandItem(index: number): void {

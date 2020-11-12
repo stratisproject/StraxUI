@@ -47,6 +47,7 @@ export class CreateHotComponent implements OnInit, OnDestroy {
           if (response) {
             this.address = response.address;
             this.confirmed = true;
+            localStorage.setItem("hasHotStaking" + this.walletName, "true");
           } else {
             this.isConfirming = false;
           }

@@ -6,6 +6,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ColdStakingService } from '@shared/services/cold-staking-service';
 import { ColdStakingWithdrawal } from '@shared/models/cold-staking-withdrawal';
 import { GlobalService } from '@shared/services/global.service';
+import { WalletService } from '@shared/services/wallet.service';
+import { FeeEstimation } from '@shared/models/fee-estimation';
 
 @Component({
   selector: 'app-withdraw-cold-funds',
@@ -15,14 +17,15 @@ import { GlobalService } from '@shared/services/global.service';
 export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
   public copied = false;
   public transactionHex: string;
-  public fee = 1000000; //Stratoshi
+  public fee = 0; //Stratoshi
   public generated = false;
   public isGenerating = false;
   public walletName: string;
   public coinUnit: string;
   private withdrawColdFundsForm: FormGroup;
   private subscriptions: Subscription[] = [];
-  constructor(private fb: FormBuilder, private clipboardService: ClipboardService, private coldStakingService: ColdStakingService, private globalService: GlobalService, public activeModal: NgbActiveModal) {
+  constructor(private fb: FormBuilder, private clipboardService: ClipboardService, private coldStakingService: ColdStakingService,
+      private globalService: GlobalService, public activeModal: NgbActiveModal, private walletService: WalletService) {
     this.buildWithdrawColdFundsForm();
     this.walletName = globalService.getWalletName();
     this.coinUnit = globalService.getCoinUnit();
@@ -42,9 +45,10 @@ export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
       this.withdrawColdFundsForm.get("receiveAddress").value,
       this.walletName,
       this.withdrawColdFundsForm.get("password").value,
-      this.withdrawColdFundsForm.get("amount").value,
+      this.withdrawColdFundsForm.get("amount").value - (this.fee / 100000000),
       this.fee / 100000000
     );
+    console.log(withdrawData);
     this.coldStakingService.invokePostColdStakingWithdrawalApiCall(withdrawData).toPromise().then(response => {
       this.transactionHex = response.transactionHex;
       this.isGenerating = false;
@@ -52,6 +56,22 @@ export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
     }, () => {
       this.isGenerating = false;
       this.generated = false;
+    })
+  }
+
+  private estimateFee() {
+    const feeEstimation = new FeeEstimation(
+      this.walletName,
+      this.coldStakingService.coldStakingAccount,
+      this.withdrawColdFundsForm.get("receiveAddress").value,
+      "",
+      this.withdrawColdFundsForm.get("amount").value,
+      "medium",
+      true
+    )
+
+    this.walletService.estimateFee(feeEstimation).toPromise().then(response => {
+      this.fee = response;
     })
   }
 
@@ -82,6 +102,10 @@ export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
           this.formErrors[field] += messages[key] + ' ';
         }
       }
+    }
+
+    if (this.withdrawColdFundsForm.valid) {
+      this.estimateFee();
     }
   }
 

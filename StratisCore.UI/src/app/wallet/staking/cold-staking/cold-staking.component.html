@@ -1,68 +1,43 @@
 <div>
-<!-- <div *ngIf="(coldStakingDeploymentInfo| async) as _coldStakingDeploymentInfo"> -->
-  <!-- /<div class="card card-staking" *ngIf="_coldStakingDeploymentInfo.thresholdState === 'Active'; else notActivated"> -->
-    <div class="card card-staking">
-    <div class="stake-type text-right">
-      <span class="badge badge-cold ml-auto">Cold Wallet
-        <span data-placement="top" class="lnr lnr-question-circle ml-2"></span>
-      </span>
-    </div>
+  <div class="card card-staking">
+  <div class="stake-type text-right">
+    <span class="badge badge-cold ml-auto">Cold Wallet
+      <!-- <span data-placement="top" class="lnr lnr-question-circle ml-2"></span> -->
+    </span>
+  </div>
+  <div *ngIf="hasColdStakingSetup">
     <div class="card-header">Balance</div>
     <div class="card-body">
       <p class="lead">
-        <strong>{{ 0 | coinNotation }}</strong>
+        <strong>{{ coldStakingBalance || 0 | coinNotation }}</strong>
       </p>
     </div>
-    <div class="card-header">Spendable</div>
-    <div class="card-body">
-      <p class="sub">{{ 0 | coinNotation}}</p>
-    </div>
-    <!-- <div class="card-footer" *ngIf="(coldStakingInfo| async) as _coldStakingInfo">
-      <div class="row justify-content-center">
-        <button type="button" class="btn btn-outline-primary col-4" (click)="withdrawClicked()">Withdraw</button>
-        <button *ngIf="_coldStakingInfo.hotWalletAccountExists" type="button" class="btn btn-outline-primary col-7 ml-2"
-                (click)="unusedAddressClicked()">Get
-          first unused address
-        </button>
-      </div>
-    </div> -->
-    <!-- <div class="row">
-      <div class="col-12">
-          <div class="row d-flex align-items-center">
-              <div class="col text-right">
-                  <button class="btn btn-link mb-2" style="display: inline-block" (click)="onSetup()">+
-                      Create Coldstaking Setup</button>
-              </div>
-          </div>
-      </div>
-    </div> -->
   </div>
-  <!-- <ng-template #notActivated>
-    <div class="card card-staking">
-      <div *ngIf="_coldStakingDeploymentInfo.thresholdState === 'LockedIn'; else notLockedIn">
-        <div class="stake-type text-right">
-          <span class="badge badge-cold ml-auto">Cold Wallet
-            <span data-placement="top" class="lnr lnr-question-circle ml-2"></span>
-          </span>
+  <div>
+    <div class="card-header">Cold staking status</div>
+    <div class="card-body" *ngIf="!hasColdStakingAccount && !hasHotStakingAccount">You have no cold staking setup.</div>
+    <div class="card-body" *ngIf="hasColdStakingAccount">This wallet has been set up as a cold staking wallet</div>
+    <div class="card-body" *ngIf="hasHotStakingAccount">This node has been set up as a hot staking node. Make sure to enable staking in the Hot Wallet section.</div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="row d-flex align-items-center">
+        <div class="col text-right">
+          <button *ngIf="hasColdStakingAccount" type="button" class="btn btn-outline-primary" (click)="withdrawClicked()">Withdraw from cold wallet</button>
+          <button *ngIf="hasHotStakingAccount" type="button" class="btn btn-outline-primary" (click)="unusedAddressClicked()">Get new hot node address</button>
         </div>
-        <div class="card-header">Cold Staking Status</div>
-        <div class="card-body">Locked in</div>
-        <div class="card-header">Blocks remaining for activation</div>
-        <div class="card-body">{{ _coldStakingDeploymentInfo.periodEndHeight - _coldStakingDeploymentInfo.height }}</div>
       </div>
-      <ng-template #notLockedIn>
-        <div class="stake-type text-right">
-          <span class="badge badge-cold ml-auto">Cold Wallet
-            <span data-placement="top" class="lnr lnr-question-circle ml-2"></span>
-          </span>
-        </div>
-        <div class="card-header">Cold Staking Status</div>
-        <div class="card-body">Not activated</div>
-        <div class="card-header">Needed threshold to activate</div>
-        <div class="card-body">{{ ((_coldStakingDeploymentInfo.threshold / _coldStakingDeploymentInfo.confirmationPeriod) * 100) | number: '1.0-0'}}%</div>
-        <div class="card-header">Current threshold</div>
-        <div class="card-body">{{ ((_coldStakingDeploymentInfo.votes / _coldStakingDeploymentInfo.blocks) * 100) | number: '1.0-0' }}%</div>
-      </ng-template>
     </div>
-  </ng-template> -->
+  </div>
+  <div class="row">
+    <div class="col-12">
+        <div class="row d-flex align-items-center">
+            <div class="col text-right">
+                <button class="btn btn-link mb-2" style="display: inline-block" (click)="onSetup()">+
+                    Create Coldstaking Setup</button>
+            </div>
+        </div>
+    </div>
+  </div>
+  </div>
 </div>

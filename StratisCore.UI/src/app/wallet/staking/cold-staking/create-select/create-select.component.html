@@ -9,7 +9,7 @@
     In order to set up cold staking you need to run a hot staking node and have a cold wallet containing the funds you want to stake.
   </p>
   <div class="row">
-    <div class="col-6">
+    <div class="col-6" *ngIf="!hasHotStakingAccount && !hasColdStakingAccount">
       <div class="card">
         <div class="card-header">
           Hot staking node
@@ -21,20 +21,23 @@
         </div>
       </div>
     </div>
-    <div class="col-6">
+    <div class="col-6" *ngIf="!hasHotStakingAccount">
       <div class="card-header">
         Cold wallet
       </div>
       <div class="card-body">
-        Your cold wallet will If you want to set up a cold wallet on this device, click create cold staking wallet.
+        If you want to set up a cold wallet on this device, click create cold staking wallet.
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-6">
+    <div class="col-6" *ngIf="!hasHotStakingAccount && !hasColdStakingAccount">
       <button class="btn btn-primary btn-block" (click)="openHotStakingCreate()">Create hot staking node</button>
     </div>
-    <div class="col-6">
+    <div class="col-12" *ngIf="hasHotStakingAccount && !hasColdStakingAccount">
+      Your node has succesfully been set up as a hot staking node. You can get a new hot address on the staking dashboard.
+    </div>
+    <div class="col-6" *ngIf="!hasHotStakingAccount">
       <button class="btn btn-primary btn-block" (click)="openColdStakingCreate()">Create cold staking wallet</button>
     </div>
   </div>
