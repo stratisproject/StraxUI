@@ -5,7 +5,7 @@
       <!-- <span data-placement="top" class="lnr lnr-question-circle ml-2"></span> -->
     </span>
   </div>
-  <div *ngIf="hasColdStaking">
+  <div *ngIf="hasColdStakingSetup">
     <div class="card-header">Balance</div>
     <div class="card-body">
       <p class="lead">
@@ -15,15 +15,18 @@
   </div>
   <div>
     <div class="card-header">Cold staking status</div>
-    <div class="card-body" *ngIf="!coldStakingInfo.coldWalletAccountExists && !coldStakingInfo.hotWalletAccountExists">You have no cold staking setup.</div>
-    <div class="card-body" *ngIf="coldStakingInfo.coldWalletAccountExists">This wallet has been set up as a cold staking wallet</div>
-    <div class="card-body" *ngIf="coldStakingInfo.hotWalletAccountExists">This node has been set up as a hot staking node</div>
+    <div class="card-body" *ngIf="!hasColdStakingAccount && !hasHotStakingAccount">You have no cold staking setup.</div>
+    <div class="card-body" *ngIf="hasColdStakingAccount">This wallet has been set up as a cold staking wallet</div>
+    <div class="card-body" *ngIf="hasHotStakingAccount">This node has been set up as a hot staking node. Make sure to enable staking in the Hot Wallet section.</div>
   </div>
-  <!-- <div class="card-footer" *ngIf="(coldStakingInfo| async) as _coldStakingInfo"> -->
-  <div class="card-footer">
-    <div class="row justify-content-center">
-      <button *ngIf="coldStakingInfo.coldWalletAccountExists" type="button" class="btn btn-outline-primary col-4" (click)="withdrawClicked()">Withdraw</button>
-      <button *ngIf="coldStakingInfo.hotWalletAccountExists" type="button" class="btn btn-outline-primary col-7 ml-2" (click)="unusedAddressClicked()">Get new hot node address</button>
+  <div class="row">
+    <div class="col-12">
+      <div class="row d-flex align-items-center">
+        <div class="col text-right">
+          <button *ngIf="hasColdStakingAccount" type="button" class="btn btn-outline-primary" (click)="withdrawClicked()">Withdraw from cold wallet</button>
+          <button *ngIf="hasHotStakingAccount" type="button" class="btn btn-outline-primary" (click)="unusedAddressClicked()">Get new hot node address</button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">

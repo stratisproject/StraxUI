@@ -18,8 +18,10 @@ export class ColdStakingComponent implements OnInit {
 
   public coldStakingInfo: any;
   public coldStakingInfoSubscription: Subscription;
-  public hasColdStaking: boolean;
-  public stakingWalletAccount: string;
+  public hasColdStakingSetup: boolean;
+  public hasColdStakingAccount: boolean;
+  public hasHotStakingAccount: boolean;
+  public stakingWalletAccountName: string;
   public coldStakingDeploymentInfo: Observable<DeploymentInfo>;
   public coldStakingBalance: number;
   private coldStakingBalanceSubscription: Subscription;
@@ -30,30 +32,23 @@ export class ColdStakingComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // Todo: async when SignalR is implemented
-    // this.coldStakingInfo = this.coldStakingService.coldStakingInfo();
-    // this.coldStakingDeploymentInfo = this.coldStakingService.coldStakingDeploymentInfo();
-    this.coldStakingInfoSubscription = interval(3000).pipe(
-      startWith(0),
-      switchMap(() => this.coldStakingService.getColdStakingInfo())
-    ).subscribe(res => {
-      this.coldStakingInfo = res;
-      if (this.coldStakingInfo.coldWalletAccountExists || this.coldStakingInfo.hotWalletAccountExists) {
-        this.hasColdStaking = true;
-        this.stakingWalletAccount = this.coldStakingInfo.coldWalletAccountExists ? "coldStakingColdAddresses" : "coldStakingHotAddresses";
-        this.coldStakingService.setStakingAccount(this.stakingWalletAccount);
-        this.startSubscriptions();
-      } else {
-        this.hasColdStaking = false;
-      }
-    });
+    this.hasColdStakingAccount = this.coldStakingService.getHasColdStakingAccount();
+    this.hasHotStakingAccount = this.coldStakingService.getHasHotStakingAccount();
+    if (this.hasColdStakingAccount || this.hasHotStakingAccount) {
+      this.hasColdStakingSetup = true;
+      this.stakingWalletAccountName = this.hasColdStakingAccount ? "coldStakingColdAddresses" : "coldStakingHotAddresses";
+      this.coldStakingService.setStakingAccount(this.stakingWalletAccountName);
+      this.startSubscriptions();
+    } else {
+      this.hasColdStakingSetup = false;
+    }
   }
 
   private startSubscriptions() {
     if (!this.coldStakingBalanceSubscription) {
       this.coldStakingBalanceSubscription = interval(10000).pipe(
         startWith(0),
-        switchMap(() => this.coldStakingService.getColdStakingBalance(this.stakingWalletAccount))
+        switchMap(() => this.coldStakingService.getColdStakingBalance(this.stakingWalletAccountName))
       ).subscribe(res => {
         this.coldStakingBalance = res.balances[0].amountConfirmed;
       });
@@ -62,7 +57,7 @@ export class ColdStakingComponent implements OnInit {
     if(!this.coldStakingHistorySubscription) {
       this.coldStakingHistorySubscription = interval(10000).pipe(
         startWith(0),
-        switchMap(() => this.coldStakingService.getColdStakingHistory(this.stakingWalletAccount))
+        switchMap(() => this.coldStakingService.getColdStakingHistory(this.stakingWalletAccountName))
       ).subscribe(res => {
         this.coldStakingHistory = res;
       });

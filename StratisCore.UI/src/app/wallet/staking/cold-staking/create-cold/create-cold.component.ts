@@ -20,8 +20,8 @@ export class CreateColdComponent implements OnInit, OnDestroy {
   public address: string;
   public estimatedFee: number;
   public copied = false;
-  public isConfirming = false;
   public confirmed = false;
+  public hasSetup = false;
   public walletName: string;
   public coinUnit: string;
   public transactionHex: string;
@@ -36,7 +36,6 @@ export class CreateColdComponent implements OnInit, OnDestroy {
   }
 
   public confirmSetup(): void {
-    this.isConfirming = true;
     const data: ColdStakingAccount = new ColdStakingAccount(
       this.walletName,
       this.coldStakingForm.get("password").value,
@@ -49,25 +48,27 @@ export class CreateColdComponent implements OnInit, OnDestroy {
       )
       this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
         this.address = response.address;
+        this.estimateColdStakingSetupFee();
+        this.confirmed = true;
+      })
+    })
+  }
 
-        console.log(this.estimatedFee);
-        console.log(this.coldStakingForm.get('amount').value)
-
-        let setupData = new ColdStakingSetup(
-          this.address,
-          this.coldStakingForm.get('hotWalletAddress').value,
-          this.walletName,
-          this.coldStakingForm.get("password").value,
-          this.globalService.getWalletAccount(),
-          this.coldStakingForm.get('amount').value - (this.estimatedFee / 100000000),
-          this.estimatedFee / 100000000
-        )
-        this.coldStakingService.invokePostSetupColdStakingApiCall(setupData).toPromise().then(response => {
-          this.transactionHex = response.transactionHex;
-          this.confirmed = true;
-        }, () => this.isConfirming = false)
-      }, () => { this.isConfirming = false; })
-    }, () => { this.isConfirming = false; });
+  public invokeSetup(): void {
+    let setupData = new ColdStakingSetup(
+      this.address,
+      this.coldStakingForm.get('hotWalletAddress').value,
+      this.walletName,
+      this.coldStakingForm.get("password").value,
+      this.globalService.getWalletAccount(),
+      this.coldStakingForm.get('amount').value - (this.estimatedFee / 100000000),
+      this.estimatedFee / 100000000
+    )
+    this.coldStakingService.invokePostSetupColdStakingApiCall(setupData).toPromise().then(response => {
+      localStorage.setItem("hasColdStaking"  + this.walletName, "true");
+      this.transactionHex = response.transactionHex;
+      this.hasSetup = true;
+    })
   }
 
   private estimateColdStakingSetupFee(): void {
@@ -117,10 +118,6 @@ export class CreateColdComponent implements OnInit, OnDestroy {
           this.formErrors[field] += messages[key] + ' ';
         }
       }
-    }
-
-    if (this.coldStakingForm.valid) {
-      this.estimateColdStakingSetupFee();
     }
   }
 

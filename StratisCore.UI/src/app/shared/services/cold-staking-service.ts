@@ -26,11 +26,10 @@ import { ColdStakingComponent } from 'src/app/wallet/staking/cold-staking/cold-s
   providedIn: 'root'
 })
 export class ColdStakingService extends RestApi {
-  //private coldStakingInfoUpdatedSubject = new BehaviorSubject<GetColdStakingInfo>(null);
-  public hasColdStakingSetup = false;
-  public canStake: boolean;
   private coldStakingHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionInfo[]> } = {};
+  private walletName: string;
   public coldStakingAccount: string;
+  public hasColdStakingSetup = false;
 
   constructor(
     http: HttpClient,
@@ -38,39 +37,55 @@ export class ColdStakingService extends RestApi {
     addressBookService: AddressBookService,
     signalRService: SignalRService,
     consensusService: ConsensusService,
-    errorService: ErrorService) {
-    super(globalService, http, errorService);
+    errorService: ErrorService
+    ) {
+      super(globalService, http, errorService);
 
-    this.canStake = !globalService.getSidechainEnabled();
+      this.walletName = this.globalService.getWalletName();
+      this.getHasColdStakingAccount();
+      this.getHasHotStakingAccount();
+    }
 
-    // signalRService.registerOnMessageEventHandler<ColdStakingInfoSignalREvent>(
-    //   SignalREvents.ColdStakingInfo, (coldStakingInfo) => {
-    //     if (coldStakingInfo.coldWalletAccountExists || coldStakingInfo.hotWalletAccountExists) {
-    //       this.hasColdStakingSetup = true;
-    //     }
-    //     this.coldStakingInfoUpdatedSubject.next(coldStakingInfo);
-    //   }
-    // );
+  public getHasColdStakingAccount(): boolean {
+    if (localStorage.getItem("hasColdStaking" + this.walletName)) {
+      return JSON.parse(localStorage.getItem("hasColdStaking" + this.walletName));
+    } else {
+      localStorage.setItem("hasColdStaking" + this.walletName, "false");
+      return JSON.parse(localStorage.getItem("hasColdStaking" + this.walletName));
+    }
   }
 
-  // public coldStakingInfo(): Observable<GetColdStakingInfo> {
-  //   return this.coldStakingInfoUpdatedSubject.asObservable();
-  // }
+  public getHasHotStakingAccount(): boolean {
+    if (localStorage.getItem("hasHotStaking" + this.walletName)) {
+      return JSON.parse(localStorage.getItem("hasHotStaking" + this.walletName));
+    } else {
+      localStorage.setItem("hasHotStaking" + this.walletName, "false");
+      return JSON.parse(localStorage.getItem("hasHotStaking" + this.walletName));
+    }
+  }
+
+  public setHasColdStakingAccount(hasColdStaking: string) {
+    localStorage.setItem("hasColdStaking"  + this.walletName, hasColdStaking);
+  }
+
+  public setHasHotStakingAccount(hasHotStaking: string) {
+    localStorage.setItem("hasHotStaking"  + this.walletName, hasHotStaking);
+  }
 
   public setStakingAccount(accountName: string) {
     this.coldStakingAccount = accountName;
   }
 
-  public getColdStakingInfo(): Observable<any> {
-    const params = new HttpParams()
-      .set('walletName', this.globalService.getWalletName());
+  // public getColdStakingInfo(): Observable<any> {
+  //   const params = new HttpParams()
+  //     .set('walletName', this.globalService.getWalletName());
 
-    return this.get<GetColdStakingInfo>('coldstaking/cold-staking-info', params).pipe(
-      catchError(err => {
-        return this.handleHttpError(err);
-      })
-    )
-  }
+  //   return this.get<GetColdStakingInfo>('coldstaking/cold-staking-info', params).pipe(
+  //     catchError(err => {
+  //       return this.handleHttpError(err);
+  //     })
+  //   )
+  // }
 
   public getColdStakingBalance(accountName: string): Observable<any> {
     const params = new HttpParams()
