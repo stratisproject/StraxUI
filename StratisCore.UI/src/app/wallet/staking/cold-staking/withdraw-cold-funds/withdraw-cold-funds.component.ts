@@ -62,7 +62,7 @@ export class WithdrawColdFundsComponent implements OnInit, OnDestroy {
   private estimateFee() {
     const feeEstimation = new FeeEstimation(
       this.walletName,
-      this.coldStakingService.coldStakingAccount,
+      this.coldStakingService.getColdStakingAccount(),
       this.withdrawColdFundsForm.get("receiveAddress").value,
       "",
       this.withdrawColdFundsForm.get("amount").value,

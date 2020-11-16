@@ -28,7 +28,7 @@ import { ColdStakingComponent } from 'src/app/wallet/staking/cold-staking/cold-s
 export class ColdStakingService extends RestApi {
   private coldStakingHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionInfo[]> } = {};
   private walletName: string;
-  public coldStakingAccount: string;
+  private coldStakingAccount: string;
   public hasColdStakingSetup = false;
 
   constructor(
@@ -41,35 +41,43 @@ export class ColdStakingService extends RestApi {
     ) {
       super(globalService, http, errorService);
 
-      this.walletName = this.globalService.getWalletName();
       this.getHasColdStakingAccount();
       this.getHasHotStakingAccount();
+      this.setStakingAccount(null);
     }
 
+  private getWalletName() {
+    return this.globalService.getWalletName();
+  }
+
   public getHasColdStakingAccount(): boolean {
-    if (localStorage.getItem("hasColdStaking" + this.walletName)) {
-      return JSON.parse(localStorage.getItem("hasColdStaking" + this.walletName));
+    if (localStorage.getItem("hasColdStaking" + this.getWalletName())) {
+      return JSON.parse(localStorage.getItem("hasColdStaking" + this.getWalletName()));
     } else {
-      localStorage.setItem("hasColdStaking" + this.walletName, "false");
-      return JSON.parse(localStorage.getItem("hasColdStaking" + this.walletName));
+      localStorage.setItem("hasColdStaking" + this.getWalletName(), "false");
+      return JSON.parse(localStorage.getItem("hasColdStaking" + this.getWalletName()));
     }
   }
 
   public getHasHotStakingAccount(): boolean {
-    if (localStorage.getItem("hasHotStaking" + this.walletName)) {
-      return JSON.parse(localStorage.getItem("hasHotStaking" + this.walletName));
+    if (localStorage.getItem("hasHotStaking" + this.getWalletName())) {
+      return JSON.parse(localStorage.getItem("hasHotStaking" + this.getWalletName()));
     } else {
-      localStorage.setItem("hasHotStaking" + this.walletName, "false");
-      return JSON.parse(localStorage.getItem("hasHotStaking" + this.walletName));
+      localStorage.setItem("hasHotStaking" + this.getWalletName(), "false");
+      return JSON.parse(localStorage.getItem("hasHotStaking" + this.getWalletName()));
     }
   }
 
   public setHasColdStakingAccount(hasColdStaking: string) {
-    localStorage.setItem("hasColdStaking"  + this.walletName, hasColdStaking);
+    localStorage.setItem("hasColdStaking"  + this.getWalletName(), hasColdStaking);
   }
 
   public setHasHotStakingAccount(hasHotStaking: string) {
-    localStorage.setItem("hasHotStaking"  + this.walletName, hasHotStaking);
+    localStorage.setItem("hasHotStaking"  + this.getWalletName(), hasHotStaking);
+  }
+
+  public getColdStakingAccount() {
+    return this.coldStakingAccount;
   }
 
   public setStakingAccount(accountName: string) {
