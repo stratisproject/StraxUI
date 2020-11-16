@@ -408,7 +408,7 @@ export class WalletService extends RestApi {
       });
   }
 
-  private clearWalletHistory(fromDate: number): void {
+  public clearWalletHistory(fromDate: number): void {
     if (this.currentWallet) {
       const walletHistorySubject = this.getWalletHistorySubject();
       walletHistorySubject.next(Array.from((walletHistorySubject.value || []).filter(item => item.timestamp < fromDate)));

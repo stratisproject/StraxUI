@@ -49,7 +49,6 @@ export class CreateColdComponent implements OnInit, OnDestroy {
       this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
         this.address = response.address;
         this.estimateColdStakingSetupFee();
-        this.confirmed = true;
       })
     })
   }
@@ -83,6 +82,7 @@ export class CreateColdComponent implements OnInit, OnDestroy {
     )
     this.coldStakingService.postColdStakingSetupFeeEstimation(data).toPromise().then(response => {
       this.estimatedFee = response;
+      this.confirmed = true;
     });
   }
 

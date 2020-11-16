@@ -120,7 +120,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.sidechainEnabled
             ? this.router.navigate(['address-selection'])
             : this.router.navigate(['wallet/dashboard']);
-            this.sidebarItems.setSelected(this.accountSidebarItem)
+            this.sidebarItems.setSelected(this.accountSidebarItem);
+            this.walletService.getHistory();
         },
         () => {
           this.openWalletForm.patchValue({password: ""});

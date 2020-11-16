@@ -84,7 +84,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
           this.last = history && history.length > 0 ? history[history.length - 1] : {} as TransactionInfo;
         }));
     } else {
-      this.transactions = this.coldStakingService.coldStakingHistory(this.coldStakingService.coldStakingAccount)
+      this.transactions = this.coldStakingService.coldStakingHistory(this.coldStakingService.getColdStakingAccount())
       .pipe(
         map((items) => {
           return items;
