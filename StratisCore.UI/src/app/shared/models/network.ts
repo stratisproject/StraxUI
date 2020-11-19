@@ -1,11 +1,11 @@
 export class Network {
-  constructor(name: string, federationAddress: string, description: string ) {
-    this.name = name;
+  constructor(destinationName: string, federationAddress: string, description: string ) {
+    this.destinationName = destinationName;
     this.federationAddress = federationAddress;
     this.description = description;
   }
 
-  public name: string;
+  public destinationName: string;
   public federationAddress: string;
   public description: string;
 }
