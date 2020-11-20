@@ -61,7 +61,8 @@ export class CreateColdComponent implements OnInit, OnDestroy {
       this.coldStakingForm.get("password").value,
       this.globalService.getWalletAccount(),
       this.coldStakingForm.get('amount').value - (this.estimatedFee / 100000000),
-      this.estimatedFee / 100000000
+      this.estimatedFee / 100000000,
+      true
     )
     this.coldStakingService.invokePostSetupColdStakingApiCall(setupData).toPromise().then(response => {
       localStorage.setItem("hasColdStaking"  + this.walletName, "true");
@@ -78,7 +79,8 @@ export class CreateColdComponent implements OnInit, OnDestroy {
       this.coldStakingForm.get("password").value,
       this.globalService.getWalletAccount(),
       this.coldStakingForm.get('amount').value,
-      0
+      0,
+      true
     )
     this.coldStakingService.postColdStakingSetupFeeEstimation(data).toPromise().then(response => {
       this.estimatedFee = response;

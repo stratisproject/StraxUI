@@ -1,5 +1,5 @@
 export class ColdStakingSetup {
-  constructor(coldWalletAddress: string, hotWalletAddress: string, walletName: string, walletPassword: string, walletAccount: string, amount: number, fees: number) {
+  constructor(coldWalletAddress: string, hotWalletAddress: string, walletName: string, walletPassword: string, walletAccount: string, amount: number, fees: number, subtractFeeFromAmount?: boolean) {
     this.coldWalletAddress = coldWalletAddress;
     this.hotWalletAddress = hotWalletAddress;
     this.walletName = walletName;
@@ -7,6 +7,7 @@ export class ColdStakingSetup {
     this.walletAccount = walletAccount;
     this.amount = amount;
     this.fees = fees;
+    this.subtractFeeFromAmount = subtractFeeFromAmount;
   }
 
   coldWalletAddress: string;
@@ -16,5 +17,6 @@ export class ColdStakingSetup {
   walletAccount: string;
   amount: number;
   fees: number;
+  subtractFeeFromAmount: boolean;
 }
 
