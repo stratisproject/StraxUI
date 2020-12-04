@@ -12,7 +12,7 @@ import { Log } from '../../wallet/tokens/services/logger.service';
 
 export interface SignalRConnectionInfo {
   signalRUri: string;
-  signalRPort: string;
+  signalPort: string;
 }
 
 export interface SignalRMessageHandler {
@@ -59,7 +59,7 @@ export class SignalRService extends RestApi implements ISignalRService {
       }
 
       this.connection = new signalR.HubConnectionBuilder()
-        .withUrl(`${con.signalRUri}/${hubName}-hub`, {})
+        .withUrl(`http://${this.globalService.getDaemonIP()}:${con.signalPort}/${hubName}-hub`, {})
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
