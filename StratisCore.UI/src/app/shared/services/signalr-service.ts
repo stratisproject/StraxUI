@@ -59,7 +59,7 @@ export class SignalRService extends RestApi implements ISignalRService {
       }
 
       this.connection = new signalR.HubConnectionBuilder()
-        .withUrl(`${con.signalRUri}/${hubName}-hub`, {})
+        .withUrl(`http://${this.globalService.getDaemonIP()}:${con.signalRPort}/${hubName}-hub`, {})
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
