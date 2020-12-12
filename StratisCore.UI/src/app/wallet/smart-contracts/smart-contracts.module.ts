@@ -29,14 +29,10 @@ import { SmartContractsServiceBase } from "./smart-contracts-service.base";
         ScBalanceComponent,
         ContractTypePipe,
         AddressSelectionComponent
-    ],
-
-    entryComponents: [
-        TransactionComponent, AddNewAddressComponent
     ]
 })
 export class SmartContractsModule {
-    static forRoot(): ModuleWithProviders {
+    static forRoot(): ModuleWithProviders<SmartContractsModule> {
         return {
           ngModule: SmartContractsModule,
           providers: [

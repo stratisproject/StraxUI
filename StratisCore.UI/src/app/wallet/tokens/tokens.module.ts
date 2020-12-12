@@ -28,13 +28,6 @@ import { SmartContractsService } from '../smart-contracts/smart-contracts.servic
     AddTokenComponent,
     SendTokenComponent,
     ProgressComponent
-  ],
-
-  entryComponents: [
-    AddTokenComponent,
-    SendTokenComponent,
-    TransactionComponent,
-    ProgressComponent
   ]
 })
 export class TokensModule { }

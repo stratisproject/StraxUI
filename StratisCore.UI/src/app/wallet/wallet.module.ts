@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
-import { BsDatepickerModule } from 'ngx-bootstrap';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddNewAddressComponent } from './address-book/modals/add-new-address/add-new-address.component';
 import { AdvancedComponent } from './advanced/advanced.component';
@@ -86,24 +86,6 @@ import { UnusedAddressComponent } from './staking/cold-staking/unused-address/un
     AccountSelectedGuard,
     AccountSidebarItem,
     StakingSidebarItem
-  ],
-  entryComponents: [
-    SendConfirmationComponent,
-    LogoutConfirmationComponent,
-    AddNodeComponent,
-    ResyncComponent,
-    BroadcastTransactionComponent,
-    CreateSelectComponent,
-    CreateHotComponent,
-    CreateColdComponent,
-    WithdrawColdFundsComponent,
-    ReceiveComponent,
-    TransactionDetailsComponent,
-    LogoutConfirmationComponent,
-    AddNodeComponent,
-    ResyncComponent,
-    BroadcastTransactionComponent,
-    UnusedAddressComponent
   ]
 })
 

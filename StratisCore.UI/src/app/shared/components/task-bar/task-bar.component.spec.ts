@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TaskBarComponent } from './task-bar.component';
 
@@ -6,7 +6,7 @@ describe('TaskBarComponent', () => {
   let component: TaskBarComponent;
   let fixture: ComponentFixture<TaskBarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TaskBarComponent ]
     })
