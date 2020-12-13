@@ -14,6 +14,7 @@ import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { ReceiveComponent } from './receive/receive.component';
 import { SendComponent } from './send/send.component';
 import { StakingComponent } from './staking/staking.component';
+import { ColdStakingComponent } from './cold-staking/cold-staking.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
       {path: 'send/:address', component: SendComponent},
       {path: 'receive', component: ReceiveComponent},
       {path: 'staking', component: StakingComponent},
+      {path: 'coldstaking', component: ColdStakingComponent},
       {
         path: 'advanced', component: AdvancedComponent,
         children: [

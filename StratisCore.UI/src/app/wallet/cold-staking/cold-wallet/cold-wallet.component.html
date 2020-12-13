@@ -1,0 +1,45 @@
+<div class="card card-staking">
+  <div class="stake-type text-left">
+    <span class="badge badge-cold ml-auto">Cold wallet functionality
+    </span>
+  </div>
+  <div class="card-body">
+    <tabset>
+      <tab heading="Set up this wallet as a cold wallet.">
+        <div *ngIf="!hasColdStakingAccount">
+          This will set up your wallet as a cold staking wallet.
+          Enter your wallet password to confirm.
+          <div class="form-group" [formGroup]="setupColdStakingAccountForm">
+            <div class="form-group mt-3">
+              <input type="password" class="form-control" placeholder="Enter your cold wallet password" formControlName="password"
+                [class.is-invalid]="formErrorsSetup.password" [class.is-valid]="!formErrorsSetup.password && setupColdStakingAccountForm.get('password').valid">
+              <div *ngIf="formErrorsSetup.password" class="invalid-feedback">{{ formErrorsSetup.password }}</div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="!setupColdStakingAccountForm.valid"
+            (click)="setupColdStakingAccount()" autofocus>
+            Setup cold staking account
+          </button>
+        </div>
+        <div *ngIf="hasColdStakingAccount">
+          This wallet has already been set up with a cold staking account.
+          Your cold staking address is: {{ coldStakingAddress }}.
+          <div class="col-3">
+            <button class="btn btn-primary" (click)="copyAddressToClipboard(coldStakingAddress)">Copy Address</button>
+          </div>
+        </div>
+      </tab>
+      <tab heading="Get extended public key">
+        <div *ngIf="hasColdStakingAccount">
+          Your extended public key is: {{ extPubKey }}
+          <div class="col-3">
+            <button class="btn btn-primary" (click)="copyExtPubKeyToClipboard(extPubKey)">Copy Extended Public Key</button>
+          </div>
+        </div>
+        <div *ngIf="!hasColdStakingAccount">
+          Your wallet is not setup as a cold staking wallet yet.
+        </div>
+      </tab>
+    </tabset>
+  </div>
+</div>

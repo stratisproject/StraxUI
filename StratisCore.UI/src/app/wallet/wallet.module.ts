@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
-import { BsDatepickerModule } from 'ngx-bootstrap';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddNewAddressComponent } from './address-book/modals/add-new-address/add-new-address.component';
 import { AdvancedComponent } from './advanced/advanced.component';
@@ -32,7 +33,7 @@ import { TransactionDetailsModalComponent } from './transaction-details-modal/tr
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 import { StakingComponent } from './staking/staking.component';
 import { HotStakingComponent } from './staking/hot-staking/hot-staking.component';
-import { ColdStakingComponent } from './staking/cold-staking/cold-staking.component';
+// import { ColdStakingComponent } from './staking/cold-staking/cold-staking.component';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
 import { CreateSelectComponent } from './staking/cold-staking/create-select/create-select.component';
 import { CreateHotComponent } from './staking/cold-staking/create-hot/create-hot.component';
@@ -40,6 +41,10 @@ import { CreateColdComponent } from './staking/cold-staking/create-cold/create-c
 import { WithdrawColdFundsComponent } from './staking/cold-staking/withdraw-cold-funds/withdraw-cold-funds.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { UnusedAddressComponent } from './staking/cold-staking/unused-address/unused-address.component';
+import { ColdStakingSidebarItem } from './side-bar-items/cold-staking-sidebar-item';
+import { ColdStakingComponent } from './cold-staking/cold-staking.component';
+import { HotWalletComponent } from './cold-staking/hot-wallet/hot-wallet.component';
+import { ColdWalletComponent } from './cold-staking/cold-wallet/cold-wallet.component';
 
 @NgModule({
   imports: [
@@ -49,6 +54,7 @@ import { UnusedAddressComponent } from './staking/cold-staking/unused-address/un
     SmartContractsModule.forRoot(),
     TokensModule,
     BsDatepickerModule.forRoot(),
+    TabsModule.forRoot(),
     ScrollingModule
   ],
   declarations: [
@@ -74,18 +80,21 @@ import { UnusedAddressComponent } from './staking/cold-staking/unused-address/un
     TransactionDetailsModalComponent,
     StakingComponent,
     HotStakingComponent,
-    ColdStakingComponent,
     BroadcastTransactionComponent,
     CreateSelectComponent,
     CreateHotComponent,
     CreateColdComponent,
     WithdrawColdFundsComponent,
-    UnusedAddressComponent
+    UnusedAddressComponent,
+    ColdStakingComponent,
+    HotWalletComponent,
+    ColdWalletComponent
   ],
   providers: [
     AccountSelectedGuard,
     AccountSidebarItem,
-    StakingSidebarItem
+    StakingSidebarItem,
+    ColdStakingSidebarItem
   ],
   entryComponents: [
     SendConfirmationComponent,
@@ -110,7 +119,8 @@ import { UnusedAddressComponent } from './staking/cold-staking/unused-address/un
 export class WalletModule {
   constructor(private sidebarItems: SideBarItemsProvider,
               accountSidebarItem: AccountSidebarItem,
-              stakingSidebarItem: StakingSidebarItem) {
+              stakingSidebarItem: StakingSidebarItem,
+              coldStakingSidebarItem: ColdStakingSidebarItem) {
 
     sidebarItems.registerSideBarItem(accountSidebarItem);
 
@@ -121,6 +131,8 @@ export class WalletModule {
       'Receive', '/wallet/receive', ['side-bar-item-receive']));
 
     sidebarItems.registerSideBarItem(stakingSidebarItem);
+
+    sidebarItems.registerSideBarItem(coldStakingSidebarItem);
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Contacts', '/wallet/address-book', ['side-bar-item-address']));
