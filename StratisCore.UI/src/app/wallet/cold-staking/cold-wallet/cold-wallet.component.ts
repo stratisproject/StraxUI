@@ -97,10 +97,9 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     this.decodedTransaction = JSON.parse(atob(this.unsignedTransaction));
     this.decodedTransaction.walletName = this.walletName;
     this.decodedTransaction.walletPassword = this.coldStakingForm.get('password').value;
-    console.log(this.decodedTransaction);
+    this.decodedTransaction.fee = this.decodedTransaction.fee.replace(/,/g, '.');
     this.coldStakingService.invokeOfflineSignRequest(this.decodedTransaction).toPromise().then(response => {
-      console.log("response: " + response);
-      this.transactionHex = response;
+      this.transactionHex = response.hex;
     })
   }
 
