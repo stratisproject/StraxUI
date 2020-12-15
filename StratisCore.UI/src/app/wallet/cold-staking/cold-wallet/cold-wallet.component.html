@@ -29,7 +29,7 @@
           </div>
         </div>
       </tab>
-      <tab heading="Get extended public key">
+      <!-- <tab heading="Get extended public key">
         <div *ngIf="hasColdStakingAccount">
           Your extended public key is: {{ extPubKey }}
           <div class="col-3">
@@ -38,6 +38,54 @@
         </div>
         <div *ngIf="!hasColdStakingAccount">
           Your wallet is not setup as a cold staking wallet yet.
+        </div>
+      </tab> -->
+      <tab heading="Sign a cold staking transaction">
+        <div *ngIf="!unsignedTransaction && !transactionHex">
+          <div class="form-group" [formGroup]="coldStakingForm ">
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" placeholder="Enter the unsigned transaction here." formControlName="unsignedTransaction"
+                [class.is-invalid]="coldStakingFormErrors.unsignedTransaction" [class.is-valid]="!coldStakingFormErrors.unsignedTransaction && coldStakingForm.get('unsignedTransaction').valid">
+              <div *ngIf="coldStakingFormErrors.unsignedTransaction" class="invalid-feedback">{{ coldStakingFormErrors.unsignedTransaction }}</div>
+            </div>
+            <div class="form-group mt-3">
+              <input type="password" class="form-control" placeholder="Enter your cold wallet password." formControlName="password"
+                [class.is-invalid]="coldStakingFormErrors.password" [class.is-valid]="!coldStakingFormErrors.password && coldStakingForm.get('password').valid">
+              <div *ngIf="coldStakingFormErrors.password" class="invalid-feedback"> {{ coldStakingFormErrors.password }}</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" [disabled]="!coldStakingForm.valid" (click)="decodeUnsignedTransaction()">Confirm</button>
+          </div>
+        </div>
+        <!-- <div *ngIf="unsignedTransaction && !transactionHex">
+          Please carefully confirm the cold staking setup values.
+          <div class="form-group mt-3">
+            <div class="blockLabel">Cold Wallet Name</div>
+            <div class="blockText">{{ walletName }}</div>
+          </div>
+          <div class="form-group mt-3">
+            <div class="blockLabel">Amount to stake</div>
+            <div class="blockText">{{ coldStakingForm.get('amount').value - (estimatedFee / 100000000) }}</div>
+          </div>
+          <div class="form-group mt-3">
+            <div class="blockLabel">Transaction Fee</div>
+            <div class="blockText">{{ estimatedFee | coinNotation}}</div>
+          </div>
+          <div class="form-group mt-3">
+            <div class="blockLabel">Cold wallet address</div>
+            <div class="blockText">{{ coldStakingForm.get('coldWalletAddress').value }}</div>
+          </div>
+          <div class="form-group mt-3">
+            <div class="blockLabel">Hot wallet address</div>
+            <div class="blockText">{{ coldStakingForm.get('hotWalletAddress').value }}</div>
+          </div>
+          <button type="button" class="btn btn-primary btn-block" (click)="confirmColdStakingSetup()">Confirm</button>
+        </div>-->
+        <div *ngIf="unsignedTransaction && transactionHex">
+          Please broadcast the following transaction on an online node:
+          {{ transactionHex }}
+          <div class="col-3">
+            <button class="btn btn-primary" (click)="copyTransactionHexToClipboard(transactionHex)">Copy Address</button>
+          </div>
         </div>
       </tab>
     </tabset>

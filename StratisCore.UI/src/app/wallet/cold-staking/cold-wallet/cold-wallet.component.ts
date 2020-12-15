@@ -20,12 +20,19 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
   private setupColdStakingAccountForm: FormGroup;
   private coldStakingForm: FormGroup;
   private subscriptions: Subscription[] = [];
+  private setupData: ColdStakingSetup;
   public hasColdStakingAccount = false;
   public coldStakingAddress: string;
   public walletName: string;
   public coinUnit: string;
   public extPubKey: string;
   public transactionHex: string;
+  public unsignedTransaction: any;
+  public decodedTransaction: UnsignedTransaction;
+  public coldStakingAmount: number;
+  public coldStakingFee: number;
+  public coldStakingColdAddress: string;
+  public coldStakingHotAddress: string;
 
   constructor(private globalService: GlobalService, private coldStakingService: ColdStakingService, private clipboardService: ClipboardService, private fb: FormBuilder, private snackbarService: SnackbarService, private apiService: ApiService) {
     this.buildSetupColdStakingAccountForm();
@@ -85,22 +92,23 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     );
   }
 
-  // private estimateColdStakingSetupFee(): void {
-  //   const data = new ColdStakingSetup(
-  //     this.address,
-  //     this.coldStakingForm.get('hotWalletAddress').value,
-  //     this.walletName,
-  //     this.coldStakingForm.get("password").value,
-  //     this.globalService.getWalletAccount(),
-  //     this.coldStakingForm.get('amount').value,
-  //     0,
-  //     true
-  //   )
-  //   this.coldStakingService.postColdStakingSetupFeeEstimation(data).toPromise().then(response => {
-  //     this.estimatedFee = response;
-  //     this.confirmed = true;
-  //   });
-  // }
+  public decodeUnsignedTransaction(): void {
+    this.unsignedTransaction = this.coldStakingForm.get('unsignedTransaction').value;
+    this.decodedTransaction = JSON.parse(atob(this.unsignedTransaction));
+    this.decodedTransaction.walletName = this.walletName;
+    this.decodedTransaction.walletPassword = this.coldStakingForm.get('password').value;
+    console.log(this.decodedTransaction);
+    this.coldStakingService.invokeOfflineSignRequest(this.decodedTransaction).toPromise().then(response => {
+      console.log("response: " + response);
+      this.transactionHex = response;
+    })
+  }
+
+  public confirmColdStakingSetup(): void {
+    // this.coldStakingService.invokeOfflineSignRequest(this.decodedTransaction).toPromise().then( response => {
+    //   this.transactionHex = response;
+    // })
+  }
 
   public copyAddressToClipboard(address: string): void {
     this.clipboardService.copyFromContent(address);
@@ -117,6 +125,17 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     this.clipboardService.copyFromContent(extPubKey);
     this.snackbarService.add({
       msg: 'The Extended Public Key has been copied to your clipboard.',
+      customClass: 'notify-snack-bar',
+      action: {
+        text: null
+      }
+    });
+  }
+
+  public copyTransactionHexToClipboard(transactionHex: string): void {
+    this.clipboardService.copyFromContent(transactionHex);
+    this.snackbarService.add({
+      msg: 'The transaction hex has been copied to your clipboard.',
       customClass: 'notify-snack-bar',
       action: {
         text: null
@@ -164,8 +183,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
 
   private buildColdStakingForm(): void {
     this.coldStakingForm = this.fb.group({
-      amount: ['', Validators.compose([Validators.required, Validators.min(0)])],
-      hotWalletAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      unsignedTransaction: ['', Validators.required],
       password: ['', Validators.required]
     });
 
@@ -180,32 +198,26 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
       return;
     }
     const form = this.coldStakingForm;
-    for (const field in this.formErrors) {
-      this.formErrors[field] = '';
+    for (const field in this.coldStakingFormErrors) {
+      this.coldStakingFormErrors[field] = '';
       const control = form.get(field);
       if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
+        const messages = this.coldStakingFormValidationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.coldStakingFormErrors[field] += messages[key] + ' ';
         }
       }
     }
   }
 
-  private formErrors = {
-    amount: '',
-    hotWalletAddress: '',
+  private coldStakingFormErrors = {
+    unsignedTransaction: '',
     password: ''
   };
 
-  private validationMessages = {
-    amount: {
-      required: 'Please enter an amount.',
-      min: 'A negative amount is not allowed.'
-    },
-    hotWalletAddress: {
-      required: 'Please enter your hot wallet address.',
-      minlength: 'An address is at least 26 characters long.'
+  private coldStakingFormValidationMessages = {
+    unsignedTransaction: {
+      required: 'Your unsigned transaction is required.'
     },
     password: {
       required: 'Please enter your password.'
@@ -215,4 +227,27 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
+}
+
+export class UnsignedTransaction {
+  walletPassword: string;
+  walletName: string;
+  walletAccount: string;
+  unsignedTransaction: string;
+  fee: string;
+  utxos: [Utxo];
+  addresses: [Address];
+}
+
+export class Utxo {
+  transactionId: string;
+  index: string;
+  scriptPubKey: string;
+  amount: string;
+}
+
+export class Address {
+  address: string;
+  keyPath: string;
+  addressType: string;
 }

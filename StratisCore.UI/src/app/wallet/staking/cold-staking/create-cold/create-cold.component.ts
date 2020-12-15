@@ -54,38 +54,38 @@ export class CreateColdComponent implements OnInit, OnDestroy {
   }
 
   public invokeSetup(): void {
-    let setupData = new ColdStakingSetup(
-      this.address,
-      this.coldStakingForm.get('hotWalletAddress').value,
-      this.walletName,
-      this.coldStakingForm.get("password").value,
-      this.globalService.getWalletAccount(),
-      this.coldStakingForm.get('amount').value - (this.estimatedFee / 100000000),
-      this.estimatedFee / 100000000,
-      true
-    )
-    this.coldStakingService.invokePostSetupColdStakingApiCall(setupData).toPromise().then(response => {
-      localStorage.setItem("hasColdStaking"  + this.walletName, "true");
-      this.transactionHex = response.transactionHex;
-      this.hasSetup = true;
-    })
+    // let setupData = new ColdStakingSetup(
+    //   this.address,
+    //   this.coldStakingForm.get('hotWalletAddress').value,
+    //   this.walletName,
+    //   this.coldStakingForm.get("password").value,
+    //   this.globalService.getWalletAccount(),
+    //   this.coldStakingForm.get('amount').value - (this.estimatedFee / 100000000),
+    //   this.estimatedFee / 100000000,
+    //   true
+    // )
+    // this.coldStakingService.invokePostSetupColdStakingApiCall(setupData).toPromise().then(response => {
+    //   localStorage.setItem("hasColdStaking"  + this.walletName, "true");
+    //   this.transactionHex = response.transactionHex;
+    //   this.hasSetup = true;
+    // })
   }
 
   private estimateColdStakingSetupFee(): void {
-    const data = new ColdStakingSetup(
-      this.address,
-      this.coldStakingForm.get('hotWalletAddress').value,
-      this.walletName,
-      this.coldStakingForm.get("password").value,
-      this.globalService.getWalletAccount(),
-      this.coldStakingForm.get('amount').value,
-      0,
-      true
-    )
-    this.coldStakingService.postColdStakingSetupFeeEstimation(data).toPromise().then(response => {
-      this.estimatedFee = response;
-      this.confirmed = true;
-    });
+    // const data = new ColdStakingSetup(
+    //   this.address,
+    //   this.coldStakingForm.get('hotWalletAddress').value,
+    //   this.walletName,
+    //   this.coldStakingForm.get("password").value,
+    //   this.globalService.getWalletAccount(),
+    //   this.coldStakingForm.get('amount').value,
+    //   0,
+    //   true
+    // )
+    // this.coldStakingService.postColdStakingSetupFeeEstimation(data).toPromise().then(response => {
+    //   this.estimatedFee = response;
+    //   this.confirmed = true;
+    // });
   }
 
   public copyToClipboardClicked(transactionHex: string): void {
