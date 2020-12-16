@@ -35,12 +35,7 @@ import { StakingComponent } from './staking/staking.component';
 import { HotStakingComponent } from './staking/hot-staking/hot-staking.component';
 // import { ColdStakingComponent } from './staking/cold-staking/cold-staking.component';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
-import { CreateSelectComponent } from './staking/cold-staking/create-select/create-select.component';
-import { CreateHotComponent } from './staking/cold-staking/create-hot/create-hot.component';
-import { CreateColdComponent } from './staking/cold-staking/create-cold/create-cold.component';
-import { WithdrawColdFundsComponent } from './staking/cold-staking/withdraw-cold-funds/withdraw-cold-funds.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { UnusedAddressComponent } from './staking/cold-staking/unused-address/unused-address.component';
 import { ColdStakingSidebarItem } from './side-bar-items/cold-staking-sidebar-item';
 import { ColdStakingComponent } from './cold-staking/cold-staking.component';
 import { HotWalletComponent } from './cold-staking/hot-wallet/hot-wallet.component';
@@ -81,11 +76,6 @@ import { ColdWalletComponent } from './cold-staking/cold-wallet/cold-wallet.comp
     StakingComponent,
     HotStakingComponent,
     BroadcastTransactionComponent,
-    CreateSelectComponent,
-    CreateHotComponent,
-    CreateColdComponent,
-    WithdrawColdFundsComponent,
-    UnusedAddressComponent,
     ColdStakingComponent,
     HotWalletComponent,
     ColdWalletComponent
@@ -102,17 +92,12 @@ import { ColdWalletComponent } from './cold-staking/cold-wallet/cold-wallet.comp
     AddNodeComponent,
     ResyncComponent,
     BroadcastTransactionComponent,
-    CreateSelectComponent,
-    CreateHotComponent,
-    CreateColdComponent,
-    WithdrawColdFundsComponent,
     ReceiveComponent,
     TransactionDetailsComponent,
     LogoutConfirmationComponent,
     AddNodeComponent,
     ResyncComponent,
-    BroadcastTransactionComponent,
-    UnusedAddressComponent
+    BroadcastTransactionComponent
   ]
 })
 

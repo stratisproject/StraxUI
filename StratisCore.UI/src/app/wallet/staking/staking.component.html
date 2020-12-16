@@ -10,21 +10,12 @@
     <div class="col-6">
       <app-hot-staking></app-hot-staking>
     </div>
-    <!-- <div class="col-6">
-      <app-cold-staking></app-cold-staking>
-    </div> -->
   </div>
   <div class="row">
     <div class="light col-12 mx-auto">
       <div class="col-12">
         <div class="card card-flat">
           <div class="card-body text-center">
-            <!-- <div class="btn-group btn-group-toggle col-9" data-toggle="buttons">
-              <label [ngClass]="{'active' : hotStaking}" class="btn btn-outline-primary"><input type="radio" name="options" autocomplete="off" (click)="switchHistory(true)">Hot Staking History</label>
-              <label [ngClass]="{'active' : !hotStaking}" class="btn btn-outline-primary"><input type="radio" name="options" autocomplete="off" (click)="switchHistory(false)">Cold Staking History</label>
-            </div>
-            <app-transactions *ngIf="hotStaking" title="Staking History" [stakingOnly]="true"></app-transactions>
-            <app-transactions *ngIf="!hotStaking" title="Staking History" [coldStaking]="true" [stakingOnly]="true"></app-transactions> -->
             <app-transactions title="Staking History" [stakingOnly]="true"></app-transactions>
           </div>
         </div>

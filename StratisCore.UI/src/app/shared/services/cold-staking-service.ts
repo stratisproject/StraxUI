@@ -20,7 +20,6 @@ import { ColdStakingWithdrawal } from '@shared/models/cold-staking-withdrawal';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { Transaction } from '@shared/models/transaction';
 import { AddressBookService } from '@shared/services/address-book-service';
-import { ColdStakingComponent } from 'src/app/wallet/staking/cold-staking/cold-staking.component';
 
 @Injectable({
   providedIn: 'root'
