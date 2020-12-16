@@ -17,8 +17,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./cold-wallet.component.scss']
 })
 export class ColdWalletComponent implements OnInit, OnDestroy {
-  private setupColdStakingAccountForm: FormGroup;
-  private coldStakingForm: FormGroup;
+  public setupColdStakingAccountForm: FormGroup;
+  public coldStakingForm: FormGroup;
   private subscriptions: Subscription[] = [];
   private setupData: ColdStakingSetup;
   public hasColdStakingAccount = false;
@@ -170,11 +170,11 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     }
   }
 
-  private formErrorsSetup = {
+  public formErrorsSetup = {
     password: ''
   };
 
-  private validationMessagesSetup = {
+  public validationMessagesSetup = {
     password: {
       required: 'Please enter your password.'
     }
@@ -209,12 +209,12 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     }
   }
 
-  private coldStakingFormErrors = {
+  public coldStakingFormErrors = {
     unsignedTransaction: '',
     password: ''
   };
 
-  private coldStakingFormValidationMessages = {
+  public coldStakingFormValidationMessages = {
     unsignedTransaction: {
       required: 'Your unsigned transaction is required.'
     },

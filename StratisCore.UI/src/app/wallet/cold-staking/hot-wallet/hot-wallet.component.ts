@@ -18,9 +18,9 @@ import { ColdStakingSetup } from '@shared/models/cold-staking-setup';
   styleUrls: ['./hot-wallet.component.scss']
 })
 export class HotWalletComponent implements OnInit, OnDestroy {
-  private passwordForm: FormGroup;
-  private importPubKeyForm: FormGroup;
-  private coldStakingForm: FormGroup;
+  public passwordForm: FormGroup;
+  public importPubKeyForm: FormGroup;
+  public coldStakingForm: FormGroup;
   private subscriptions: Subscription[] = [];
   public hasHotStakingSetup = false;
   public isConfirming = false;
@@ -233,11 +233,11 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     }
   }
 
-  private formErrors = {
+  public formErrors = {
     password: ''
   };
 
-  private validationMessages = {
+  public validationMessages = {
     password: {
       required: 'Please enter your password.'
     }
@@ -273,13 +273,13 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     }
   }
 
-  private importPubKeyFormErrors = {
+  public importPubKeyFormErrors = {
     walletName: '',
     extPubKey: '',
     creationDate: ''
   };
 
-  private importPubKeyValidationMessages = {
+  public importPubKeyValidationMessages = {
     walletName: {
       required: 'A wallet name is required'
     },
@@ -322,14 +322,14 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     }
   }
 
-  private coldStakingFormErrors = {
+  public coldStakingFormErrors = {
     coldWalletName: '',
     amount: '',
     coldWalletAddress: '',
     hotWalletAddress: ''
   };
 
-  private coldStakingFormValidationMessages = {
+  public coldStakingFormValidationMessages = {
     coldWalletName: {
       required: 'The name of your imported cold wallet is required.'
     },
