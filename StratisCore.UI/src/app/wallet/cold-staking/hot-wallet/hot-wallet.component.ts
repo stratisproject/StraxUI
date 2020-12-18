@@ -21,6 +21,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public passwordForm: FormGroup;
   public importPubKeyForm: FormGroup;
   public coldStakingForm: FormGroup;
+  public recoveryForm: FormGroup;
   private subscriptions: Subscription[] = [];
   public hasHotStakingSetup = false;
   public isConfirming = false;
@@ -40,6 +41,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     this.buildPasswordForm();
     this.buildImportPubKeyForm();
     this.buildColdStakingForm();
+    this.buildRecoveryForm();
     this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
   }
 
@@ -158,7 +160,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public recoverHotStakingWallet() {
     const data: ColdStakingAccount = new ColdStakingAccount(
       this.walletName,
-      this.passwordForm.get("password").value,
+      this.recoveryForm.get("password").value,
       false
     )
     this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(response => {
@@ -344,6 +346,44 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     hotWalletAddress: {
       required: 'Please enter your hot wallet address.',
       minlength: 'An address is at least 26 characters long.'
+    }
+  };
+
+  private buildRecoveryForm(): void {
+    this.recoveryForm = this.fb.group({
+      password: ['', Validators.required]
+    });
+
+    this.subscriptions.push(this.recoveryForm.valueChanges
+      .subscribe(() => this.onRecoveryFormValueChanged()));
+
+    this.onRecoveryFormValueChanged();
+  }
+
+  private onRecoveryFormValueChanged(): void {
+    if (!this.recoveryForm) {
+      return;
+    }
+    const form = this.recoveryForm;
+    for (const field in this.recoveryFormErrors) {
+      this.recoveryFormErrors[field] = '';
+      const control = form.get(field);
+      if (control && control.dirty && !control.valid) {
+        const messages = this.recoveryFormValidationMessages[field];
+        for (const key in control.errors) {
+          this.recoveryFormErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  public recoveryFormErrors = {
+    password: ''
+  };
+
+  public recoveryFormValidationMessages = {
+    password: {
+      required: 'Please enter your password.'
     }
   };
 

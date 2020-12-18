@@ -129,21 +129,22 @@
         </div>
       </tab>
       <!-- RECOVER HOT STAKING WALLET ACCOUNT -->
-      <!-- <tab heading="Recover hot staking wallet account">
+      <tab heading="Recover hot staking wallet account">
         <div *ngIf="!hasHotStakingSetup">
-          <div class="form-group" [formGroup]="passwordForm">
+          <div class="mt-3">Use this form to recover your hot staking wallet account.</div>
+          <div class="form-group" [formGroup]="recoveryForm">
             <div class="form-group mt-3">
               <input type="password" class="form-control" placeholder="Enter your wallet password." formControlName="password"
-                [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && passwordForm.get('password').valid">
-              <div *ngIf="formErrors.password" class="invalid-feedback"> {{ formErrors.password }}</div>
+                [class.is-invalid]="recoveryFormErrors.password" [class.is-valid]="!recoveryFormErrors.password && recoveryForm.get('password').valid">
+              <div *ngIf="recoveryFormErrors.password" class="invalid-feedback"> {{ recoveryFormErrors.password }}</div>
             </div>
           </div>
-          <button [disabled]="!passwordForm.valid" (click)="recoverHotStakingWallet()">Recover hot staking wallet</button>
+          <button [disabled]="!recoveryForm.valid" (click)="recoverHotStakingWallet()">Recover hot staking wallet</button>
         </div>
         <div *ngIf="hasHotStakingSetup">
-          This wallet has already been set up as a hot staking wallet.
+          <div class="mt-3">This wallet has already been set up as a hot staking wallet.</div>
         </div>
-      </tab> -->
+      </tab>
     </tabset>
   </div>
 </div>

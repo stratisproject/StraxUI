@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 export class ColdWalletComponent implements OnInit, OnDestroy {
   public setupColdStakingAccountForm: FormGroup;
   public coldStakingForm: FormGroup;
+  public recoveryForm: FormGroup;
   private subscriptions: Subscription[] = [];
   private setupData: ColdStakingSetup;
   public hasColdStakingAccount = false;
@@ -37,6 +38,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
   constructor(private globalService: GlobalService, private coldStakingService: ColdStakingService, private clipboardService: ClipboardService, private fb: FormBuilder, private snackbarService: SnackbarService, private apiService: ApiService) {
     this.buildSetupColdStakingAccountForm();
     this.buildColdStakingForm();
+    this.buildRecoveryForm();
   }
 
   ngOnInit() {
@@ -218,6 +220,44 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     unsignedTransaction: {
       required: 'Your unsigned transaction is required.'
     },
+    password: {
+      required: 'Please enter your password.'
+    }
+  };
+
+  private buildRecoveryForm(): void {
+    this.recoveryForm = this.fb.group({
+      password: ['', Validators.required]
+    });
+
+    this.subscriptions.push(this.recoveryForm.valueChanges
+      .subscribe(() => this.onRecoveryFormValueChanged()));
+
+    this.onRecoveryFormValueChanged();
+  }
+
+  private onRecoveryFormValueChanged(): void {
+    if (!this.recoveryForm) {
+      return;
+    }
+    const form = this.recoveryForm;
+    for (const field in this.recoveryFormErrors) {
+      this.recoveryFormErrors[field] = '';
+      const control = form.get(field);
+      if (control && control.dirty && !control.valid) {
+        const messages = this.recoveryFormValidationMessages[field];
+        for (const key in control.errors) {
+          this.recoveryFormErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  public recoveryFormErrors = {
+    password: ''
+  };
+
+  public recoveryFormValidationMessages = {
     password: {
       required: 'Please enter your password.'
     }
