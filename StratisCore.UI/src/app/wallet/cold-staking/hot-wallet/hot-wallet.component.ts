@@ -27,7 +27,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public isConfirming = false;
   public confirmed = false;
   public walletName: string;
-  public address: string;
+  public hotStakingAddress: string;
   public creationDate: Date;
   public minDate = new Date("2016-01-01");
   public maxDate = new Date();
@@ -49,14 +49,18 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     this.walletName = this.globalService.getWalletName();
     this.hasHotStakingSetup = (localStorage.getItem("hasHotStaking" + this.walletName) === "true") ? true : false;
     if (this.hasHotStakingSetup) {
-      const addressData = new ColdStakingAddress(
-        this.walletName,
-        false
-      )
-      this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
-        this.address = response.address;
-      })
+      this.getHotStakingAccountAddress(this.walletName);
     }
+  }
+
+  private getHotStakingAccountAddress(walletName: string): void {
+    let addressData = new ColdStakingAddress(
+      walletName,
+      false
+    )
+    this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
+      this.hotStakingAddress = response.address;
+    })
   }
 
   public confirmSetup(): void {
@@ -74,7 +78,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
         )
         this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
           if (response) {
-            this.address = response.address;
+            this.hotStakingAddress = response.address;
             this.confirmed = true;
             localStorage.setItem("hasHotStaking" + this.walletName, "true");
             this.snackbarService.add({
@@ -178,6 +182,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
               text: null
             }
           });
+          this.getHotStakingAccountAddress(this.walletName);
         })
       }
     });

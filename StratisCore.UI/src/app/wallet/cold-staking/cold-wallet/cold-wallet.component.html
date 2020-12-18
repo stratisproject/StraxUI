@@ -79,7 +79,7 @@
               <div *ngIf="recoveryFormErrors.password" class="invalid-feedback"> {{ recoveryFormErrors.password }}</div>
             </div>
           </div>
-          <button [disabled]="!recoveryForm.valid" (click)="recoverColdStakingWallet()">Recover cold staking wallet</button>
+          <button class="btn btn-primary" [disabled]="!recoveryForm.valid" (click)="recoverColdStakingWallet()">Recover cold staking wallet</button>
         </div>
         <div *ngIf="hasColdStakingAccount">
           <div class="mt-3">This wallet has already been set up as a cold wallet.</div>

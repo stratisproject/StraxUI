@@ -111,6 +111,28 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     // })
   }
 
+  public recoverColdStakingWallet() {
+    const data: ColdStakingAccount = new ColdStakingAccount(
+      this.walletName,
+      this.recoveryForm.get("password").value,
+      true
+    )
+    this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(response => {
+      if (response) {
+        localStorage.setItem("hasColdStaking" + this.walletName, "true");
+        this.snackbarService.add({
+          msg: `This node has been set up as a hot staking node`,
+          customClass: 'notify-snack-bar',
+          action: {
+            text: null
+          }
+        });
+        this.hasColdStakingAccount = true;
+        this.getColdStakingAccountAddress(this.walletName);
+      }
+    });
+  }
+
   public copyAddressToClipboard(address: string): void {
     this.clipboardService.copyFromContent(address);
     this.snackbarService.add({
