@@ -128,6 +128,49 @@
           <button class="btn btn-primary" (click)="copyUnsignedTransactionToClipboardClicked(unsignedTransactionEncoded)">Copy Encoded Transaction</button>
         </div>
       </tab>
+      <!-- CREATE UNSIGNED COLD STAKING WITHDRAWAL TRANSACTION -->
+      <tab heading="Create unsigned cold staking withdrawal transaction">
+        <div *ngIf="!unsignedWithdrawelTransactionEncoded; else unsignedWithdrawelTransactionEncodedTemplate">
+          <div class="mt-3">Use the form below to create an unsigned cold withdrawal staking transaction.</div>
+          <div class="form-group" [formGroup]="withdrawColdFundsForm">
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" placeholder="Enter the amount you want to withdraw" formControlName="amount"
+                [class.is-invalid]="withdrawColdFundsFormErrors.amount" [class.is-valid]="!withdrawColdFundsFormErrors.amount && withdrawColdFundsForm.get('amount').valid">
+              <div *ngIf="withdrawColdFundsFormErrors.amount" class="invalid-feedback"> {{ withdrawColdFundsFormErrors.amount }}</div>
+            </div>
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" placeholder="Enter the receive address" formControlName="destinationAddress"
+                [class.is-invalid]="withdrawColdFundsFormErrors.destinationAddress" [class.is-valid]="!withdrawColdFundsFormErrors.destinationAddress && withdrawColdFundsForm.get('destinationAddress').valid">
+              <div *ngIf="withdrawColdFundsFormErrors.destinationAddress" class="invalid-feedback"> {{ withdrawColdFundsFormErrors.destinationAddress }}</div>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div>
+              <div class="alert alert-warning py-1">A transaction fee will be substracted from the amount automatically to withdraw your funds from the cold staking setup.</div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" (click)="createWithdrawTx()" [disabled]="!withdrawColdFundsForm.valid" autofocus>
+            Create unsigned withdraw transaction
+          </button>
+        </div>
+        <ng-template #unsignedWithdrawelTransactionEncodedTemplate>
+          <div class="row">
+            <div class="col-9">
+              The unsigned transaction has been successfully generated. Please sign this transaction on your cold wallet.
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col">
+              <p class="textWrapper">{{ unsignedWithdrawelTransactionEncoded }}</p>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col">
+              <button class="btn btn-primary" (click)="copyUnsignedTransactionToClipboardClicked(unsignedWithdrawelTransactionEncoded)">Copy Unsigned Transaction</button>
+            </div>
+          </div>
+        </ng-template>
+      </tab>
       <!-- RECOVER HOT STAKING WALLET ACCOUNT -->
       <tab heading="Recover hot staking wallet account">
         <div *ngIf="!hasHotStakingSetup">

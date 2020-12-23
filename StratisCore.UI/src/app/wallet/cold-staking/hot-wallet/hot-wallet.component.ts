@@ -11,6 +11,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ExtPubKeyImport } from '@shared/models/extpubkey-import';
 import { WalletService } from '@shared/services/wallet.service';
 import { ColdStakingSetup } from '@shared/models/cold-staking-setup';
+import { ColdStakingWithdrawal } from '@shared/models/cold-staking-withdrawal';
 
 @Component({
   selector: 'app-hot-wallet',
@@ -22,6 +23,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public importPubKeyForm: FormGroup;
   public coldStakingForm: FormGroup;
   public recoveryForm: FormGroup;
+  public withdrawColdFundsForm: FormGroup;
   private subscriptions: Subscription[] = [];
   public hasHotStakingSetup = false;
   public isConfirming = false;
@@ -36,12 +38,14 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public hasEstimatedSetupFee = false;
   public hasColdStakingSetup = false;
   public unsignedTransactionEncoded: any;
+  public unsignedWithdrawelTransactionEncoded: any;
 
   constructor(private clipboardService: ClipboardService, private coldStakingService: ColdStakingService, private globalService: GlobalService, private fb: FormBuilder, private snackbarService: SnackbarService, private walletService: WalletService) {
     this.buildPasswordForm();
     this.buildImportPubKeyForm();
     this.buildColdStakingForm();
     this.buildRecoveryForm();
+    this.buildWithdrawColdFundsForm();
     this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
   }
 
@@ -127,7 +131,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   }
 
   public confirmColdStakingSetup(): void {
-    let setupData = new ColdStakingSetup(
+    const setupData = new ColdStakingSetup(
       this.coldStakingForm.get('coldWalletAddress').value,
       this.coldStakingForm.get('hotWalletAddress').value,
       this.coldStakingForm.get('coldWalletName').value,
@@ -138,7 +142,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       true
     )
     this.coldStakingService.invokePostSetupOfflineColdStakingApiCall(setupData).toPromise().then(response => {
-      let objJsonStr = JSON.stringify(response);
+      const objJsonStr = JSON.stringify(response);
       this.unsignedTransactionEncoded = Buffer.from(objJsonStr).toString("base64");
       this.hasColdStakingSetup = true;
     })
@@ -161,7 +165,22 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     });
   }
 
-  public recoverHotStakingWallet() {
+  public createWithdrawTx(): void {
+    const withdrawData = new ColdStakingWithdrawal(
+      this.withdrawColdFundsForm.get("receiveAddress").value,
+      this.walletName,
+      this.withdrawColdFundsForm.get("password").value,
+      0.0001,
+      null,
+      true
+    );
+    this.coldStakingService.invokePostColdStakingOfflineWithdrawalApiCall(withdrawData).toPromise().then(response => {
+      const objJsonStr = JSON.stringify(response);
+      this.unsignedWithdrawelTransactionEncoded = Buffer.from(objJsonStr).toString("base64");
+    })
+  }
+
+  public recoverHotStakingWallet(): void {
     const data: ColdStakingAccount = new ColdStakingAccount(
       this.walletName,
       this.recoveryForm.get("password").value,
@@ -389,6 +408,50 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public recoveryFormValidationMessages = {
     password: {
       required: 'Please enter your password.'
+    }
+  };
+
+  private buildWithdrawColdFundsForm(): void {
+    this.withdrawColdFundsForm = this.fb.group({
+      amount: ['', Validators.required],
+      destinationAddress: ['', Validators.required]
+    });
+
+    this.subscriptions.push(this.withdrawColdFundsForm.valueChanges
+      .subscribe(() => this.onWithdrawColdFundsFormValueChanged()));
+
+    this.onWithdrawColdFundsFormValueChanged();
+  }
+
+  private onWithdrawColdFundsFormValueChanged(): void {
+    if (!this.withdrawColdFundsForm) {
+      return;
+    }
+    const form = this.withdrawColdFundsForm;
+    for (const field in this.withdrawColdFundsFormErrors) {
+      this.withdrawColdFundsFormErrors[field] = '';
+      const control = form.get(field);
+      if (control && control.dirty && !control.valid) {
+        const messages = this.withdrawColdFundsFormValidationMessages[field];
+        for (const key in control.errors) {
+          this.withdrawColdFundsFormErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  private withdrawColdFundsFormErrors = {
+    amount: '',
+    destinationAddress: '',
+    password: ''
+  };
+
+  private withdrawColdFundsFormValidationMessages = {
+    amount: {
+      required: 'Please enter the amount you want to withdraw from your cold staking setup.'
+    },
+    destinationAddress: {
+      required: 'Please enter the destination address for the amount you want to withdraw.'
     }
   };
 

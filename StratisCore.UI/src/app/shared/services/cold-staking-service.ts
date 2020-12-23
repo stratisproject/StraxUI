@@ -45,7 +45,7 @@ export class ColdStakingService extends RestApi {
       this.setStakingAccount(null);
     }
 
-  private getWalletName() {
+  private getWalletName(): string {
     return this.globalService.getWalletName();
   }
 
@@ -67,19 +67,19 @@ export class ColdStakingService extends RestApi {
     }
   }
 
-  public setHasColdStakingAccount(hasColdStaking: string) {
+  public setHasColdStakingAccount(hasColdStaking: string): void {
     localStorage.setItem("hasColdStaking"  + this.getWalletName(), hasColdStaking);
   }
 
-  public setHasHotStakingAccount(hasHotStaking: string) {
+  public setHasHotStakingAccount(hasHotStaking: string): void {
     localStorage.setItem("hasHotStaking"  + this.getWalletName(), hasHotStaking);
   }
 
-  public getColdStakingAccount() {
+  public getColdStakingAccount(): string {
     return this.coldStakingAccount;
   }
 
-  public setStakingAccount(accountName: string) {
+  public setStakingAccount(accountName: string): void {
     this.coldStakingAccount = accountName;
   }
 
@@ -207,6 +207,14 @@ export class ColdStakingService extends RestApi {
 
   public invokePostColdStakingWithdrawalApiCall(data: ColdStakingWithdrawal): Observable<any> {
     return this.post('coldstaking/cold-staking-withdrawal', data).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    );
+  }
+
+  public invokePostColdStakingOfflineWithdrawalApiCall(data: ColdStakingWithdrawal): Observable<any> {
+    return this.post('coldstaking/cold-staking-offline-withdrawal', data).pipe(
       catchError(err => {
         return this.handleHttpError(err);
       })
