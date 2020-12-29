@@ -29,7 +29,7 @@
                 <div *ngIf="formErrors.password" class="invalid-feedback"> {{ formErrors.password }}</div>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-block" [disabled]="!passwordForm.valid || isConfirming" (click)="confirmSetup()" autofocus>Confirm</button>
+            <button type="submit" class="btn btn-primary btn-block mt-3" [disabled]="!passwordForm.valid || isConfirming" (click)="confirmSetup()" autofocus>Confirm</button>
           </div>
           <ng-template #isconfirmed>
             <div class="row">
@@ -46,7 +46,6 @@
                 <button class="btn btn-primary" (click)="copyToClipboardClicked(hotStakingAddress)">Copy Address</button>
               </div>
             </div>
-            <button type="button" class="btn btn-lg btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
           </ng-template>
         </div>
       </tab>
@@ -74,8 +73,8 @@
       </tab>
       <!-- CREATE UNSIGNED COLD STAKING TRANSACTION -->
       <tab heading="Create unsigned cold staking transaction">
-        <div class="mt-3">Use the form below to create an unsigned cold staking transaction.</div>
         <div *ngIf="!hasEstimatedSetupFee && !hasColdStakingSetup" class="form-group mt-3" [formGroup]="coldStakingForm">
+          <div class="mt-3">Use the form below to create an unsigned cold staking transaction.</div>
           <div class="form-group mt-3">
             <input type="text" class="form-control" placeholder="Enter the wallet name of your imported cold wallet." formControlName="coldWalletName"
               [class.is-invalid]="coldStakingFormErrors.coldWalletName" [class.is-valid]="!coldStakingFormErrors.coldWalletName && coldStakingForm.get('coldWalletName').valid">
@@ -87,7 +86,7 @@
             <div *ngIf="coldStakingFormErrors.amount" class="invalid-feedback">{{ coldStakingFormErrors.amount }}</div>
           </div>
           <div class="form-group mt-3">
-            <input type="text" class="form-control" placeholder="Enter your cold wallet special address" formControlName="coldWalletAddress"
+            <input type="text" class="form-control" placeholder="Enter your cold wallet address" formControlName="coldWalletAddress"
               [class.is-invalid]="coldStakingFormErrors.coldWalletAddress" [class.is-valid]="!coldStakingFormErrors.coldWalletAddress && coldStakingForm.get('coldWalletAddress').valid">
             <div *ngIf="coldStakingFormErrors.coldWalletAddress" class="invalid-feedback">{{ coldStakingFormErrors.coldWalletAddress }}</div>
           </div>
@@ -99,7 +98,7 @@
           <button type="button" class="btn btn-primary btn-block" [disabled]="!coldStakingForm.valid" (click)="onColdStakingSetupClicked()">Next</button>
         </div>
         <div *ngIf="hasEstimatedSetupFee && !hasColdStakingSetup">
-          Please carefully confirm the cold staking setup values.
+          <div class="mt-3">Please carefully confirm the cold staking setup values.</div>
           <div class="form-group mt-3">
             <div class="blockLabel">Imported Cold Wallet Name</div>
             <div class="blockText">{{ coldStakingForm.get('coldWalletName').value }}</div>
@@ -123,8 +122,8 @@
           <button type="button" class="btn btn-primary btn-block" (click)="confirmColdStakingSetup()">Next</button>
         </div>
         <div *ngIf="hasEstimatedSetupFee && hasColdStakingSetup">
-          Please sign the transaction below on your cold staking wallet.
-          {{ unsignedTransactionEncoded }}
+          <div class="mt-3">Please sign the transaction below on your cold staking wallet.</div>
+          <div class="mt-3">{{ unsignedTransactionEncoded }}</div>
           <button class="btn btn-primary" (click)="copyUnsignedTransactionToClipboardClicked(unsignedTransactionEncoded)">Copy Encoded Transaction</button>
         </div>
       </tab>
