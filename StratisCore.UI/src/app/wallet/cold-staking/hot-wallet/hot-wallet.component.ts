@@ -58,7 +58,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   }
 
   private getHotStakingAccountAddress(walletName: string): void {
-    let addressData = new ColdStakingAddress(
+    const addressData = new ColdStakingAddress(
       walletName,
       false
     )
@@ -167,17 +167,37 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   public createWithdrawTx(): void {
     const withdrawData = new ColdStakingWithdrawal(
-      this.withdrawColdFundsForm.get("receiveAddress").value,
-      this.walletName,
+      this.withdrawColdFundsForm.get("destinationAddress").value,
+      this.withdrawColdFundsForm.get("walletName").value,
+      "account 0",
+      this.withdrawColdFundsForm.get("amount").value,
+      this.estimateOfflineWithdrawFee(),
       this.withdrawColdFundsForm.get("password").value,
-      0.0001,
-      null,
       true
     );
     this.coldStakingService.invokePostColdStakingOfflineWithdrawalApiCall(withdrawData).toPromise().then(response => {
       const objJsonStr = JSON.stringify(response);
       this.unsignedWithdrawelTransactionEncoded = Buffer.from(objJsonStr).toString("base64");
     })
+  }
+
+  private estimateOfflineWithdrawFee(): string {
+    const estimationData = new ColdStakingWithdrawal(
+      this.withdrawColdFundsForm.get("destinationAddress").value,
+      this.withdrawColdFundsForm.get("walletName").value,
+      "account 0",
+      this.withdrawColdFundsForm.get("amount").value,
+      "0",
+      null,
+      true
+    );
+
+    let fee;
+    this.coldStakingService.postColdStakingWithdrawOfflineFeeEstimation(estimationData).toPromise().then(response => {
+      fee = response;
+    });
+
+    return fee;
   }
 
   public recoverHotStakingWallet(): void {
@@ -413,6 +433,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildWithdrawColdFundsForm(): void {
     this.withdrawColdFundsForm = this.fb.group({
+      walletName: ['', Validators.required],
       amount: ['', Validators.required],
       destinationAddress: ['', Validators.required]
     });
@@ -441,12 +462,15 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   }
 
   private withdrawColdFundsFormErrors = {
+    walletName: '',
     amount: '',
-    destinationAddress: '',
-    password: ''
+    destinationAddress: ''
   };
 
   private withdrawColdFundsFormValidationMessages = {
+    walletName: {
+      required: 'Please enter the wallet name of your imported cold staking wallet.'
+    },
     amount: {
       required: 'Please enter the amount you want to withdraw from your cold staking setup.'
     },

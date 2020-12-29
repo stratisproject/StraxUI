@@ -173,6 +173,14 @@ export class ColdStakingService extends RestApi {
     );
   }
 
+  public postColdStakingWithdrawOfflineFeeEstimation(data: ColdStakingWithdrawal) {
+    return this.post('coldStaking/estimate-offline-cold-staking-withdrawal-tx-fee', data).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    );
+  }
+
   public invokePostColdStakingAccountApiCall(data: ColdStakingAccount): Observable<any> {
     return this.post('coldstaking/cold-staking-account', data).pipe(
       catchError(err => {
@@ -214,7 +222,7 @@ export class ColdStakingService extends RestApi {
   }
 
   public invokePostColdStakingOfflineWithdrawalApiCall(data: ColdStakingWithdrawal): Observable<any> {
-    return this.post('coldstaking/cold-staking-offline-withdrawal', data).pipe(
+    return this.post('coldStaking/offline-cold-staking-withdrawal', data).pipe(
       catchError(err => {
         return this.handleHttpError(err);
       })

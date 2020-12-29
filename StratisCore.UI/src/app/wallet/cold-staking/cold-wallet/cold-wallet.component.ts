@@ -74,7 +74,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
   }
 
   private getColdStakingAccountAddress(walletName: string): void {
-    let addressData = new ColdStakingAddress(
+    const addressData = new ColdStakingAddress(
       walletName,
       true
     )
@@ -111,7 +111,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     // })
   }
 
-  public recoverColdStakingWallet() {
+  public recoverColdStakingWallet(): void {
     const data: ColdStakingAccount = new ColdStakingAccount(
       this.walletName,
       this.recoveryForm.get("password").value,
