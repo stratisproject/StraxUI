@@ -52,7 +52,7 @@
       <!-- IMPORT PUBKEY -->
       <tab heading="Import cold wallet extended public key">
         <div class="mt-3">Import your cold wallet extended public key to be able to create a cold staking setup transaction.</div>
-        <form class="col-10 mx-auto d-flex align-content-center flex-wrap mt-2" [formGroup]="importPubKeyForm">
+        <form class="mt-2" [formGroup]="importPubKeyForm">
           <div class="form-group col-12">
             <label class="text-left" for="walletName">Wallet Name</label>
             <input type="text" class="form-control form-control-success" [class.is-invald]="importPubKeyFormErrors.walletName" [class.is-valid]="!importPubKeyFormErrors.walletName && importPubKeyForm.get('walletName').valid" formControlName="walletName" placeholder="Enter a wallet name.">
