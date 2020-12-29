@@ -113,7 +113,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
     const extPubKeyImportData = new ExtPubKeyImport(
       this.importPubKeyForm.get("extPubKey").value,
-      100000000, // account 0
+      +this.importPubKeyForm.get("selectBox").value, // account 0
       this.importPubKeyForm.get("walletName").value,
       recoveryDate
     )
@@ -303,6 +303,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildImportPubKeyForm(): void {
     this.importPubKeyForm = this.fb.group({
+      selectBox: ['', Validators.required],
       walletName: ['', Validators.required],
       extPubKey: ['', Validators.required],
       creationDate: ['', Validators.required]
@@ -332,12 +333,16 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   }
 
   public importPubKeyFormErrors = {
+    selectBox: '',
     walletName: '',
     extPubKey: '',
     creationDate: ''
   };
 
   public importPubKeyValidationMessages = {
+    selectBox: {
+      required: 'Please choose the option that suits your purpose'
+    },
     walletName: {
       required: 'A wallet name is required'
     },
