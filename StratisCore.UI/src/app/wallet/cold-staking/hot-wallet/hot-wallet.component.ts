@@ -113,7 +113,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
     const extPubKeyImportData = new ExtPubKeyImport(
       this.importPubKeyForm.get("extPubKey").value,
-      0, // account 0
+      100000000, // account 0
       this.importPubKeyForm.get("walletName").value,
       recoveryDate
     )
@@ -178,8 +178,8 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public createWithdrawTx(): void {
     const withdrawData = new ColdStakingWithdrawal(
       this.withdrawColdFundsForm.get("destinationAddress").value,
-      this.walletName,
-      "coldStakingHotAddresses",
+      this.withdrawColdFundsForm.get("walletName").value,
+      "account 100000000",
       this.withdrawColdFundsForm.get("amount").value,
       this.estimatedWithdrawFee / 100000000,
       null,
@@ -194,8 +194,8 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   private estimateOfflineWithdrawFee(): void {
     const estimationData = new ColdStakingWithdrawal(
       this.withdrawColdFundsForm.get("destinationAddress").value,
-      this.walletName,
-      "coldStakingHotAddresses",
+      this.withdrawColdFundsForm.get("walletName").value,
+      "account 100000000",
       this.withdrawColdFundsForm.get("amount").value,
       0,
       null,
