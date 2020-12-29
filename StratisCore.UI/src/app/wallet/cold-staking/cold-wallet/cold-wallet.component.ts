@@ -102,6 +102,10 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     this.decodedTransaction.fee = this.decodedTransaction.fee.replace(/,/g, '.');
     this.coldStakingService.invokeOfflineSignRequest(this.decodedTransaction).toPromise().then(response => {
       this.transactionHex = response.hex;
+    }).catch(error => {
+      this.unsignedTransaction = "";
+      this.transactionHex = "";
+      this.coldStakingForm.reset();
     })
   }
 

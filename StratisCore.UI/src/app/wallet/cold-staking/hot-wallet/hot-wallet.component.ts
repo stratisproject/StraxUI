@@ -35,10 +35,14 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public maxDate = new Date();
   public bsConfig: Partial<BsDatepickerConfig>;
   public estimatedFee: number;
+  public estimatedWithdrawFee: number;
   public hasEstimatedSetupFee = false;
   public hasColdStakingSetup = false;
+  public isEstimatingWithdrawFee = false;
+  public hasEstimatedWithdrawFee = false;
   public unsignedTransactionEncoded: any;
   public unsignedWithdrawelTransactionEncoded: any;
+  public coinUnit: string;
 
   constructor(private clipboardService: ClipboardService, private coldStakingService: ColdStakingService, private globalService: GlobalService, private fb: FormBuilder, private snackbarService: SnackbarService, private walletService: WalletService) {
     this.buildPasswordForm();
@@ -47,6 +51,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     this.buildRecoveryForm();
     this.buildWithdrawColdFundsForm();
     this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
+    this.coinUnit = this.globalService.getCoinUnit();
   }
 
   ngOnInit(): void {
@@ -165,14 +170,19 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     });
   }
 
+  public onEstimateWithdrawFeeClicked(): void {
+    this.estimateOfflineWithdrawFee();
+    this.isEstimatingWithdrawFee = true;
+  }
+
   public createWithdrawTx(): void {
     const withdrawData = new ColdStakingWithdrawal(
       this.withdrawColdFundsForm.get("destinationAddress").value,
-      this.withdrawColdFundsForm.get("walletName").value,
-      "account 0",
+      this.walletName,
+      "coldStakingHotAddresses",
       this.withdrawColdFundsForm.get("amount").value,
-      this.estimateOfflineWithdrawFee(),
-      this.withdrawColdFundsForm.get("password").value,
+      this.estimatedWithdrawFee / 100000000,
+      null,
       true
     );
     this.coldStakingService.invokePostColdStakingOfflineWithdrawalApiCall(withdrawData).toPromise().then(response => {
@@ -181,23 +191,25 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     })
   }
 
-  private estimateOfflineWithdrawFee(): string {
+  private estimateOfflineWithdrawFee(): void {
     const estimationData = new ColdStakingWithdrawal(
       this.withdrawColdFundsForm.get("destinationAddress").value,
-      this.withdrawColdFundsForm.get("walletName").value,
-      "account 0",
+      this.walletName,
+      "coldStakingHotAddresses",
       this.withdrawColdFundsForm.get("amount").value,
-      "0",
+      0,
       null,
       true
     );
 
-    let fee;
     this.coldStakingService.postColdStakingWithdrawOfflineFeeEstimation(estimationData).toPromise().then(response => {
-      fee = response;
+      this.estimatedWithdrawFee = response;
+      this.hasEstimatedWithdrawFee = true;
+      this.isEstimatingWithdrawFee = false;
+    }).catch(error => {
+      this.isEstimatingWithdrawFee = false;
+      this.hasEstimatedWithdrawFee = false;
     });
-
-    return fee;
   }
 
   public recoverHotStakingWallet(): void {

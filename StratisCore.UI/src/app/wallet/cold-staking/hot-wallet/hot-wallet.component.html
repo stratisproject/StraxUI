@@ -153,14 +153,23 @@
               <div class="alert alert-warning py-1">A transaction fee will be substracted from the amount automatically to withdraw your funds from the cold staking setup.</div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary btn-block" (click)="createWithdrawTx()" [disabled]="!withdrawColdFundsForm.valid" autofocus>
+          <button *ngIf="!hasEstimatedWithdrawFee && !isEstimatingWithdrawFee" type="submit" class="btn btn-primary btn-block mt-3" (click)="onEstimateWithdrawFeeClicked()" [disabled]="!withdrawColdFundsForm.valid" autofocus>
+            Estimate fee
+          </button>
+          <div *ngIf="!hasEstimatedWithdrawFee && isEstimatingWithdrawFee" class="mt-3">
+            Estimating fee...
+          </div>
+          <div *ngIf="hasEstimatedWithdrawFee && !isEstimatingWithdrawFee" class="mt-3">
+            Estimated transaction fee: {{ estimatedWithdrawFee / 100000000 }} {{ coinUnit }}
+          </div>
+          <button *ngIf="hasEstimatedWithdrawFee && !isEstimatingWithdrawFee" type="submit" class="btn btn-primary btn-block mt-3" (click)="createWithdrawTx()" [disabled]="!withdrawColdFundsForm.valid" autofocus>
             Create unsigned withdraw transaction
           </button>
         </div>
         <ng-template #unsignedWithdrawelTransactionEncodedTemplate>
           <div class="row">
-            <div class="col-9">
-              The unsigned withdraw transaction has been successfully generated. Please sign this transaction on your cold wallet.
+            <div class="col-9 mt-3">
+              The unsigned withdraw transaction has been successfully generated. Please copy and sign this transaction on your cold wallet.
             </div>
           </div>
           <div class="row mt-2">
