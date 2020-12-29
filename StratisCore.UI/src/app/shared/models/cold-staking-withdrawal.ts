@@ -1,7 +1,8 @@
 export class ColdStakingWithdrawal {
-  constructor(receivingAddress: string, walletName: string, amount: number, fees: number, walletPassword?: string, subtractFeeFromAmount?: boolean) {
+  constructor(receivingAddress: string, walletName: string, accountName: string, amount: number, fees: string, walletPassword?: string, subtractFeeFromAmount?: boolean) {
     this.receivingAddress = receivingAddress;
     this.walletName = walletName;
+    this.accountName = accountName;
     this.amount = amount;
     this.fees = fees;
     this.walletPassword = walletPassword;
@@ -9,8 +10,9 @@ export class ColdStakingWithdrawal {
   }
   receivingAddress: string;
   walletName: string;
+  accountName: string;
   walletPassword: string;
   amount: number;
-  fees: number;
+  fees: string;
   subtractFeeFromAmount: boolean;
 }
