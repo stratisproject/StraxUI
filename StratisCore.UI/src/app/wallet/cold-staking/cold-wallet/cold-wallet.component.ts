@@ -103,6 +103,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     this.decodedTransaction.utxos.forEach(function (utxo) {
       utxo.amount = utxo.amount.replace(/,/g, '.');
     })
+    this.decodedTransaction.walletName = this.walletName;
     this.coldStakingService.invokeOfflineSignRequest(this.decodedTransaction).toPromise().then(response => {
       this.transactionHex = response.hex;
     }).catch(error => {
