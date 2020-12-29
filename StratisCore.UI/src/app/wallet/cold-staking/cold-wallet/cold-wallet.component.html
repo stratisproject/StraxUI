@@ -59,6 +59,7 @@
       </tab>
       <tab heading="Get extended public key">
         <div *ngIf="hasColdStakingAccount">
+          <div class="mt-3 alert alert-warning py-1">This extended public key should only be used to create a withdraw transaction for your cold staking set up.</div>
           <div class="mt-3">Your extended public key is: {{ extPubKey }}</div>
           <div>This key can be used to create a withdrawal transaction on an online node.</div>
           <div class="col-3">
