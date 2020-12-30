@@ -1,0 +1,89 @@
+<div class="card card-staking">
+  <div class="stake-type text-left">
+    <h4><span class="badge badge-cold ml-auto">Cold wallet functionality</span></h4>
+  </div>
+  <div class="card-body mt-3">
+    <tabset>
+      <tab heading="Set up this wallet as a cold wallet.">
+        <div *ngIf="!hasColdStakingAccount">
+          <div class="mt-3">This will set up your wallet as a cold staking wallet.</div>
+          <div>Enter your wallet password to confirm.</div>
+          <div class="form-group" [formGroup]="setupColdStakingAccountForm">
+            <div class="form-group mt-3">
+              <input type="password" class="form-control" placeholder="Enter your cold wallet password" formControlName="password"
+                [class.is-invalid]="formErrorsSetup.password" [class.is-valid]="!formErrorsSetup.password && setupColdStakingAccountForm.get('password').valid">
+              <div *ngIf="formErrorsSetup.password" class="invalid-feedback">{{ formErrorsSetup.password }}</div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="!setupColdStakingAccountForm.valid"
+            (click)="setupColdStakingAccount()" autofocus>
+            Setup cold staking account
+          </button>
+        </div>
+        <div *ngIf="hasColdStakingAccount">
+          <div class="mt-3">This wallet has already been set up with a cold staking account.</div>
+          <div class="row mt-2">
+            <div class="col-6">
+              Your cold staking address is: {{ coldStakingAddress }}.
+            </div>
+            <div class="col-3">
+              <button class="btn btn-primary" (click)="copyAddressToClipboard(coldStakingAddress)">Copy Address</button>
+            </div>
+          </div>
+        </div>
+      </tab>
+      <tab heading="Sign a cold staking transaction">
+        <div *ngIf="!unsignedTransaction && !transactionHex">
+          <div class="mt-3">Paste the unsigned transaction and enter your cold wallet password to sign the transaction.</div>
+          <div class="form-group" [formGroup]="coldStakingForm ">
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" placeholder="Enter the unsigned transaction here." formControlName="unsignedTransaction"
+                [class.is-invalid]="coldStakingFormErrors.unsignedTransaction" [class.is-valid]="!coldStakingFormErrors.unsignedTransaction && coldStakingForm.get('unsignedTransaction').valid">
+              <div *ngIf="coldStakingFormErrors.unsignedTransaction" class="invalid-feedback">{{ coldStakingFormErrors.unsignedTransaction }}</div>
+            </div>
+            <div class="form-group mt-3">
+              <input type="password" class="form-control" placeholder="Enter your cold wallet password." formControlName="password"
+                [class.is-invalid]="coldStakingFormErrors.password" [class.is-valid]="!coldStakingFormErrors.password && coldStakingForm.get('password').valid">
+              <div *ngIf="coldStakingFormErrors.password" class="invalid-feedback"> {{ coldStakingFormErrors.password }}</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" [disabled]="!coldStakingForm.valid" (click)="decodeUnsignedTransaction()">Confirm</button>
+          </div>
+        </div>
+        <div *ngIf="unsignedTransaction && transactionHex">
+          <div class="mt-3">Please broadcast the following transaction on an online node:</div>
+          <div class="mt-3">{{ transactionHex }}</div>
+          <button class="btn btn-primary mt-3" (click)="copyTransactionHexToClipboard(transactionHex)">Copy transaction hex</button>
+        </div>
+      </tab>
+      <tab heading="Get extended public key">
+        <div *ngIf="hasColdStakingAccount">
+          <div class="mt-3 alert alert-warning py-1">This extended public key should only be used to create a withdraw transaction for your cold staking set up.</div>
+          <div class="mt-3">Your extended public key is: {{ extPubKey }}</div>
+          <div>This key can be used to create a withdrawal transaction on an online node.</div>
+          <div class="col-3">
+            <button class="btn btn-primary" (click)="copyExtPubKeyToClipboard(extPubKey)">Copy Extended Public Key</button>
+          </div>
+        </div>
+        <div *ngIf="!hasColdStakingAccount">
+          <div class="mt-3">Your wallet is not setup as a cold staking wallet yet.</div>
+        </div>
+      </tab>
+      <tab heading="Recover cold staking wallet account">
+        <div *ngIf="!hasColdStakingAccount">
+          <div class="mt-3">Use this form to recover your cold staking wallet account.</div>
+          <div class="form-group" [formGroup]="recoveryForm">
+            <div class="form-group mt-3">
+              <input type="password" class="form-control" placeholder="Enter your wallet password." formControlName="password"
+                [class.is-invalid]="recoveryFormErrors.password" [class.is-valid]="!recoveryFormErrors.password && recoveryForm.get('password').valid">
+              <div *ngIf="recoveryFormErrors.password" class="invalid-feedback"> {{ recoveryFormErrors.password }}</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" [disabled]="!recoveryForm.valid" (click)="recoverColdStakingWallet()">Recover cold staking wallet</button>
+        </div>
+        <div *ngIf="hasColdStakingAccount">
+          <div class="mt-3">This wallet has already been set up as a cold wallet.</div>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+</div>

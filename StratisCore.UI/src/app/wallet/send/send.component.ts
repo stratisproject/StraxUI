@@ -89,6 +89,7 @@ export class SendComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private sendFormErrors: any = {};
   private sendToSidechainFormErrors: any = {};
+  private hasCustomChangeAddress = false;
 
   public ngOnInit(): void {
 
@@ -131,8 +132,8 @@ export class SendComponent implements OnInit, OnDestroy {
     }
 
     this.confirmationText = this.sidechainEnabled
-      ? 'Please note that sending from a sidechain to the mainchain requires 240 confirmations.'
-      : 'Please note that sending from the mainchain to a sidechain requires 500 confirmations.';
+      ? "Amounts less than 50 Cirrus clear in 25 confirmations<br>Amounts between 50 and 1000 Cirrus clear in 80 confirmations<br>Amounts more than 1000 Cirrus clear in 500 confirmations"
+      : "Amounts less than 50 Stratis clear in 25 confirmations<br>Amounts between 50 and 1000 Stratis clear in 80 confirmations<br>Amounts more than 1000 Stratis clear in 500 confirmations";
   }
 
   public ngOnDestroy(): void {
@@ -265,6 +266,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
   private getTransaction(isSideChain?: boolean): Transaction {
     const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
+    this.hasCustomChangeAddress = form.get('changeAddress').value ? true : false;
 
     return new Transaction(
       this.globalService.getWalletName(),
@@ -278,7 +280,7 @@ export class SendComponent implements OnInit, OnDestroy {
       !this.accountsEnabled, // Shuffle Outputs
       isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
       null,
-      null,
+      this.hasCustomChangeAddress ? form.get('changeAddress').value : null,
       isSideChain
     );
   }
@@ -317,6 +319,7 @@ export class SendComponent implements OnInit, OnDestroy {
       transaction: transactionResponse.transaction,
       transactionFee: transactionResponse.transactionFee,
       sidechainEnabled: this.sidechainEnabled,
+      hasCustomChangeAddress: this.hasCustomChangeAddress,
       hasOpReturn: transactionResponse.isSideChain
     }, {taskBarWidth: '550px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);

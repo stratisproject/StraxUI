@@ -40,6 +40,10 @@
       <li class="list-inline-item col blockLabel">Destination Address</li>
       <li class="list-inline-item col-8 blockText">{{ transaction.opReturnData }}</li>
     </ul>
+    <ul *ngIf="hasCustomChangeAddress" class="list-inline row">
+      <li class="list-inline-item col blockLabel">Change Address</li>
+      <li class="list-inline-item col-8 blockText">{{ transaction.changeAddress }}</li>
+    </ul>
   </div>
 </div>
 <button type="button" class="mt-4 btn btn-primary btn-block" (click)="closeClicked.emit(true)">Close</button>

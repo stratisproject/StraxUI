@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateColdComponent } from './create-cold.component';
+import { ColdWalletComponent } from './cold-wallet.component';
 
-describe('CreateColdComponent', () => {
-  let component: CreateColdComponent;
-  let fixture: ComponentFixture<CreateColdComponent>;
+describe('ColdWalletComponent', () => {
+  let component: ColdWalletComponent;
+  let fixture: ComponentFixture<ColdWalletComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateColdComponent ]
+      declarations: [ ColdWalletComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateColdComponent);
+    fixture = TestBed.createComponent(ColdWalletComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

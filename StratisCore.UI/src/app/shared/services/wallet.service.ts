@@ -31,6 +31,7 @@ import { NodeService } from '@shared/services/node-service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
+import { ExtPubKeyImport } from '@shared/models/extpubkey-import';
 
 @Injectable({
   providedIn: 'root'
@@ -161,6 +162,12 @@ export class WalletService extends RestApi {
         //this.paginateHistory();
         this.getHistory();
       }),
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  public importExtPubKey(data: ExtPubKeyImport): Observable<any> {
+    return this.post('wallet/recover-via-extpubkey', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }

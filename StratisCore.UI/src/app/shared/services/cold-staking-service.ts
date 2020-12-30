@@ -20,7 +20,6 @@ import { ColdStakingWithdrawal } from '@shared/models/cold-staking-withdrawal';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { Transaction } from '@shared/models/transaction';
 import { AddressBookService } from '@shared/services/address-book-service';
-import { ColdStakingComponent } from 'src/app/wallet/staking/cold-staking/cold-staking.component';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +45,7 @@ export class ColdStakingService extends RestApi {
       this.setStakingAccount(null);
     }
 
-  private getWalletName() {
+  private getWalletName(): string {
     return this.globalService.getWalletName();
   }
 
@@ -68,19 +67,19 @@ export class ColdStakingService extends RestApi {
     }
   }
 
-  public setHasColdStakingAccount(hasColdStaking: string) {
+  public setHasColdStakingAccount(hasColdStaking: string): void {
     localStorage.setItem("hasColdStaking"  + this.getWalletName(), hasColdStaking);
   }
 
-  public setHasHotStakingAccount(hasHotStaking: string) {
+  public setHasHotStakingAccount(hasHotStaking: string): void {
     localStorage.setItem("hasHotStaking"  + this.getWalletName(), hasHotStaking);
   }
 
-  public getColdStakingAccount() {
+  public getColdStakingAccount(): string {
     return this.coldStakingAccount;
   }
 
-  public setStakingAccount(accountName: string) {
+  public setStakingAccount(accountName: string): void {
     this.coldStakingAccount = accountName;
   }
 
@@ -166,6 +165,22 @@ export class ColdStakingService extends RestApi {
     );
   }
 
+  public postColdStakingSetupOfflineFeeEstimation(data: ColdStakingSetup) {
+    return this.post('coldstaking/estimate-offline-cold-staking-setup-tx-fee', data).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    );
+  }
+
+  public postColdStakingWithdrawOfflineFeeEstimation(data: ColdStakingWithdrawal) {
+    return this.post('coldStaking/estimate-offline-cold-staking-withdrawal-tx-fee', data).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    );
+  }
+
   public invokePostColdStakingAccountApiCall(data: ColdStakingAccount): Observable<any> {
     return this.post('coldstaking/cold-staking-account', data).pipe(
       catchError(err => {
@@ -182,8 +197,32 @@ export class ColdStakingService extends RestApi {
     );
   }
 
+  public invokePostSetupOfflineColdStakingApiCall(data: ColdStakingSetup): Observable<any> {
+    return this.post('coldstaking/setup-offline-cold-staking', data).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    );
+  }
+
+  public invokeOfflineSignRequest(data: any): Observable<any> {
+    return this.post('wallet/offline-sign-request', data).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    );
+  }
+
   public invokePostColdStakingWithdrawalApiCall(data: ColdStakingWithdrawal): Observable<any> {
     return this.post('coldstaking/cold-staking-withdrawal', data).pipe(
+      catchError(err => {
+        return this.handleHttpError(err);
+      })
+    );
+  }
+
+  public invokePostColdStakingOfflineWithdrawalApiCall(data: ColdStakingWithdrawal): Observable<any> {
+    return this.post('coldStaking/offline-cold-staking-withdrawal', data).pipe(
       catchError(err => {
         return this.handleHttpError(err);
       })

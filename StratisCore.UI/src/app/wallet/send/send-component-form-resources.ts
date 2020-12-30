@@ -7,6 +7,9 @@ export class SendComponentFormResources {
       required: 'An address is required.',
       minlength: 'An address is at least 26 characters long.'
     },
+    changeAddress: {
+      minlength: 'An address is at least 26 characters long.'
+    },
     amount: {
       required: 'An amount is required.',
       pattern: 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
@@ -33,6 +36,9 @@ export class SendComponentFormResources {
       required: 'An address is required.',
       minlength: 'An address is at least 26 characters long.'
     },
+    changeAddress: {
+      minlength: 'An address is at least 26 characters long.'
+    },
     amount: {
       required: 'An amount is required.',
       pattern: 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
@@ -50,6 +56,8 @@ export class SendComponentFormResources {
   public static buildSendForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
     return fb.group({
       address: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      changeAddressCheckbox: [false],
+      changeAddress: ['', Validators.compose([Validators.minLength(26)])],
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(0.00001),
@@ -64,6 +72,8 @@ export class SendComponentFormResources {
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       networkSelect: ['', Validators.compose([Validators.required])],
       destinationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      changeAddressCheckbox: [false],
+      changeAddress: ['', Validators.compose([Validators.minLength(26)])],
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(1),
@@ -74,18 +84,18 @@ export class SendComponentFormResources {
   }
 
   public static stratisNetworks: Network[] = [
-    // { name: 'Cirrus', federationAddress: 'sg3WNvfWFxLJXXPYsvhGDdzpc9bT4uRQsN', description: 'Cirrus Sidechain'}
+    { destinationName: 'Cirrus', federationAddress: 'yU2jNwiac7XF8rQvSk2bgibmwsNLkkhsHV', description: 'Cirrus Sidechain'}
   ];
 
   public static stratisTestNetworks: Network[] = [
-    // { name: 'CirrusTest', federationAddress: '2N1wrNv5NDayLrKuph9YDVk8Fip8Wr8F8nX', description: 'Cirrus Test Sidechain'}
+    // { destinationName: 'CirrusTest', federationAddress: '2N1wrNv5NDayLrKuph9YDVk8Fip8Wr8F8nX', description: 'Cirrus Test Sidechain'}
   ];
 
   public static cirrusNetworks: Network[] = [
-    // { name: 'Stratis', federationAddress: 'cnYBwudqzHBtGVELyQNUGzviKV4Ym3yiEo', description: 'Stratis Mainnet'}
+    { destinationName: 'Stratis', federationAddress: 'cYTNBJDbgjRgcKARAvi2UCSsDdyHkjUqJ2', description: 'Stratis Mainnet'}
   ];
 
   public static cirrusTestNetworks: Network[] = [
-    // { name: 'StratisTest', federationAddress: 'xH1GHWVNKwdebkgiFPtQtM4qb3vrvNX2Rg', description: 'Stratis Testnet'}
+    // { destinationName: 'StratisTest', federationAddress: 'xH1GHWVNKwdebkgiFPtQtM4qb3vrvNX2Rg', description: 'Stratis Testnet'}
   ];
 }
