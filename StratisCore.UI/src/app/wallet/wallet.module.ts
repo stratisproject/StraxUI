@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-<<<<<<< HEAD
 import { TabsModule } from 'ngx-bootstrap/tabs';
-=======
->>>>>>> angular11
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddNewAddressComponent } from './address-book/modals/add-new-address/add-new-address.component';
 import { AdvancedComponent } from './advanced/advanced.component';
