@@ -40,7 +40,7 @@ export abstract class SideBarItemBase implements SideBarItem {
   }
 
   order: number;
-  selected: boolean;
+  abstract selected: boolean;
   visible: boolean;
   disabled?: boolean;
   iconClass?: any;
@@ -50,6 +50,8 @@ export class SimpleSideBarItem extends SideBarItemBase {
   constructor(displayText: string, route: string, sideBarClasses?: string[], visible?: true) {
     super(displayText, route, sideBarClasses, visible);
   }
+
+  selected = false;
 
   protected getStatusClasses(): string[] {
     return [];

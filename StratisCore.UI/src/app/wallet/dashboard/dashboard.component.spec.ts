@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CoinNotationPipe } from '../../shared/pipes/coin-notation.pipe';
 import { CoinAbbreviationPipe } from '../../shared/pipes/coin-abbreviation.pipe';
 
@@ -8,7 +8,7 @@ describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DashboardComponent ]
     })

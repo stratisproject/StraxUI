@@ -18,7 +18,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
   @Input() opened: boolean;
-  @ViewChild(TaskBarItemHostDirective, {static: false}) host: TaskBarItemHostDirective;
+  @ViewChild(TaskBarItemHostDirective) host: TaskBarItemHostDirective;
   public options: BehaviorSubject<TaskBarOptions> = new BehaviorSubject<TaskBarOptions>({});
   private closedComplete = new EventEmitter<boolean>();
 

@@ -67,10 +67,7 @@ import { ConsensusService } from './services/consensus-service';
     SideBarComponent,
     TaskBarComponent,
     TaskBarItemHostDirective
-  ],
-  entryComponents: [
-    GenericModalComponent,
-    ConfirmationModalComponent]
+  ]
 })
 
 export class SharedModule {

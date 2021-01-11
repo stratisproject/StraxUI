@@ -27,15 +27,11 @@ export default function setup(): void {
       webdriverOptions: {}
     });
     await this.app.start();
-    const browser = this.app.client;
-    await browser.waitUntilWindowLoaded();
-
-    browser.timeouts('script', 15000);
   });
 
-  afterEach(function () {
+  afterEach( async function () {
     if (this.app && this.app.isRunning()) {
-      return this.app.stop();
+      await this.app.stop();
     }
   });
 }
