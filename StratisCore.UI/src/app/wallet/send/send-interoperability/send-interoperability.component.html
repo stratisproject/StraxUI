@@ -1,6 +1,11 @@
 <div class="send-form" @fadeIn>
   <form [formGroup]="interoperabilityForm">
     <div class="form-group clearfix">
+      <div>
+        <div class="alert alert-warning py-1" [innerHTML]="testingText"></div>
+      </div>
+    </div>
+    <div class="form-group clearfix">
       <label for="amount">Amount</label>
       <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
       <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.amount" [class.is-valid]="interoperabilityForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">

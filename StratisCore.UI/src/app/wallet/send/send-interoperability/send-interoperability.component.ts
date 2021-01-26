@@ -36,6 +36,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   public totalBalance = 0;
   public spendableBalance = 0;
   public estimatedSidechainFee = 0;
+  public testingText: string;
   public confirmationText: string;
   public contact: AddressLabel;
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
@@ -64,6 +65,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 }
 
   ngOnInit(): void {
+    this.testingText = "Please note interoperability is currently in test phase. Use at your own risk. Funds may get lost in the process.";
     this.confirmationText = "Amounts less than 50 Stratis clear in 25 confirmations<br>Amounts between 50 and 1000 Stratis clear in 80 confirmations<br>Amounts more than 1000 Stratis clear in 500 confirmations";
 
     if (this.activatedRoute.snapshot.params['address']) {
