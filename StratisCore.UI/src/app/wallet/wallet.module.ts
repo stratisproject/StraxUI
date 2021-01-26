@@ -40,6 +40,9 @@ import { ColdStakingSidebarItem } from './side-bar-items/cold-staking-sidebar-it
 import { ColdStakingComponent } from './cold-staking/cold-staking.component';
 import { HotWalletComponent } from './cold-staking/hot-wallet/hot-wallet.component';
 import { ColdWalletComponent } from './cold-staking/cold-wallet/cold-wallet.component';
+import { SendDefaultComponent } from './send/send-default/send-default.component';
+import { SendSidechainComponent } from './send/send-sidechain/send-sidechain.component';
+import { SendInteroperabilityComponent } from './send/send-interoperability/send-interoperability.component';
 
 @NgModule({
   imports: [
@@ -78,7 +81,10 @@ import { ColdWalletComponent } from './cold-staking/cold-wallet/cold-wallet.comp
     BroadcastTransactionComponent,
     ColdStakingComponent,
     HotWalletComponent,
-    ColdWalletComponent
+    ColdWalletComponent,
+    SendDefaultComponent,
+    SendSidechainComponent,
+    SendInteroperabilityComponent
   ],
   providers: [
     AccountSelectedGuard,
