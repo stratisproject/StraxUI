@@ -11,7 +11,7 @@
       <select class="custom-select form-control" formControlName="networkSelect">
         <option value='' disabled selected>Select destination network...</option>
         <option *ngFor="let network of networks" [value]="network.federationAddress">{{ network.description }}</option>
-        <option value="customNetwork">Custom...</option>
+        <!-- <option value="customNetwork">Custom...</option> -->
       </select>
       <div *ngIf="interoperabilityFormErrors.networkSelect" class="invalid-feedback">{{ interoperabilityFormErrors.networkSelect }}</div>
     </div>
