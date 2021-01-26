@@ -21,7 +21,7 @@
       <div *ngIf="interoperabilityFormErrors.federationAddress" class="invalid-feedback">{{ interoperabilityFormErrors.federationAddress }}</div>
     </div>
     <div class="form-group clearfix">
-      <label for="destinationAddress">Ropsten destination address</label>
+      <label for="destinationAddress">Destination address</label>
       <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.destinationAddress" [class.is-valid]="interoperabilityForm.get('destinationAddress').valid" formControlName="destinationAddress" placeholder="Please enter the sidechain destination address here.">
       <div *ngIf="interoperabilityFormErrors.destinationAddress" class="invalid-feedback">{{ interoperabilityFormErrors.destinationAddress }}</div>
     </div>

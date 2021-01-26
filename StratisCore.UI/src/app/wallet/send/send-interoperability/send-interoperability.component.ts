@@ -237,7 +237,9 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(1),
-        (control: AbstractControl) => Validators.max(balanceCalculator())(control)])],
+        Validators.max(10),
+        // (control: AbstractControl) => Validators.max(balanceCalculator())(control)
+      ])],
       fee: ['medium', Validators.required],
       password: ['', Validators.required]
     });
@@ -270,7 +272,8 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
      required: 'An amount is required.',
      pattern: 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
      min: 'The amount has to be more or equal to 1.',
-     max: 'The total transaction amount exceeds your spendable balance.'
+     max: 'We do not allow transfers larger than 10 STRAX while testing.'
+    //  max: 'The total transaction amount exceeds your spendable balance.'
    },
    fee: {
      required: 'A fee is required.'
