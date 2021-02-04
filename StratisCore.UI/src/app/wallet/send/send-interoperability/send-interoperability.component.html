@@ -3,6 +3,12 @@
     <div class="form-group clearfix">
       <div>
         <div class="alert alert-warning py-1" [innerHTML]="testingText"></div>
+        <div class="form-group clearfix">
+          <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="interoperabilityFormErrors.tacAgreed" [class.is-valid]="!interoperabilityFormErrors.tacAgreed && interoperabilityForm.get('tacAgreed').valid"
+            formControlName="tacAgreed" id="tacAgreed">
+            I agree
+          <div *ngIf="interoperabilityFormErrors.tacAgreed" class="invalid-feedback">{{ interoperabilityFormErrors.tacAgreed }}</div>
+        </div>
       </div>
     </div>
     <div class="form-group clearfix">

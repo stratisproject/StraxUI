@@ -65,8 +65,10 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 }
 
   ngOnInit(): void {
-    this.testingText = "Please note interoperability is currently in test phase. Use at your own risk. Funds may get lost in the process.";
-    this.confirmationText = "Amounts less than 50 Stratis clear in 25 confirmations<br>Amounts between 50 and 1000 Stratis clear in 80 confirmations<br>Amounts more than 1000 Stratis clear in 500 confirmations";
+    this.coinUnit = this.globalService.getCoinUnit();
+
+    this.testingText = `${this.coinUnit} Tokens will be issued to the defined Ethereum address via the wSTRAX (ERC20) Token. This initial release is in a testing phase, please check the following box to accept responsibility for any transfers made to and from the Ethereum Ropsten Blockchain.`;
+    this.confirmationText = `Amounts less than 50 ${this.coinUnit} clear in 25 confirmations<br>Amounts between 50 and 1000 ${this.coinUnit} clear in 80 confirmations<br>Amounts more than 1000 ${this.coinUnit} clear in 500 confirmations`;
 
     if (this.activatedRoute.snapshot.params['address']) {
       this.address = this.activatedRoute.snapshot.params['address'];
@@ -78,7 +80,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     }
 
     this.getWalletBalance();
-    this.coinUnit = this.globalService.getCoinUnit();
+
     if (this.address) {
       this.interoperabilityForm.patchValue({'address': this.address});
     }
@@ -231,6 +233,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 
   public buildInteroperabilityForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
     return fb.group({
+      tacAgreed: ['', Validators.required],
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       networkSelect: ['', Validators.compose([Validators.required])],
       destinationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
@@ -256,6 +259,9 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   ];
 
   public interoperabilityFormValidationMessages = {
+    tacAgreed: {
+      required: 'Please accept responsibility for any transfers made to and from the Ethereum Ropsten Blockchain.'
+    },
     destinationAddress: {
      required: 'An address is required.',
      minlength: 'An address is at least 26 characters long.'

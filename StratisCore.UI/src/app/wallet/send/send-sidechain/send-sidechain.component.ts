@@ -63,7 +63,8 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
   private last: FeeEstimation = null;
 
   ngOnInit(): void {
-    this.confirmationText = "Amounts less than 50 Stratis clear in 25 confirmations<br>Amounts between 50 and 1000 Stratis clear in 80 confirmations<br>Amounts more than 1000 Stratis clear in 500 confirmations";
+    this.coinUnit = this.globalService.getCoinUnit();
+    this.confirmationText = `Amounts less than 50 ${this.coinUnit} clear in 25 confirmations<br>Amounts between 50 and 1000 ${this.coinUnit} clear in 80 confirmations<br>Amounts more than 1000 ${this.coinUnit} clear in 500 confirmations`;
 
     if (this.activatedRoute.snapshot.params['address']) {
       this.address = this.activatedRoute.snapshot.params['address'];
@@ -75,10 +76,6 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
     }
 
     this.getWalletBalance();
-    this.coinUnit = this.globalService.getCoinUnit();
-    if (this.address) {
-      this.sendToSidechainForm.patchValue({'address': this.address});
-    }
 
     this.testnetEnabled = this.globalService.getTestnetEnabled();
     if (this.testnetEnabled) {
