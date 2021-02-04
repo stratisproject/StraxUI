@@ -15,7 +15,6 @@ export interface FeeStatus {
   animations: Animations.fadeIn
 })
 export class SendComponent implements OnInit, OnDestroy {
-  @Input() address: string;
 
   public totalBalance = 0;
   public spendableBalance = 0;
