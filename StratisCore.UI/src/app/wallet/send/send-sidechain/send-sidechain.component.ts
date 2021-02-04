@@ -59,7 +59,7 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
   private hasCustomChangeAddress = false;
   private testnetEnabled;
   private subscriptions: Subscription[] = [];
-  private sendToSidechainFormErrors: any = {};
+  public sendToSidechainFormErrors: any = {};
   private last: FeeEstimation = null;
 
   ngOnInit(): void {

@@ -55,7 +55,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
   public contact: AddressLabel;
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
   private subscriptions: Subscription[] = [];
-  private sendFormErrors: any = {};
+  public sendFormErrors: any = {};
   private hasCustomChangeAddress = false;
   private last: FeeEstimation = null;
 
@@ -233,7 +233,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     });
   }
 
-  private sendValidationMessages = {
+  public sendValidationMessages = {
     address: {
       required: 'An address is required.',
       minlength: 'An address is at least 26 characters long.'

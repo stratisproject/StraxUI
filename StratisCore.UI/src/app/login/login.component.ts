@@ -18,15 +18,15 @@ import { WalletInfo } from '@shared/models/wallet-info';
 })
 
 export class LoginComponent implements OnInit, OnDestroy {
-  private openWalletForm: FormGroup;
-  private wallets: string[];
+  public openWalletForm: FormGroup;
+  public wallets: string[];
   private subscriptions: Subscription[] = [];
 
-  private formErrors = {
+  public formErrors = {
     'password': ''
   };
 
-  private validationMessages = {
+  public validationMessages = {
     'password': {
       'required': 'Please enter your password.'
     }

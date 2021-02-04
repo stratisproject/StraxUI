@@ -478,13 +478,13 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     }
   }
 
-  private withdrawColdFundsFormErrors = {
+  public withdrawColdFundsFormErrors = {
     walletName: '',
     amount: '',
     destinationAddress: ''
   };
 
-  private withdrawColdFundsFormValidationMessages = {
+  public withdrawColdFundsFormValidationMessages = {
     walletName: {
       required: 'Please enter the wallet name of your imported cold staking wallet.'
     },

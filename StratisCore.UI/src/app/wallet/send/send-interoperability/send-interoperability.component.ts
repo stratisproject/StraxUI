@@ -46,7 +46,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   private hasCustomChangeAddress = false;
   private testnetEnabled;
   private subscriptions: Subscription[] = [];
-  private interoperabilityFormErrors: any = {};
+  public interoperabilityFormErrors: any = {};
   private last: FeeEstimation = null;
 
   constructor(private fb: FormBuilder,

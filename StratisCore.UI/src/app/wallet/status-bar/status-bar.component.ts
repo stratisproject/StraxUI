@@ -19,7 +19,7 @@ export class StatusBarComponent implements OnInit {
   public connectedNodesTooltip = '';
 
   constructor(
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private walletService: WalletService,
     private nodeService: NodeService) {
   }

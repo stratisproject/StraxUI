@@ -48,8 +48,8 @@
           <div *ngIf="gasLimit.errors" class="invalid-feedback">
             <p *ngIf="gasLimit.errors['gasCallLimitTooLowError']">Gas call limit must be greater than
               {{ gasCallLimitMinimum }}</p>
-            <p *ngIf="gasLimit.errors['gasCreateLimitTooLowError']">Gas create limit must be greater than
-              {{ gasCreateLimitMinimum }}</p>
+            <!-- <p *ngIf="gasLimit.errors['gasCreateLimitTooLowError']">Gas create limit must be greater than
+              {{ gasCreateLimitMinimum }}</p> -->
             <p *ngIf="gasLimit.errors['gasLimitTooHighError']">Gas limit must be less than {{ gasLimitMaximum }}</p>
             <p *ngIf="gasLimit.errors['min']">Gas limit cannot be negative</p>
           </div>
