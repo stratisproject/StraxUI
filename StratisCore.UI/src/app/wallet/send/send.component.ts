@@ -20,6 +20,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public spendableBalance = 0;
   public coinUnit: string;
   public selectedTab: string;
+  public testnetEnabled = false;
   private subscriptions: Subscription[] = [];
 
   constructor(private walletService: WalletService, private globalService: GlobalService) { }
@@ -28,6 +29,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.selectedTab = "Standard";
     this.getWalletBalance();
     this.coinUnit = this.globalService.getCoinUnit();
+    this.testnetEnabled = this.globalService.getTestnetEnabled();
   }
 
   public switchForms(selectedTab: string): void {

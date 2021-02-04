@@ -12,7 +12,7 @@
         <label [ngClass]="{'active' : selectedTab === 'Sidechain'}" class="btn btn-outline-primary">
           <input type="radio" name="options" (click)="switchForms('Sidechain')">Cirrus
         </label>
-        <label [ngClass]="{'active' : selectedTab === 'Interoperability'}" class="btn btn-outline-primary">
+        <label *ngIf="!testnetEnabled" [ngClass]="{'active' : selectedTab === 'Interoperability'}" class="btn btn-outline-primary">
           <input type="radio" name="options" (click)="switchForms('Interoperability')">InterFlux
         </label>
       </div>
@@ -28,7 +28,7 @@
           <div *ngIf="selectedTab === 'Sidechain'">
             <app-send-sidechain></app-send-sidechain>
           </div>
-          <div *ngIf="selectedTab === 'Interoperability'">
+          <div *ngIf="selectedTab === 'Interoperability' && !testnetEnabled">
             <app-send-interoperability></app-send-interoperability>
           </div>
         </div>
