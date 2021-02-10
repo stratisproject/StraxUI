@@ -63,7 +63,7 @@
     "electron-context-menu": "2.3.0",
     "minimist": "1.2.5",
     "ngx-pagination": "5.0.0",
-    "ngx-qrcode2": "9.0.0",
+    "@techiediaries/ngx-qrcode": "9.1.0",
     "ngx-snackbar": "2.0.1",
     "tslib": "2.0.3"
   },
