@@ -244,7 +244,7 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
   ];
 
   public stratisTestNetworks: Network[] = [
-    // { destinationName: 'CirrusTest', federationAddress: '2N1wrNv5NDayLrKuph9YDVk8Fip8Wr8F8nX', description: 'Cirrus Test Sidechain'}
+    { destinationName: 'CirrusTest', federationAddress: 'tGWegFbA6e6QKZP7Pe3g16kFVXMghbSfY8', description: 'Cirrus Test Sidechain'}
   ];
 
   public sendToSidechainValidationMessages = {

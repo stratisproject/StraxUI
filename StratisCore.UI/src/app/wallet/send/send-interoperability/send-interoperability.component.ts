@@ -255,7 +255,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   ];
 
   public stratisTestInteropabilityNetworks: Network[] = [
-    { destinationName: 'Ropsten', federationAddress: 'yU2jNwiac7XF8rQvSk2bgibmwsNLkkhsHV', description: 'Ethereum Ropsten Testnet'}
+    { destinationName: 'Ropsten', federationAddress: 'tGWegFbA6e6QKZP7Pe3g16kFVXMghbSfY8', description: 'Ethereum Ropsten Testnet'}
   ];
 
   public interoperabilityFormValidationMessages = {
