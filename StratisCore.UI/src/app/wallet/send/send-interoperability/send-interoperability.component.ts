@@ -233,7 +233,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 
   public buildInteroperabilityForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
     return fb.group({
-      tacAgreed: ['', Validators.required],
+      tacAgreed: ['', Validators.requiredTrue],
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       networkSelect: ['', Validators.compose([Validators.required])],
       destinationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
