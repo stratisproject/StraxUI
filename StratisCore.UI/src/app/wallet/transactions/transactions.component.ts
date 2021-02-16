@@ -33,7 +33,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   private last: TransactionInfo;
 
   public constructor(
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private snackBarService: SnackbarService,
     private addressBookService: AddressBookService,
     private taskBarService: TaskBarService,
