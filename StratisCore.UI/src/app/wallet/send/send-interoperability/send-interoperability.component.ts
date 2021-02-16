@@ -68,7 +68,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     this.coinUnit = this.globalService.getCoinUnit();
 
     this.testingText = `${this.coinUnit} Tokens will be issued to the defined Ethereum address via the wSTRAX (ERC20) Token. This initial release is in a testing phase, please check the following box to accept responsibility for any transfers made to and from the Ethereum Ropsten Blockchain.`;
-    this.confirmationText = `Amounts less than 50 ${this.coinUnit} clear in 25 confirmations<br>Amounts between 50 and 1000 ${this.coinUnit} clear in 80 confirmations<br>Amounts more than 1000 ${this.coinUnit} clear in 500 confirmations`;
+    this.confirmationText = `Transfers require 500 confirmations before being released`;
 
     if (this.activatedRoute.snapshot.params['address']) {
       this.address = this.activatedRoute.snapshot.params['address'];
