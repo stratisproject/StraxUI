@@ -12,6 +12,7 @@ import { AddressBookService } from '@shared/services/address-book-service';
 import { GlobalService } from '@shared/services/global.service';
 import { TaskBarService } from '@shared/services/task-bar-service';
 import { WalletService } from '@shared/services/wallet.service';
+import { SnackbarService } from 'ngx-snackbar';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { SendConfirmationComponent } from '../send-confirmation/send-confirmation.component';
@@ -36,8 +37,10 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   public totalBalance = 0;
   public spendableBalance = 0;
   public estimatedSidechainFee = 0;
-  public testingText: string;
+  public explanatoryText: string;
   public confirmationText: string;
+  public contractText: string;
+  public ercContractAddress = "0xa61ab12eb1964c5b478283d3233270800674ace0";
   public contact: AddressLabel;
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
   public coinUnit: string;
@@ -54,7 +57,8 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     private walletService: WalletService,
     private addressBookService: AddressBookService,
     private taskBarService: TaskBarService,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private snackbarService: SnackbarService) {
   this.interoperabilityForm = this.buildInteroperabilityForm(fb,
     () => (this.spendableBalance - this.estimatedSidechainFee) / 100000000);
 
@@ -67,8 +71,10 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.coinUnit = this.globalService.getCoinUnit();
 
-    this.testingText = `${this.coinUnit} Tokens will be issued to the defined Ethereum address via the wSTRAX (ERC20) Token. This initial release is in a testing phase, please check the following box to accept responsibility for any transfers made to and from the Ethereum Ropsten Blockchain.`;
-    this.confirmationText = `Transfers require 500 confirmations before being released`;
+    this.explanatoryText = `${this.coinUnit} Tokens will be released to the defined Ethereum address via the wSTRAX (ERC20) Token on the Ethereum blockchain.`;
+    this.confirmationText = `Amounts between 500 and 1000 ${this.coinUnit} clear in 80 confirmations<br>Amounts more than 1000 ${this.coinUnit} clear in 500 confirmations`;
+    this.contractText = `The official wSTRAX contract address on Ethereum is ${this.ercContractAddress}`
+
 
     if (this.activatedRoute.snapshot.params['address']) {
       this.address = this.activatedRoute.snapshot.params['address'];
@@ -224,6 +230,16 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     this.interoperabilityForm.controls.address.setValue('');
   }
 
+  public onCopiedClick(): void {
+    this.snackbarService.add({
+      msg: `ERC-20 contract address has been copied to your clipboard`,
+      customClass: 'notify-snack-bar',
+      action: {
+        text: null
+      }
+    });
+  }
+
   private resetInteroperabilityForm(): void {
     this.interoperabilityForm.reset();
     this.interoperabilityForm.get('networkSelect').patchValue('');
@@ -241,9 +257,8 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       changeAddress: ['', Validators.compose([Validators.minLength(26)])],
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
-        Validators.min(1),
-        Validators.max(10),
-        // (control: AbstractControl) => Validators.max(balanceCalculator())(control)
+        Validators.min(500),
+        (control: AbstractControl) => Validators.max(balanceCalculator())(control)
       ])],
       fee: ['medium', Validators.required],
       password: ['', Validators.required]
@@ -251,16 +266,16 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   }
 
   public stratisInteropabilityNetworks: Network[] = [
-    { destinationName: 'Ropsten', federationAddress: 'yU2jNwiac7XF8rQvSk2bgibmwsNLkkhsHV', description: 'Ethereum Ropsten Testnet'}
+    { destinationName: 'Ethereum', federationAddress: 'yU2jNwiac7XF8rQvSk2bgibmwsNLkkhsHV', description: 'Ethereum'}
   ];
 
   public stratisTestInteropabilityNetworks: Network[] = [
-    { destinationName: 'Ropsten', federationAddress: 'tGWegFbA6e6QKZP7Pe3g16kFVXMghbSfY8', description: 'Ethereum Ropsten Testnet'}
+    { destinationName: 'Ethereum Ropsten', federationAddress: 'tGWegFbA6e6QKZP7Pe3g16kFVXMghbSfY8', description: 'Ethereum Ropsten Testnet'}
   ];
 
   public interoperabilityFormValidationMessages = {
     tacAgreed: {
-      required: 'Please accept responsibility for any transfers made to and from the Ethereum Ropsten Blockchain.'
+      required: 'Please accept responsibility for any transfers made to and from the Ethereum Blockchain.'
     },
     destinationAddress: {
      required: 'An address is required.',
@@ -279,9 +294,8 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
    amount: {
      required: 'An amount is required.',
      pattern: 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-     min: 'The amount has to be more or equal to 1.',
-     max: 'We do not allow transfers larger than 10 STRAX while testing.'
-    //  max: 'The total transaction amount exceeds your spendable balance.'
+     min: 'The amount has to be more or equal to 500.',
+     max: 'The total transaction amount exceeds your spendable balance.'
    },
    fee: {
      required: 'A fee is required.'

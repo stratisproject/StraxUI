@@ -2,7 +2,7 @@
   <form [formGroup]="interoperabilityForm">
     <div class="form-group clearfix">
       <div>
-        <div class="alert alert-warning py-1" [innerHTML]="testingText"></div>
+        <div class="alert alert-warning py-1" [innerHTML]="explanatoryText"></div>
         <div class="form-group clearfix">
           <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="interoperabilityFormErrors.tacAgreed" [class.is-valid]="!interoperabilityFormErrors.tacAgreed && interoperabilityForm.get('tacAgreed').valid"
             formControlName="tacAgreed" id="tacAgreed">
@@ -68,6 +68,8 @@
     <div class="form-group clearfix">
       <div>
         <div class="alert alert-warning py-1" [innerHTML]="confirmationText"></div>
+        <div class="alert alert-warning py-1" [innerHTML]="contractText"></div>
+        <button type="button" class="btn btn-primary right" ngxClipboard [cbContent]="ercContractAddress" (click)="onCopiedClick()">Copy contract address to clipboard</button>
       </div>
     </div>
     <div class="form-group clearfix">
