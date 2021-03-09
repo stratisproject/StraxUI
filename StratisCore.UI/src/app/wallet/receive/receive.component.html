@@ -21,8 +21,8 @@
       </div>
     </div>
 
-    <button *ngIf="!accountsEnabled" type="button" class="btn btn-link" (click)="toggleAllAddresses()"> {{ showAddressesButtonText }}</button>
-    <div *ngIf="!accountsEnabled && showAll">
+    <button type="button" class="btn btn-link" (click)="toggleAllAddresses()"> {{ showAddressesButtonText }}</button>
+    <div class="mt-3" *ngIf="showAll">
       <div class="card card-flat mb-5">
         <div class="card-body">
           <tabset>

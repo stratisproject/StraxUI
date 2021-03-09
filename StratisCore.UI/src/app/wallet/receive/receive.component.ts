@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '@shared/services/global.service';
 import { WalletInfo } from '@shared/models/wallet-info';
-
-import { CurrentAccountService } from '@shared/services/current-account.service';
 import { WalletService } from '@shared/services/wallet.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { SnackbarService } from 'ngx-snackbar';
@@ -16,11 +14,9 @@ import { Animations } from '@shared/animations/animations';
 })
 
 export class ReceiveComponent implements OnInit {
-  accountsEnabled: boolean;
   constructor(
     private walletService: WalletService,
     private globalService: GlobalService,
-    private currentAccountService: CurrentAccountService,
     private clipboardService: ClipboardService,
     private snackbarService: SnackbarService) {}
 
