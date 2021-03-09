@@ -7,38 +7,21 @@ if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
 }
 
-// Set to true if you want to build Core for sidechains
-const buildForSidechain = false;
-const daemonName = buildForSidechain ? 'Stratis.CirrusD' : 'Stratis.StraxD';
-
+const applicationName = 'Strax Wallet';
+const daemonName = 'Stratis.StraxD';
 const args = process.argv.slice(1);
-
-args.push('--enableSignalR');
-
-console.log(args);
 
 const serve = args.some(val => val === '--serve' || val === '-serve');
 const testnet = args.some(val => val === '--testnet' || val === '-testnet');
-let sidechain = args.some(val => val === '--sidechain' || val === '-sidechain');
 let nodaemon = args.some(val => val === '--nodaemon' || val === '-nodaemon');
 const devtools = args.some(val => val === '--devtools' || val === '-devtools');
 
-if (buildForSidechain) {
-  sidechain = true;
-}
-
-const applicationName = sidechain ? 'Cirrus Core' : 'Strax Wallet';
-
 // Set default API port according to network
 let apiPortDefault;
-if (testnet && !sidechain) {
+if (testnet) {
   apiPortDefault = 27103;
-} else if (!testnet && !sidechain) {
+} else if (!testnet) {
   apiPortDefault = 17103;
-} else if (sidechain && testnet) {
-  apiPortDefault = 38223;
-} else if (sidechain && !testnet) {
-  apiPortDefault = 37223;
 }
 
 // Sets default arguments
@@ -64,10 +47,6 @@ ipcMain.on('get-port', (event) => {
 
 ipcMain.on('get-testnet', (event) => {
   event.returnValue = testnet;
-});
-
-ipcMain.on('get-sidechain', (event) => {
-  event.returnValue = sidechain;
 });
 
 ipcMain.on('get-daemonip', (event) => {
@@ -182,10 +161,7 @@ function startDaemon(): void {
 
 function createTray(): void {
   // Put the app in system tray
-  let iconPath = 'stratis/icon-16.png';
-  if (sidechain) {
-    iconPath = 'cirrus/icon-16.png';
-  }
+  const iconPath = 'stratis/icon-16.png';
   let trayIcon;
   if (serve) {
     trayIcon = nativeImage.createFromPath('./src/assets/images/' + iconPath);
