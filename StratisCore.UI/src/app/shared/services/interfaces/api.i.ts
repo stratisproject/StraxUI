@@ -1,4 +1,4 @@
-import { Log } from "../../../wallet/tokens/services/logger.service";
+import { Log } from "@shared/services/logger.service";
 
 export interface WalletNamesData {
   walletNames: Array<string>;

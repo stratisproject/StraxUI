@@ -11,7 +11,7 @@ import {
   SignalREvents,
   StakingInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
-import { Log } from '../../wallet/tokens/services/logger.service';
+import { Log } from '@shared/services/logger.service';
 
 @Injectable({
   providedIn: 'root'

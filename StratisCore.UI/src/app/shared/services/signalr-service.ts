@@ -8,7 +8,7 @@ import { RestApi } from '@shared/services/rest-api';
 import { ErrorService } from '@shared/services/error-service';
 import { interval, Observable, Subscription } from 'rxjs';
 import { startWith, tap } from 'rxjs/operators';
-import { Log } from '../../wallet/tokens/services/logger.service';
+import { Log } from '@shared/services/logger.service';
 
 export interface SignalRConnectionInfo {
   signalRUri: string;
