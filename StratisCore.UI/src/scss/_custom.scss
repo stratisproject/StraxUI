@@ -1006,25 +1006,6 @@ img {
       color: $white !important;
     }
   }
-
-  #stratis-green-bg {
-    &.nav-link {
-      background-color: $white !important;
-      color: $primary !important;
-    }
-  }
-
-  // for none active sidechains pill
-  #stratis-green-bg {
-    &.nav-link {
-      &.active {
-        background-color: $stratis-green !important;
-        color: $white !important;
-      }
-    }
-  }
-
-  // for none active sidechains pill
 }
 
 // anim
