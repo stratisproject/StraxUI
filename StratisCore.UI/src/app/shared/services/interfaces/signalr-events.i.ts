@@ -15,7 +15,7 @@ export interface WalletInfoSignalREvent extends SignalREvent, GeneralInfo {
 export interface StakingInfoSignalREvent extends SignalREvent, StakingInfo {
 }
 
-export interface FullNodeEvent extends SignalREvent {
+export interface FullNodeSignalREvent extends SignalREvent {
   message: string;
 }
 

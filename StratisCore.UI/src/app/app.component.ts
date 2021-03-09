@@ -69,9 +69,9 @@ export class AppComponent implements OnInit, OnDestroy {
               const walletFeatureResponse = response.featuresData.find(x => x.namespace === this.lastFeatureNamespace);
               if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized'
                 && walletFeatureResponse && walletFeatureResponse.state === 'Initialized') {
-                //this.loading = false;
-                //this.statusIntervalSubscription.unsubscribe();
-                //this.router.navigate(['login']);
+                this.loading = false;
+                this.statusIntervalSubscription.unsubscribe();
+                this.router.navigate(['login']);
               }
             }
           );

@@ -10,7 +10,7 @@ import {
   BlockConnectedSignalREvent,
   SignalREvents,
   WalletInfoSignalREvent,
-  FullNodeEvent
+  FullNodeSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
 import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -52,7 +52,7 @@ export class NodeService extends RestApi {
       }
     });
 
-    signalRService.registerOnMessageEventHandler<FullNodeEvent>(
+    signalRService.registerOnMessageEventHandler<FullNodeSignalREvent>(
       SignalREvents.FullNodeEvent, (message) => {
         this.fullNodeEventSubject.next(message);
       });
