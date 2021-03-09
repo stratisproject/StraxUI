@@ -14,9 +14,7 @@ import { LogoutConfirmationComponent } from './logout-confirmation/logout-confir
 import { ReceiveComponent } from './receive/receive.component';
 import { SendConfirmationComponent } from './send/send-confirmation/send-confirmation.component';
 import { SendComponent } from './send/send.component';
-import { SmartContractsModule } from './smart-contracts/smart-contracts.module';
 import { StatusBarComponent } from './status-bar/status-bar.component';
-import { TokensModule } from './tokens/tokens.module';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletComponent } from './wallet.component';
@@ -33,7 +31,6 @@ import { TransactionDetailsModalComponent } from './transaction-details-modal/tr
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 import { StakingComponent } from './staking/staking.component';
 import { HotStakingComponent } from './staking/hot-staking/hot-staking.component';
-// import { ColdStakingComponent } from './staking/cold-staking/cold-staking.component';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ColdStakingSidebarItem } from './side-bar-items/cold-staking-sidebar-item';
@@ -49,8 +46,6 @@ import { SendInteroperabilityComponent } from './send/send-interoperability/send
     SnackbarModule,
     SharedModule,
     WalletRoutingModule,
-    SmartContractsModule.forRoot(),
-    TokensModule,
     BsDatepickerModule.forRoot(),
     TabsModule.forRoot(),
     ScrollingModule

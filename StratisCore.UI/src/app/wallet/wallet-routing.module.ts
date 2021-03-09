@@ -7,8 +7,6 @@ import { ExtPubkeyComponent } from './advanced/components/ext-pubkey/ext-pubkey.
 import { GenerateAddressesComponent } from './advanced/components/generate-addresses/generate-addresses.component';
 import { ResyncComponent } from './advanced/components/resync/resync.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SmartContractsComponent } from './smart-contracts/components/smart-contracts.component';
-import { TokensComponent } from './tokens/components/tokens.component';
 import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { ReceiveComponent } from './receive/receive.component';
@@ -36,8 +34,6 @@ const routes: Routes = [
           {path: 'resync', component: ResyncComponent}
         ]
       },
-      {path: 'smart-contracts', component: SmartContractsComponent, canActivate: [AccountSelectedGuard]},
-      {path: 'tokens', component: TokensComponent, canActivate: [AccountSelectedGuard]},
       {path: 'address-book', component: AddressBookComponent}
     ]
   },
