@@ -7,8 +7,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { ErrorService } from '@shared/services/error-service';
 import { SignalRService } from '@shared/services/signalr-service';
 import {
-  SignalREvents,
-  ColdStakingInfoSignalREvent
+  SignalREvents
 } from '@shared/services/interfaces/signalr-events.i';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ConsensusService } from '@shared/services/consensus-service';

@@ -154,3 +154,7 @@ export interface GetColdStakingInfo {
   coldWalletAccountExists: boolean;
   hotWalletAccountExists: boolean;
 }
+
+export interface FullNodeEventModel {
+  message: string;
+}

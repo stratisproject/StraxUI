@@ -24,7 +24,9 @@
         </svg>
       </div>
       <div *ngIf="!apiConnected" class="loadingText mt-1 col-12 mx-auto text-center">Loading, please wait...</div>
-      <div *ngIf="apiConnected" class="loadingText mt-1 col-12 mx-auto text-center">Connected to the API. Waiting for node to initialize.</div>
+      <div *ngIf="apiConnected" class="loadingText mt-1 col-12 mx-auto text-center">Connected to the API. Waiting for node to initialize.
+        <div *ngIf="(fullNodeEvent | async) as _fullNodeEvent">{{ _fullNodeEvent.message }}</div>
+      </div>
     </div>
   </div>
 </div>
