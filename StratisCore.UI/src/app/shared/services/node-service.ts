@@ -55,7 +55,6 @@ export class NodeService extends RestApi {
     signalRService.registerOnMessageEventHandler<FullNodeEvent>(
       SignalREvents.FullNodeEvent, (message) => {
         this.fullNodeEventSubject.next(message);
-        console.log(message);
       });
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(

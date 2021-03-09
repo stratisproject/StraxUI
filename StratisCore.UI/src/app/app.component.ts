@@ -26,13 +26,13 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly MaxRetryCount = 50;
   private readonly TryDelayMilliseconds = 3000;
   public apiConnected = false;
-  private walletFeatureNamespace = null;
+  private lastFeatureNamespace = null;
   public fullNodeEvent: Observable<FullNodeEventModel>;
   loading = true;
   loadingFailed = false;
 
   ngOnInit(): void {
-    this.walletFeatureNamespace = 'Stratis.Bitcoin.Features.Wallet.WalletFeature';
+    this.lastFeatureNamespace = 'Stratis.Features.Diagnostic.DiagnosticFeature';
     this.fullNodeEvent = this.nodeService.FullNodeEvent();
     this.setTitle();
     this.tryStart();
@@ -66,12 +66,12 @@ export class AppComponent implements OnInit, OnDestroy {
           .subscribe(
             response => {
               const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-              const walletFeatureResponse = response.featuresData.find(x => x.namespace === this.walletFeatureNamespace);
+              const walletFeatureResponse = response.featuresData.find(x => x.namespace === this.lastFeatureNamespace);
               if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized'
                 && walletFeatureResponse && walletFeatureResponse.state === 'Initialized') {
-                this.loading = false;
-                this.statusIntervalSubscription.unsubscribe();
-                this.router.navigate(['login']);
+                //this.loading = false;
+                //this.statusIntervalSubscription.unsubscribe();
+                //this.router.navigate(['login']);
               }
             }
           );
