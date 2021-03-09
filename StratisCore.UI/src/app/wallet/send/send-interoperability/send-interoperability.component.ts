@@ -203,7 +203,6 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     this.taskBarService.open(SendConfirmationComponent, {
       transaction: transactionResponse.transaction,
       transactionFee: transactionResponse.transactionFee,
-      sidechainEnabled: false,
       hasCustomChangeAddress: this.hasCustomChangeAddress,
       hasOpReturn: transactionResponse.isSideChain
     }, {taskBarWidth: '600px'}).then(ref => {

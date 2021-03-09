@@ -8,7 +8,7 @@ export class StakingSidebarItem extends SideBarItemBase {
 
   constructor(private stakingService: StakingService) {
     super('Staking', 'wallet/staking', ['side-bar-item-staking']);
-    this.visible = this.stakingService.canStake;
+    this.visible = true;
     if (this.visible) {
       this.subscriptions.push(stakingService.stakingInfo()
         .subscribe(stakingInfo => {

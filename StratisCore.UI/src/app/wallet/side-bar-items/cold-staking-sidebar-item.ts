@@ -8,7 +8,7 @@ export class ColdStakingSidebarItem extends SideBarItemBase {
 
   constructor(private stakingService: StakingService) {
     super('Cold Staking', 'wallet/coldstaking', ['side-bar-item-cold-staking']);
-    this.visible = this.stakingService.canStake;
+    this.visible = true;
     if (this.visible) {
       this.subscriptions.push(stakingService.stakingInfo()
         .subscribe(stakingInfo => {

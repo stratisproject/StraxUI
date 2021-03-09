@@ -34,19 +34,10 @@ export class ReceiveComponent implements OnInit {
   public pageNumberUsed = 1;
   public pageNumberUnused = 1;
   public pageNumberChange = 1;
-  public sidechainEnabled: boolean;
   public showAddressesButtonText = "Show all addresses";
 
   public ngOnInit(): void {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
-    this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
-
-    if (!this.accountsEnabled) {
-      this.getUnusedReceiveAddresses();
-    } else {
-      // If accounts are enabled, we just use the account address
-      this.getAccountAddress();
-    }
+    this.getUnusedReceiveAddresses();
   }
 
   public copyToClipboardClicked(address): void {
@@ -81,14 +72,9 @@ export class ReceiveComponent implements OnInit {
       );
   }
 
-  private getAccountAddress(): void {
-    this.address = this.currentAccountService.address;
-    this.setQrString(this.address);
-  }
-
   private setQrString(address: string): void {
     // TODO: fix this later to use the actual sidechain name instead of 'cirrus'
-    this.qrString = `${this.globalService.networkName}:${address}`;
+    this.qrString = `strax:${address}`;
   }
 
   private getAddresses(): void {

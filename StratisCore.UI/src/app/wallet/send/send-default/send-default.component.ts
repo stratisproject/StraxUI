@@ -51,7 +51,6 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
   public spendableBalance = 0;
   public apiError: string;
   public testnetEnabled: boolean;
-  public sidechainEnabled: boolean;
   public contact: AddressLabel;
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
   private subscriptions: Subscription[] = [];
@@ -66,7 +65,6 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     }
 
     this.testnetEnabled = this.globalService.getTestnetEnabled();
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
 
     this.getWalletBalance();
     this.coinUnit = this.globalService.getCoinUnit();
@@ -186,7 +184,6 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     this.taskBarService.open(SendConfirmationComponent, {
       transaction: transactionResponse.transaction,
       transactionFee: transactionResponse.transactionFee,
-      sidechainEnabled: this.sidechainEnabled,
       hasCustomChangeAddress: this.hasCustomChangeAddress,
       hasOpReturn: transactionResponse.isSideChain
     }, {taskBarWidth: '600px'}).then(ref => {

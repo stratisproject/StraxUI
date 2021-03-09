@@ -23,17 +23,12 @@ export class LogoutConfirmationComponent implements OnInit {
     private walletService: WalletService,
     private coldStakingService: ColdStakingService) { }
 
-  public sidechainEnabled: boolean;
-
   ngOnInit(): void {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
+
   }
 
   public onLogout(): void {
-    if (!this.sidechainEnabled) {
-      this.stakingService.stopStaking();
-
-    }
+    this.stakingService.stopStaking();
     this.activeModal.close();
     this.walletService.clearWalletHistory(0);
     this.coldStakingService.setStakingAccount(null);

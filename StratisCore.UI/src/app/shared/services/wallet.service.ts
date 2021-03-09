@@ -262,10 +262,14 @@ export class WalletService extends RestApi {
     const observable = this.post<BuildTransactionResponse>('wallet/build-transaction', transaction);
 
     return observable.pipe(
+      map(response => {
+        response.isSideChain = transaction.isSideChainTransaction;
+        return response;
+      }),
       flatMap((buildTransactionResponse) => {
         return this.post('wallet/send-transaction', new TransactionSending(buildTransactionResponse.hex)).pipe(
           map(() => {
-            return new TransactionResponse(transaction, buildTransactionResponse.fee);
+            return new TransactionResponse(transaction, buildTransactionResponse.fee, buildTransactionResponse.isSideChain);
           }),
           tap(() => {
             this.refreshWallet();
