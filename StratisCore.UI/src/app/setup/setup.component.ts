@@ -12,10 +12,8 @@ import { Animations } from '@shared/animations/animations';
 export class SetupComponent implements OnInit {
   constructor(private router: Router, private globalService: GlobalService) {}
 
-  public sidechainEnabled: boolean;
-
   ngOnInit(): void {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
+
   }
 
   public onCreateClicked(): void {

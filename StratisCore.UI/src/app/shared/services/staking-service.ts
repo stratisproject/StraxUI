@@ -21,7 +21,6 @@ export class StakingService extends RestApi {
   public stakingEnabled = new BehaviorSubject<boolean>(false);
   public isStopping: boolean;
   public isStarting: boolean;
-  public canStake: boolean;
 
   constructor(
     http: HttpClient,
@@ -29,8 +28,6 @@ export class StakingService extends RestApi {
     signalRService: SignalRService,
     errorService: ErrorService) {
     super(globalService, http, errorService);
-
-    this.canStake = !globalService.getSidechainEnabled();
 
     signalRService.registerOnMessageEventHandler<StakingInfoSignalREvent>(
       SignalREvents.StakingInfo, (stakingInfo) => {

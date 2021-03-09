@@ -18,10 +18,8 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private newWallet: WalletCreation;
   public mnemonicArray: string[];
-  public sidechainEnabled: boolean;
 
   ngOnInit(): void {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.subscription = this.route.queryParams.subscribe(params => {
       this.newWallet = new WalletCreation(
         params["name"],

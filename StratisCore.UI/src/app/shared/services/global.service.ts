@@ -11,7 +11,6 @@ export class GlobalService {
   constructor(private electronService: ElectronService) {
     this.setApplicationVersion();
     this.setGitCommit();
-    this.setSidechainEnabled();
     this.setTestnetEnabled();
     this.setApiPort();
     this.setDaemonIP();
@@ -20,11 +19,8 @@ export class GlobalService {
   private applicationVersion = '1.2.0';
   private gitCommit = "";
   private testnet = false;
-  private sidechain = false;
   private mainApiPort = 17103;
   private testApiPort = 27103;
-  private mainSideChainApiPort = 37223;
-  private testSideChainApiPort = 38223;
   private apiPort: number;
   private walletPath: string;
   private currentWalletName: string;
@@ -65,20 +61,6 @@ export class GlobalService {
     }
   }
 
-  public getSidechainEnabled(): boolean {
-    return this.sidechain;
-  }
-
-  public get networkName(): string {
-    return this.sidechain ? 'cirrus' : 'stratis';
-  }
-
-  public setSidechainEnabled(): void {
-    if (this.electronService.isElectronApp) {
-      this.sidechain = this.electronService.ipcRenderer.sendSync('get-sidechain');
-    }
-  }
-
   public getApiPort(): number {
     return this.apiPort;
   }
@@ -86,14 +68,10 @@ export class GlobalService {
   public setApiPort(): void {
     if (this.electronService.isElectronApp) {
       this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
-    } else if (this.testnet && !this.sidechain) {
+    } else if (this.testnet) {
       this.apiPort = this.testApiPort;
-    } else if (!this.testnet && !this.sidechain) {
+    } else if (!this.testnet) {
       this.apiPort = this.mainApiPort;
-    } else if (this.testnet && this.sidechain) {
-      this.apiPort = this.testSideChainApiPort;
-    } else if (!this.testnet && this.sidechain) {
-      this.apiPort = this.mainSideChainApiPort;
     }
   }
 

@@ -3,71 +3,24 @@
   class="d-flex align-content-center justify-content-center flex-wrap">
 
   <form class="text-center login-form">
-    <img
-      *ngIf="!sidechainEnabled"
-      class="login-logo"
-      src="./assets/images/stratis/home-stratis-logo.svg">
-    <img
-      *ngIf="sidechainEnabled"
-      class="login-logo"
-      src="./assets/images/cirrus/home-cirrus-logo.svg">
-
-    <div
-      *ngIf="hasWallet"
-      class="form-group"
-      [formGroup]="openWalletForm">
-      <select
-        class="custom-select"
-        formControlName="selectWallet">
-        <option
-          value=""
-          disabled
-          selected>
-          Choose a wallet
-        </option>
-        <option
-          *ngFor="let wallet of wallets"
-          [value]="wallet">
-          {{ wallet }}
-        </option>
+    <img class="login-logo" src="./assets/images/stratis/home-stratis-logo.svg">
+    <div *ngIf="hasWallet" class="form-group" [formGroup]="openWalletForm">
+      <select class="custom-select" formControlName="selectWallet">
+        <option value="" disabled selected>Choose a wallet</option>
+        <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
       </select>
-
       <div class="form-group mt-3">
-        <input
-          type="password"
-          class="form-control"
-          placeholder="Enter your password."
-          id="Password"
-          formControlName="password"
-          [class.is-invalid]="formErrors.password">
-        <div
-          *ngIf="formErrors.password"
-          class="invalid-feedback text-white">
-          {{ formErrors.password }}
-        </div>
+        <input type="password" class="form-control" placeholder="Enter your password." id="Password" formControlName="password" [class.is-invalid]="formErrors.password">
+        <div *ngIf="formErrors.password" class="invalid-feedback text-white">{{ formErrors.password }}</div>
       </div>
     </div>
 
     <div *ngIf="hasWallet">
-      <button
-        type="submit"
-        class="btn btn-block btn-outline-light"
-        [class.btn-stratis-green]="sidechainEnabled"
-        [disabled]="!openWalletForm.valid || isDecrypting"
-        (click)="onDecryptClicked()"
-        autofocus>
-        Decrypt
-      </button>
+      <button type="submit" class="btn btn-block btn-outline-light" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()" autofocus>Decrypt</button>
     </div>
 
     <div class="row d-flex justify-content-center mt-3">
-      <button
-        [disabled]="isDecrypting"
-        type="button"
-        class="btn btn-block btn-link text-white"
-        (click)="onCreateClicked()">
-        Create or restore a wallet
-      </button>
+      <button [disabled]="isDecrypting" type="button" class="btn btn-block btn-link text-white" (click)="onCreateClicked()">Create or restore a wallet</button>
     </div>
 
     <!-- SVG -->

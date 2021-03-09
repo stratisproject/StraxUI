@@ -2,17 +2,8 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
-import {
-  Balances,
-  TransactionsHistoryItem,
-  WalletBalance,
-  WalletHistory, WalletNamesData
-} from '@shared/services/interfaces/api.i';
-import {
-  SignalREvent,
-  SignalREvents,
-  WalletInfoSignalREvent
-} from '@shared/services/interfaces/signalr-events.i';
+import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory, WalletNamesData } from '@shared/services/interfaces/api.i';
+import { SignalREvent, SignalREvents, WalletInfoSignalREvent } from '@shared/services/interfaces/signalr-events.i';
 import { catchError, map, flatMap, tap } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
@@ -45,7 +36,6 @@ export class WalletService extends RestApi {
   private walletActivitySubject = new Subject<boolean>();
   private currentWallet: WalletInfo;
   private historyPageSize = 40;
-  public accountsEnabled: boolean;
   public isSyncing: boolean;
   public ibdMode: boolean;
 
@@ -77,7 +67,6 @@ export class WalletService extends RestApi {
     });
 
     currentAccountService.currentAddress.subscribe((address) => {
-      this.accountsEnabled = globalService.getSidechainEnabled();
       if (null != address) {
         this.updateWalletForCurrentAddress();
       }
@@ -181,37 +170,16 @@ export class WalletService extends RestApi {
   }
 
   public estimateFee(feeEstimation: FeeEstimation): Observable<any> {
-    // TODO: What is the intrinsic link between Smart Contacts and Accounts Enabled?
-    if (this.accountsEnabled) {
-
-      feeEstimation.sender = this.currentAccountService.address;
-      feeEstimation.shuffleOutputs = false;
-
-      return this.post('smartcontracts/estimate-fee', feeEstimation).pipe(
-        catchError(err => this.handleHttpError(err))
-      );
-    } else {
-
-      feeEstimation.shuffleOutputs = true;
-
-      return this.post('wallet/estimate-txfee', feeEstimation).pipe(
-        catchError(err => this.handleHttpError(err))
-      );
-    }
+    feeEstimation.shuffleOutputs = true;
+    return this.post('wallet/estimate-txfee', feeEstimation).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
   public getHistory(): void {
-    let extra = Object.assign({}, {}) as { [key: string]: any };
-
-    if (this.accountsEnabled) {
-      extra = Object.assign(extra, {
-        address: this.currentAccountService.address
-      });
-    }
-
     this.loadingSubject.next(true);
 
-    this.get<WalletHistory>('wallet/history', this.getWalletParams(this.currentWallet, extra))
+    this.get<WalletHistory>('wallet/history', this.getWalletParams(this.currentWallet))
       .pipe(map((response) => {
           return response.history[0].transactionsHistory;
         }),
@@ -291,28 +259,13 @@ export class WalletService extends RestApi {
   }
 
   private buildAndSendTransaction(transaction: Transaction | OpreturnTransaction): Observable<TransactionResponse> {
-
-    if (this.accountsEnabled) {
-      transaction.shuffleOutputs = !this.accountsEnabled;
-      if (this.globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress()) {
-        // Only set a change address if we're on a sidechain and there's a current account selected
-        transaction.sender = this.currentAccountService.address;
-      }
-    }
-
-    const observable = this.accountsEnabled
-      ? this.post<BuildTransactionResponse>('smartcontracts/build-transaction', transaction)
-      : this.post<BuildTransactionResponse>('wallet/build-transaction', transaction);
+    const observable = this.post<BuildTransactionResponse>('wallet/build-transaction', transaction);
 
     return observable.pipe(
-      map(response => {
-        response.isSideChain = transaction.isSideChainTransaction;
-        return response;
-      }),
       flatMap((buildTransactionResponse) => {
         return this.post('wallet/send-transaction', new TransactionSending(buildTransactionResponse.hex)).pipe(
           map(() => {
-            return new TransactionResponse(transaction, buildTransactionResponse.fee, buildTransactionResponse.isSideChain);
+            return new TransactionResponse(transaction, buildTransactionResponse.fee);
           }),
           tap(() => {
             this.refreshWallet();
@@ -349,9 +302,7 @@ export class WalletService extends RestApi {
   }
 
   private getWalletBalance(data: WalletInfo): Observable<Balances> {
-    return this.get<Balances>('wallet/balance', this.getWalletParams(data, {
-      'includeBalanceByAddress': `${this.accountsEnabled}`
-    })).pipe(
+    return this.get<Balances>('wallet/balance', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -379,21 +330,8 @@ export class WalletService extends RestApi {
     const walletSubject = this.getWalletSubject();
     const newBalance = new WalletBalance(
       walletBalance || walletSubject.value,
-      walletSubject.value ? walletSubject.value.currentAddress : null);
-
-    if (this.accountsEnabled) {
-      if (null != this.currentAccountService.address
-        && (null == newBalance.currentAddress || newBalance.currentAddress.address !== this.currentAccountService.address)) {
-        newBalance.setCurrentAccountAddress(this.currentAccountService.address);
-        this.clearWalletHistory(0);
-        //this.paginateHistory();
-        this.getHistory();
-        if (!this.rescanInProgress && !this.isSyncing) {
-          this.walletActivitySubject.next(true);
-        }
-        historyRefreshed = true;
-      }
-    }
+      walletSubject.value ? walletSubject.value.currentAddress : null
+    );
 
     if (!historyRefreshed && (walletSubject.value
       && (walletSubject.value.amountConfirmed !== newBalance.amountConfirmed

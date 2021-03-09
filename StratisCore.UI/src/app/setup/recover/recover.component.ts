@@ -31,13 +31,11 @@ export class RecoverComponent implements OnInit, OnDestroy {
   public minDate = new Date("2009-08-09");
   public maxDate = new Date();
   public bsConfig: Partial<BsDatepickerConfig>;
-  public sidechainEnabled: boolean;
   private walletRecovery: WalletRecovery;
   private formValueChanges$: Subscription;
   private passphrase$: Subscription;
 
   ngOnInit(): void {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
   }
 

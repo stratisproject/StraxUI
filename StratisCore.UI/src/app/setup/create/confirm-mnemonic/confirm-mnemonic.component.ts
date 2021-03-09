@@ -31,7 +31,6 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
   private newWallet: WalletCreation;
   private mnemonicForm$: Subscription;
   private queryParams$: Subscription;
-  public sidechainEnabled: boolean;
   public mnemonicForm: FormGroup;
   public matchError = '';
   public isCreating: boolean;
@@ -64,7 +63,6 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.queryParams$ = this.route.queryParams.subscribe(params => {
       this.newWallet = new WalletCreation(
         params['name'],

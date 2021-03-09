@@ -23,17 +23,13 @@ export class AppComponent implements OnInit, OnDestroy {
   private statusIntervalSubscription: Subscription;
   private readonly MaxRetryCount = 50;
   private readonly TryDelayMilliseconds = 3000;
-  public sidechainEnabled;
   public apiConnected = false;
   private walletFeatureNamespace = null;
   loading = true;
   loadingFailed = false;
 
   ngOnInit(): void {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
-    this.walletFeatureNamespace = this.sidechainEnabled
-      ? 'Stratis.Bitcoin.Features.SmartContracts.Wallet.SmartContractWalletFeature'
-      : 'Stratis.Bitcoin.Features.Wallet.WalletFeature';
+    this.walletFeatureNamespace = 'Stratis.Bitcoin.Features.Wallet.WalletFeature';
 
     this.setTitle();
     this.tryStart();
@@ -85,7 +81,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setTitle(): void {
-    const applicationName = this.sidechainEnabled ? 'Cirrus Core' : 'Strax Wallet';
+    const applicationName = 'Strax Wallet';
     const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
     const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
     this.titleService.setTitle(title);

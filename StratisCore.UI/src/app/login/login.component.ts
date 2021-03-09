@@ -44,7 +44,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.buildDecryptForm();
   }
 
-  public sidechainEnabled: boolean;
   public hasWallet = false;
   public isDecrypting = false;
 
@@ -52,7 +51,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.getWalletNames();
     this.getCurrentNetwork();
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
   }
 
   private buildDecryptForm(): void {
@@ -117,11 +115,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.walletService.loadStratisWallet(walletLoad)
       .subscribe(
         () => {
-          this.sidechainEnabled
-            ? this.router.navigate(['address-selection'])
-            : this.router.navigate(['wallet/dashboard']);
-            this.sidebarItems.setSelected(this.accountSidebarItem);
-            this.walletService.getHistory();
+          this.router.navigate(['wallet/dashboard']);
+          this.sidebarItems.setSelected(this.accountSidebarItem);
+          this.walletService.getHistory();
         },
         () => {
           this.openWalletForm.patchValue({password: ""});
