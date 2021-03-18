@@ -33,7 +33,7 @@
     </div>
     <div class="form-group clearfix">
       <label for="destinationAddress">Destination address</label>
-      <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.destinationAddress" [class.is-valid]="interoperabilityForm.get('destinationAddress').valid" formControlName="destinationAddress" placeholder="Please enter the sidechain destination address here.">
+      <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.destinationAddress" [class.is-valid]="interoperabilityForm.get('destinationAddress').valid" formControlName="destinationAddress" placeholder="Please enter the Ethereum destination address here.">
       <div *ngIf="interoperabilityFormErrors.destinationAddress" class="invalid-feedback">{{ interoperabilityFormErrors.destinationAddress }}</div>
     </div>
     <div class="form-group clearfix">
