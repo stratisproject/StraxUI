@@ -40,7 +40,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   public explanatoryText: string;
   public confirmationText: string;
   public contractText: string;
-  public ercContractAddress = "0xa61ab12eb1964c5b478283d3233270800674ace0";
+  public ercContractAddress = "0xa3c22370de5f9544f0c4de126b1e46ceadf0a51b";
   public contact: AddressLabel;
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
   public coinUnit: string;
