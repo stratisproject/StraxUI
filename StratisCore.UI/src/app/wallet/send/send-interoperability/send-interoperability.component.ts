@@ -72,7 +72,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     this.coinUnit = this.globalService.getCoinUnit();
 
     this.explanatoryText = `${this.coinUnit} Tokens will be released to the defined Ethereum address via the wSTRAX (ERC20) Token on the Ethereum blockchain.`;
-    this.confirmationText = `Amounts between 500 and 1000 ${this.coinUnit} clear in 80 confirmations<br>Amounts more than 1000 ${this.coinUnit} clear in 500 confirmations`;
+    this.confirmationText = `Amounts clear in 500 confirmations`;
     this.contractText = `The official wSTRAX contract address on Ethereum is ${this.ercContractAddress}`
 
 
