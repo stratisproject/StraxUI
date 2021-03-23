@@ -9,6 +9,7 @@ import { WalletService } from '@shared/services/wallet.service';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { AccountSidebarItem } from '../wallet/side-bar-items/account-sidebar-item';
 import { WalletInfo } from '@shared/models/wallet-info';
+import { AuthenticationService } from '@shared/services/auth.service'
 
 
 @Component({
@@ -39,7 +40,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private sidebarItems: SideBarItemsProvider,
-    private accountSidebarItem: AccountSidebarItem,) {
+    private accountSidebarItem: AccountSidebarItem,
+    private authenticationService: AuthenticationService) {
 
     this.buildDecryptForm();
   }
@@ -118,6 +120,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['wallet/dashboard']);
           this.sidebarItems.setSelected(this.accountSidebarItem);
           this.walletService.getHistory();
+          this.authenticationService.SignIn();
         },
         () => {
           this.openWalletForm.patchValue({password: ""});

@@ -13,28 +13,29 @@ import { ReceiveComponent } from './receive/receive.component';
 import { SendComponent } from './send/send.component';
 import { StakingComponent } from './staking/staking.component';
 import { ColdStakingComponent } from './cold-staking/cold-staking.component';
+import { AuthenticationGuard } from '@shared/guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: 'wallet', component: WalletComponent, children: [
+    path: 'wallet', component: WalletComponent, canActivate: [AuthenticationGuard], children: [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-      {path: 'dashboard', component: DashboardComponent},
-      {path: 'send', component: SendComponent},
-      {path: 'send/:address', component: SendComponent},
-      {path: 'receive', component: ReceiveComponent},
-      {path: 'staking', component: StakingComponent},
-      {path: 'coldstaking', component: ColdStakingComponent},
+      {path: 'dashboard', component: DashboardComponent, canActivate: [AuthenticationGuard]},
+      {path: 'send', component: SendComponent, canActivate: [AuthenticationGuard]},
+      {path: 'send/:address', component: SendComponent, canActivate: [AuthenticationGuard]},
+      {path: 'receive', component: ReceiveComponent, canActivate: [AuthenticationGuard]},
+      {path: 'staking', component: StakingComponent, canActivate: [AuthenticationGuard]},
+      {path: 'coldstaking', component: ColdStakingComponent, canActivate: [AuthenticationGuard]},
       {
-        path: 'advanced', component: AdvancedComponent,
+        path: 'advanced', component: AdvancedComponent, canActivate: [AuthenticationGuard],
         children: [
           {path: '', redirectTo: 'about', pathMatch: 'full'},
-          {path: 'about', component: AboutComponent},
-          {path: 'extpubkey', component: ExtPubkeyComponent},
-          {path: 'generate-addresses', component: GenerateAddressesComponent},
-          {path: 'resync', component: ResyncComponent}
+          {path: 'about', component: AboutComponent, canActivate: [AuthenticationGuard]},
+          {path: 'extpubkey', component: ExtPubkeyComponent, canActivate: [AuthenticationGuard]},
+          {path: 'generate-addresses', component: GenerateAddressesComponent, canActivate: [AuthenticationGuard]},
+          {path: 'resync', component: ResyncComponent, canActivate: [AuthenticationGuard]}
         ]
       },
-      {path: 'address-book', component: AddressBookComponent}
+      {path: 'address-book', component: AddressBookComponent, canActivate: [AuthenticationGuard]}
     ]
   },
 ];
