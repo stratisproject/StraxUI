@@ -1,5 +1,5 @@
 export class WalletRecovery {
-  constructor(walletName: string, mnemonic: string, password: string, passphrase: string, creationDate = new Date("2017-01-01"), folderPath?: string) {
+  constructor(walletName: string, mnemonic: string, password: string, passphrase: string, creationDate = new Date("2020-01-01"), folderPath?: string) {
     this.name = walletName;
     this.mnemonic = mnemonic;
     this.password = password;
