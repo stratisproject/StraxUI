@@ -33,7 +33,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
       private addressBookService: AddressBookService,
       private activatedRoute: ActivatedRoute,
       private fb: FormBuilder,
-      private walletService: WalletService,
+      public walletService: WalletService,
       private taskBarService: TaskBarService) {
     this.sendForm = this.buildSendForm(fb,
       () => (this.spendableBalance - this.estimatedFee) / 100000000);

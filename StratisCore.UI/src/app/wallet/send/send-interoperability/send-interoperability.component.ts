@@ -54,7 +54,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
     private globalService: GlobalService,
-    private walletService: WalletService,
+    public walletService: WalletService,
     private addressBookService: AddressBookService,
     private taskBarService: TaskBarService,
     private activatedRoute: ActivatedRoute,
