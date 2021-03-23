@@ -16,11 +16,6 @@
           <div *ngIf="formErrors.walletName" class="invalid-feedback">{{ formErrors.walletName }}</div>
         </div>
         <div class="form-group col-12">
-          <label class="text-left" for="creationDate">Earliest Possible Creation Date</label>
-          <input type="text" class="form-control" bsDatepicker formControlName="walletDate" placeholder="mm/dd/yyyy" [bsConfig]="bsConfig" [minDate]="minDate" [maxDate]="maxDate"/>
-          <div *ngIf="formErrors.walletDate" class="text-danger mt-2">{{ formErrors.walletDate }}</div>
-        </div>
-        <div class="form-group col-12">
           <label class="text-left" for="walletMnemonic">Secret Words</label>
           <input type="text" class="form-control form-control-success" [class.is-invalid]="formErrors.walletMnemonic" [class.is-valid]="!formErrors.walletMnemonic && recoverWalletForm.get('walletMnemonic').valid" formControlName="walletMnemonic" placeholder="Enter your secret words.">
           <div *ngIf="formErrors.walletMnemonic" class="invalid-feedback">{{ formErrors.walletMnemonic }}</div>
