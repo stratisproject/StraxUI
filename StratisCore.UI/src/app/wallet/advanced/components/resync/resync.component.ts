@@ -1,40 +1,26 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { GlobalService } from '@shared/services/global.service';
-import { NodeService } from '@shared/services/node-service';
 import { WalletService } from '@shared/services/wallet.service';
 import { WalletResync } from '@shared/models/wallet-rescan';
 import { SnackbarService } from 'ngx-snackbar';
-
 @Component({
   selector: 'app-resync',
   templateUrl: './resync.component.html',
   styleUrls: ['./resync.component.scss']
 })
-export class ResyncComponent implements OnInit, OnDestroy {
+export class ResyncComponent implements OnInit {
   @Output() rescanStarted = new EventEmitter<boolean>();
+
   constructor(
     private globalService: GlobalService,
     private snackbarService: SnackbarService,
-    private walletService: WalletService,
-    private nodeService: NodeService) {
+    public walletService: WalletService) {
   }
 
-
   private walletName: string;
-  private lastBlockSyncedHeight: number;
-  private chainTip: number;
-  private isChainSynced: boolean;
-  public isSyncing = true;
-  private generalWalletInfoSubscription: Subscription;
 
   ngOnInit(): void {
     this.walletName = this.globalService.getWalletName();
-    this.startSubscriptions();
-  }
-
-  ngOnDestroy(): void {
-    this.cancelSubscriptions();
   }
 
   public onResyncClicked(): void {
@@ -62,37 +48,4 @@ export class ResyncComponent implements OnInit, OnDestroy {
       }
     );
   }
-
-  private getGeneralWalletInfo(): void {
-    this.generalWalletInfoSubscription = this.nodeService.generalInfo()
-      .subscribe(
-        response => {
-          const generalWalletInfoResponse = response;
-          this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
-          this.chainTip = generalWalletInfoResponse.chainTip;
-          this.isChainSynced = generalWalletInfoResponse.isChainSynced;
-
-          if (this.isChainSynced && this.lastBlockSyncedHeight === this.chainTip) {
-            this.isSyncing = false;
-          } else {
-            this.isSyncing = true;
-          }
-        },
-        () => {
-          this.cancelSubscriptions();
-        }
-      )
-    ;
-  }
-
-  private cancelSubscriptions(): void {
-    if (this.generalWalletInfoSubscription) {
-      this.generalWalletInfoSubscription.unsubscribe();
-    }
-  }
-
-  private startSubscriptions(): void {
-    this.getGeneralWalletInfo();
-  }
-
 }

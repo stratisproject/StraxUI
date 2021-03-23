@@ -1,7 +1,7 @@
   <div class="row">
     <div class="col-12">
       <div class="alert alert-info" role="alert"><p class="m-0">Rescanning your wallet will temporarily clear the transactions in your wallet and rescan the blockchain.</p></div>
-      <div class="alert alert-warning text-center" *ngIf="isSyncing">Please note that your wallet needs to be completely synced before you can rescan your wallet.</div>
-      <button type="button" [disabled]="isSyncing" class="btn btn-primary btn-right-200" (click)="onResyncClicked()">Rescan</button>
+      <div class="alert alert-warning text-center" *ngIf="walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress">Please note that your wallet needs to be completely synchronised before you can rescan your wallet.</div>
+      <button type="button" [disabled]="walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress" class="btn btn-primary btn-right-200" (click)="onResyncClicked()">Rescan</button>
     </div>
   </div>
