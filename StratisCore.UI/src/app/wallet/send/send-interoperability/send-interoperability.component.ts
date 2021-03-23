@@ -40,7 +40,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   public explanatoryText: string;
   public confirmationText: string;
   public contractText: string;
-  public ercContractAddress = "0xa61ab12eb1964c5b478283d3233270800674ace0";
+  public ercContractAddress = "0xa3c22370de5f9544f0c4de126b1e46ceadf0a51b";
   public contact: AddressLabel;
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
   public coinUnit: string;
@@ -72,7 +72,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     this.coinUnit = this.globalService.getCoinUnit();
 
     this.explanatoryText = `${this.coinUnit} Tokens will be released to the defined Ethereum address via the wSTRAX (ERC20) Token on the Ethereum blockchain.`;
-    this.confirmationText = `Amounts between 500 and 1000 ${this.coinUnit} clear in 80 confirmations<br>Amounts more than 1000 ${this.coinUnit} clear in 500 confirmations`;
+    this.confirmationText = `Amounts clear in 500 confirmations`;
     this.contractText = `The official wSTRAX contract address on Ethereum is ${this.ercContractAddress}`
 
 
@@ -256,7 +256,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       changeAddress: ['', Validators.compose([Validators.minLength(26)])],
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
-        Validators.min(500),
+        Validators.min(90000),
         (control: AbstractControl) => Validators.max(balanceCalculator())(control)
       ])],
       fee: ['medium', Validators.required],
@@ -293,7 +293,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
    amount: {
      required: 'An amount is required.',
      pattern: 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-     min: 'The amount has to be more or equal to 500.',
+     min: 'The amount has to be more or equal to 90000.',
      max: 'The total transaction amount exceeds your spendable balance.'
    },
    fee: {
