@@ -2,6 +2,7 @@ import { Log } from "@shared/services/logger.service";
 
 export interface WalletNamesData {
   walletNames: Array<string>;
+  watchOnlyWallets: Array<string>;
 }
 
 export interface Money {

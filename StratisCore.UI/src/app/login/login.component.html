@@ -4,10 +4,10 @@
 
   <form class="text-center login-form">
     <img class="login-logo" src="./assets/images/stratis/home-stratis-logo.svg">
-    <div *ngIf="hasWallet" class="form-group" [formGroup]="openWalletForm">
+    <div *ngIf="wallets.length > 0" class="form-group" [formGroup]="openWalletForm">
       <select class="custom-select" formControlName="selectWallet">
         <option value="" disabled selected>Choose a wallet</option>
-        <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
+        <option *ngFor="let wallet of wallets" [value]="wallet.walletName">{{ wallet.walletName }} <div *ngIf="wallet.isWatchOnly">(watch only)</div></option>
       </select>
       <div class="form-group mt-3">
         <input type="password" class="form-control" placeholder="Enter your password." id="Password" formControlName="password" [class.is-invalid]="formErrors.password">
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div *ngIf="hasWallet">
+    <div *ngIf="wallets.length > 0">
       <button type="submit" class="btn btn-block btn-outline-light" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()" autofocus>Decrypt</button>
     </div>
 

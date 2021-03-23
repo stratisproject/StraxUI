@@ -21,7 +21,9 @@ import { WalletBalance } from '@shared/services/interfaces/api.i';
 
 export class LoginComponent implements OnInit, OnDestroy {
   public openWalletForm: FormGroup;
-  public wallets: string[];
+  public wallets: Wallets[] = [];
+  private regularWallets: string[];
+  private watchOnlyWallets: string[];
   private subscriptions: Subscription[] = [];
 
   public formErrors = {
@@ -47,7 +49,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.buildDecryptForm();
   }
 
-  public hasWallet = false;
   public isDecrypting = false;
   public wallet: Observable<WalletBalance>;
 
@@ -89,12 +90,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.walletService.getWalletNames()
       .subscribe(
         response => {
-          this.wallets = response.walletNames.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
-          if (this.wallets.length > 0) {
-            this.hasWallet = true;
-          } else {
-            this.hasWallet = false;
-          }
+          this.regularWallets = response.walletNames.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
+          this.watchOnlyWallets = response.watchOnlyWallets.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
+
+          this.regularWallets.forEach(wallet => {
+            if (this.watchOnlyWallets.find(x => x == wallet)) {
+              this.wallets.push(new Wallets(wallet, true));
+            } else {
+              this.wallets.push(new Wallets(wallet, false));
+            }
+          })
         }
       ));
   }
@@ -123,6 +128,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.walletService.getHistory();
           this.wallet = this.walletService.wallet()
           this.authenticationService.SignIn();
+          if (this.watchOnlyWallets.find(x => x == walletLoad.name)) {
+            this.globalService.setWalletWatchOnly(true);
+          } else {
+            this.globalService.setWalletWatchOnly(false);
+          }
         },
         () => {
           this.openWalletForm.patchValue({password: ""});
@@ -146,4 +156,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
+}
+
+export class Wallets {
+  constructor(walletName, isWatchOnly) {
+    this.walletName = walletName;
+    this.isWatchOnly = isWatchOnly;
+  }
+  walletName: string;
+  isWatchOnly: boolean;
 }

@@ -47,7 +47,7 @@ export abstract class SideBarItemBase implements SideBarItem {
 }
 
 export class SimpleSideBarItem extends SideBarItemBase {
-  constructor(displayText: string, route: string, sideBarClasses?: string[], visible?: true) {
+  constructor(displayText: string, route: string, sideBarClasses?: string[], visible?: boolean) {
     super(displayText, route, sideBarClasses, visible);
   }
 
