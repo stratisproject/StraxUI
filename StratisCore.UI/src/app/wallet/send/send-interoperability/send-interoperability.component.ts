@@ -51,6 +51,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public interoperabilityFormErrors: any = {};
   private last: FeeEstimation = null;
+  private minimumInteroperabilityAmount = 1000;
 
   constructor(private fb: FormBuilder,
     private globalService: GlobalService,
@@ -257,7 +258,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       changeAddress: ['', Validators.compose([Validators.minLength(26)])],
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
-        Validators.min(90000),
+        Validators.min(this.minimumInteroperabilityAmount),
         (control: AbstractControl) => Validators.max(balanceCalculator())(control)
       ])],
       fee: ['medium', Validators.required],
@@ -294,7 +295,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
    amount: {
      required: 'An amount is required.',
      pattern: 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-     min: 'The amount has to be more or equal to 90000.',
+     min: `The amount has to be more or equal to ${this.minimumInteroperabilityAmount}.`,
      max: 'The total transaction amount exceeds your spendable balance.'
    },
    fee: {
