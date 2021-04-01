@@ -16,7 +16,7 @@ export class GlobalService {
     this.setDaemonIP();
   }
 
-  private applicationVersion = '1.2.0';
+  private applicationVersion = '1.3.0';
   private gitCommit = "";
   private testnet = false;
   private mainApiPort = 17103;
@@ -25,7 +25,7 @@ export class GlobalService {
   private walletPath: string;
   private currentWalletName: string;
   private currentWalletAccount: string;
-  private watchOnlySubject = new BehaviorSubject<any>([' First Goal','Second Goal']);
+  private watchOnlySubject = new BehaviorSubject<boolean>(false);
   private network: string;
   private daemonIP: string;
   private version = VERSION;

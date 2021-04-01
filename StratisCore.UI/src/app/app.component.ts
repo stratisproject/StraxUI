@@ -81,7 +81,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private setTitle(): void {
     const applicationName = 'Strax Wallet';
     const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
-    const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
+    const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix} - Community Testing`;
     this.titleService.setTitle(title);
   }
 
