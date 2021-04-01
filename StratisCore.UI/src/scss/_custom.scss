@@ -109,16 +109,6 @@ img {
     }
   }
 
-  .nav-link-stratis-green {
-    &.active-stratis-green {
-      color: $stratis-green !important;
-    }
-
-    &:hover {
-      color: $stratis-green;
-    }
-  }
-
   ///// JUMBOTRON
   .jumbotron {
     h5 {
@@ -739,14 +729,6 @@ img {
   stroke-dashoffset: 745.74853515625;
   stroke-dasharray: 745.74853515625;
   animation: dash 4s ease-out forwards;
-}
-
-// for cross-chain modal look
-.stratis-green-shadow {
-  .modal-content {
-    border: 1px solid $stratis-green !important;
-    box-shadow: 0 5px 20px 0 rgba($stratis-green, .4) !important;
-  }
 }
 
 .receive-component {
