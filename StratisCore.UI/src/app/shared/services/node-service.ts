@@ -4,11 +4,13 @@ import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
 import {
   GeneralInfo,
+  FullNodeEventModel
 } from '@shared/services/interfaces/api.i';
 import {
   BlockConnectedSignalREvent,
   SignalREvents,
-  WalletInfoSignalREvent
+  WalletInfoSignalREvent,
+  FullNodeEvent
 } from '@shared/services/interfaces/signalr-events.i';
 import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -20,6 +22,8 @@ import { ErrorService } from '@shared/services/error-service';
   providedIn: 'root'
 })
 export class NodeService extends RestApi {
+  private fullNodeEventSubject: BehaviorSubject<FullNodeEventModel> = new BehaviorSubject<FullNodeEventModel>({message: "Initializing"});
+
   private generalInfoSubject: BehaviorSubject<GeneralInfo> = new BehaviorSubject<GeneralInfo>({
     walletName: '',
     walletFilePath: '',
@@ -48,6 +52,11 @@ export class NodeService extends RestApi {
       }
     });
 
+    signalRService.registerOnMessageEventHandler<FullNodeEvent>(
+      SignalREvents.FullNodeEvent, (message) => {
+        this.fullNodeEventSubject.next(message);
+      });
+
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(
       SignalREvents.WalletGeneralInfo, (message) => {
         if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
@@ -75,6 +84,10 @@ export class NodeService extends RestApi {
 
   public generalInfo(): Observable<GeneralInfo> {
     return this.generalInfoSubject.asObservable();
+  }
+
+  public FullNodeEvent(): Observable<FullNodeEventModel> {
+    return this.fullNodeEventSubject.asObservable();
   }
 
   public addNode(nodeIP: string): Observable<any> {

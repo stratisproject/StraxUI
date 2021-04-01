@@ -18,10 +18,15 @@ export interface StakingInfoSignalREvent extends SignalREvent, StakingInfo {
 export interface ColdStakingInfoSignalREvent extends SignalREvent, GetColdStakingInfo {
 }
 
+export interface FullNodeEvent extends SignalREvent {
+  message: string;
+}
+
 export enum SignalREvents {
   BlockConnected = 'BlockConnected',
   TransactionReceived = 'TransactionReceived',
   WalletGeneralInfo = 'WalletGeneralInfo',
   StakingInfo = 'StakingInfo',
-  ColdStakingInfo = 'ColdStakingInfo'
+  ColdStakingInfo = 'ColdStakingInfo',
+  FullNodeEvent = 'FullNodeEvent'
 }
