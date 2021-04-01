@@ -23,6 +23,8 @@ import { TaskBarComponent } from './components/task-bar/task-bar.component';
 import { TaskBarItemHostDirective } from '@shared/components/task-bar/task-bar-item-host-directive';
 import { TaskBarService } from '@shared/services/task-bar-service';
 import { ConsensusService } from './services/consensus-service';
+import { WalletInitializingComponent } from './components/wallet-initializing/wallet-initializing.component';
+import { WalletInitializingFailedComponent } from './components/wallet-initializing-failed/wallet-initializing-failed.component';
 
 @NgModule({
   imports: [CommonModule],
@@ -37,7 +39,9 @@ import { ConsensusService } from './services/consensus-service';
     ConfirmationModalComponent,
     SideBarComponent,
     TaskBarComponent,
-    TaskBarItemHostDirective
+    TaskBarItemHostDirective,
+    WalletInitializingComponent,
+    WalletInitializingFailedComponent
   ],
   providers: [
     ApiService,
@@ -66,7 +70,9 @@ import { ConsensusService } from './services/consensus-service';
     ConfirmationModalComponent,
     SideBarComponent,
     TaskBarComponent,
-    TaskBarItemHostDirective
+    TaskBarItemHostDirective,
+    WalletInitializingComponent,
+    WalletInitializingFailedComponent
   ]
 })
 

@@ -20,6 +20,7 @@ export interface ColdStakingInfoSignalREvent extends SignalREvent, GetColdStakin
 
 export interface FullNodeEvent extends SignalREvent {
   message: string;
+  state: string;
 }
 
 export enum SignalREvents {

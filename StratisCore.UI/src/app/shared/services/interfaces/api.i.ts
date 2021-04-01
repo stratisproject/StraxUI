@@ -158,4 +158,5 @@ export interface GetColdStakingInfo {
 
 export interface FullNodeEventModel {
   message: string;
+  state: string;
 }

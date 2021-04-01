@@ -1,9 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { Observable, Subscription } from 'rxjs';
-import { retryWhen, delay, tap } from 'rxjs/operators';
-import { ApiService } from '@shared/services/api.service';
+import { Observable } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { GlobalService } from '@shared/services/global.service';
 import { NodeService } from '@shared/services/node-service';
@@ -15,69 +13,35 @@ import { FullNodeEventModel } from '@shared/services/interfaces/api.i';
   styleUrls: ['./app.component.scss'],
 })
 
-export class AppComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService, private nodeService: NodeService) {
+export class AppComponent implements OnInit {
+  constructor(private router: Router, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService, private nodeService: NodeService) {
   }
 
-  private subscription: Subscription;
-  private statusIntervalSubscription: Subscription;
-  private readonly MaxRetryCount = 50;
-  private readonly TryDelayMilliseconds = 3000;
-  public apiConnected = false;
-  private lastFeatureNamespace = 'Stratis.Features.Diagnostic.DiagnosticFeature';
   public fullNodeEvent: Observable<FullNodeEventModel>;
-  loading = true;
-  loadingFailed = false;
+  public loading = true;
+  public loadingFailed = false;
+  public currentMessage: string;
+  public currentState: string;
 
   ngOnInit(): void {
     this.setTitle();
-    this.tryStart();
-  }
-
-  ngOnDestroy(): void {
     this.fullNodeEvent = this.nodeService.FullNodeEvent();
-    this.subscription.unsubscribe();
-    this.statusIntervalSubscription.unsubscribe();
-  }
 
-  // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
-  private tryStart(): void {
-    let retry = 0;
-    const stream$ = this.apiService.getNodeStatus(true).pipe(
-      retryWhen(errors =>
-        errors.pipe(delay(this.TryDelayMilliseconds)).pipe(
-          tap(errorStatus => {
-            if (retry++ === this.MaxRetryCount) {
-              throw errorStatus;
-            }
-            console.log(`Retrying ${retry}...`);
-          })
-        )
-      )
-    );
+    this.fullNodeEvent.subscribe(response => {
+      this.currentMessage = response.message;
+      this.currentState = response.state;
+      console.log("message: " + this.currentMessage + "\nstate: " + this.currentState);
 
-    this.subscription = stream$.subscribe(
-      () => {
-        this.apiConnected = true;
-        this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
-          .subscribe(
-            response => {
-              const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-              const lastFeatureResponse = response.featuresData.find(x => x.namespace === this.lastFeatureNamespace);
-              if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized'
-                && lastFeatureResponse && lastFeatureResponse.state === 'Initialized') {
-                this.loading = false;
-                this.statusIntervalSubscription.unsubscribe();
-                this.router.navigate(['login']);
-              }
-            }
-          );
-      }, () => {
-        console.log('Failed to start wallet');
+      if (response.state === "Initialized") {
+        this.loading = false;
+        this.router.navigate(['login']);
+      }
+
+      if (response.state === "Failed") {
         this.loading = false;
         this.loadingFailed = true;
       }
-    );
+    })
   }
 
   private setTitle(): void {
