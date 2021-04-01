@@ -4,13 +4,12 @@ import { Router } from '@angular/router';
 import { GlobalService } from '@shared/services/global.service';
 import { ApiService } from '@shared/services/api.service';
 import { WalletLoad } from '@shared/models/wallet-load';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { AccountSidebarItem } from '../wallet/side-bar-items/account-sidebar-item';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { AuthenticationService } from '@shared/services/auth.service'
-import { WalletBalance } from '@shared/services/interfaces/api.i';
 
 
 @Component({
@@ -50,7 +49,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public isDecrypting = false;
-  public wallet: Observable<WalletBalance>;
 
   public ngOnInit(): void {
     this.getWalletNames();
@@ -126,7 +124,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['wallet/dashboard']);
           this.sidebarItems.setSelected(this.accountSidebarItem);
           this.walletService.getHistory();
-          this.wallet = this.walletService.wallet()
           this.authenticationService.SignIn();
           if (this.watchOnlyWallets.find(x => x == walletLoad.name)) {
             this.globalService.setWalletWatchOnly(true);
