@@ -1,13 +1,25 @@
 <div *ngIf="loading">
-  <app-wallet-initializing></app-wallet-initializing>
-  <div *ngIf="(fullNodeEvent | async) as _fullNodeEvent" class="loadingText mt-1 col-12 mx-auto text-center">{{ _fullNodeEvent.message }}</div>
+  <div class="login">
+    <div class="row align-items-center h-100">
+      <div id="logoAnim" class="mx-auto">
+        <app-wallet-initializing></app-wallet-initializing>
+        <div *ngIf="(fullNodeEvent | async) as _fullNodeEvent" class="loadingText mt-5 text-center">{{ _fullNodeEvent.message }}</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div *ngIf="loadingFailed">
-  <app-wallet-initializing-failed></app-wallet-initializing-failed>
-  <div class="loadingText mt-4 text-danger text-center">
-    Loading Failed - Unable to connect to Stratis Node.<br>
-    If you continue to receive this message after restarting, please have a look at the support section <a class="text-primary" (click)="openSupport()"><u>here</u></a>.
+  <div class="login">
+    <div class="row align-items-center h-100">
+      <div id="logoAnim" class="mx-auto">
+        <app-wallet-initializing-failed></app-wallet-initializing-failed>
+        <div class="loadingText mt-5 text-danger text-center">
+          Loading Failed - Unable to connect to Stratis Node.<br>
+          If you continue to receive this message after restarting, please have a look at the support section <a class="text-primary" (click)="openSupport()"><u>here</u></a>.
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
