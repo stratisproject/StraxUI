@@ -59,8 +59,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     private taskBarService: TaskBarService,
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackbarService) {
-  this.interoperabilityForm = this.buildInteroperabilityForm(fb,
-    () => (this.spendableBalance - this.estimatedSidechainFee) / 100000000);
+  this.interoperabilityForm = this.buildInteroperabilityForm(fb);
 
   this.subscriptions.push(this.interoperabilityForm.valueChanges.pipe(debounceTime(500))
     .subscribe(data => this.validateForm(data)));
@@ -214,8 +213,10 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.walletService.wallet()
       .subscribe(
         response => {
-          this.totalBalance = response.amountConfirmed + response.amountUnconfirmed;
-          this.spendableBalance = response.spendableAmount;
+          if (response) {
+            this.totalBalance = response.amountConfirmed + response.amountUnconfirmed;
+            this.spendableBalance = response.spendableAmount;
+          }
         },
       ));
   }
@@ -246,7 +247,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     this.estimatedSidechainFee = 0;
   }
 
-  public buildInteroperabilityForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
+  public buildInteroperabilityForm(fb: FormBuilder): FormGroup {
     return fb.group({
       tacAgreed: ['', Validators.requiredTrue],
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
@@ -257,7 +258,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(90000),
-        (control: AbstractControl) => Validators.max(balanceCalculator())(control)
+        (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedSidechainFee)(control)
       ])],
       fee: ['medium', Validators.required],
       password: ['', Validators.required]

@@ -35,8 +35,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
       private fb: FormBuilder,
       public walletService: WalletService,
       private taskBarService: TaskBarService) {
-    this.sendForm = this.buildSendForm(fb,
-      () => (this.spendableBalance - this.estimatedFee) / 100000000);
+    this.sendForm = this.buildSendForm(fb);
 
     this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(500))
       .subscribe(data => this.validateForm(data)));
@@ -201,9 +200,11 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.walletService.wallet()
       .subscribe(
         response => {
-          this.totalBalance = response.amountConfirmed + response.amountUnconfirmed;
-          this.spendableBalance = response.spendableAmount;
-        },
+          if (response) {
+            this.totalBalance = response.amountConfirmed + response.amountUnconfirmed;
+            this.spendableBalance = response.spendableAmount;
+          }
+        }
       ));
   }
 
@@ -216,7 +217,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     this.sendForm.controls.address.setValue('');
   }
 
-  private buildSendForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
+  private buildSendForm(fb: FormBuilder): FormGroup {
     return fb.group({
       address: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       changeAddressCheckbox: [false],
@@ -224,7 +225,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(0.00001),
-        (control: AbstractControl) => Validators.max(balanceCalculator())(control)])],
+        (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedFee)(control)])],
       fee: ['medium', Validators.required],
       password: ['', Validators.required]
     });
