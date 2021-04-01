@@ -6,14 +6,12 @@ import { SetupRoutingModule } from './setup-routing.module';
 import { RecoverComponent } from './recover/recover.component';
 import { ShowMnemonicComponent } from './create/show-mnemonic/show-mnemonic.component';
 import { ConfirmMnemonicComponent } from './create/confirm-mnemonic/confirm-mnemonic.component';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { SnackbarModule } from 'ngx-snackbar';
 
 @NgModule({
   imports: [
     SetupRoutingModule,
     SharedModule,
-    BsDatepickerModule.forRoot(),
     SnackbarModule
   ],
   declarations: [
