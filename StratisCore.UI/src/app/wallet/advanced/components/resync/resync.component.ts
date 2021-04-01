@@ -24,13 +24,10 @@ export class ResyncComponent implements OnInit {
   }
 
   public onResyncClicked(): void {
-    const rescanDate = new Date("2020-01-01");
-    rescanDate.setDate(rescanDate.getDate() - 1);
-
     const rescanData = new WalletResync(
       this.walletName,
-      rescanDate,
-      false
+      true,
+      true
     );
 
     this.walletService

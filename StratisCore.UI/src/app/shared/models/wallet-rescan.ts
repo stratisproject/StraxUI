@@ -1,11 +1,11 @@
 export class WalletResync {
-  constructor(walletName: string, date: Date, all: boolean) {
+  constructor(walletName: string, all: boolean, reSync: boolean) {
     this.walletName = walletName;
-    this.date = date;
     this.all = all;
+    this.reSync = reSync;
   }
 
   walletName: string;
-  date: Date;
   all: boolean;
+  reSync: boolean;
 }

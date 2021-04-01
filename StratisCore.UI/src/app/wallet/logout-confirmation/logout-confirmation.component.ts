@@ -30,7 +30,7 @@ export class LogoutConfirmationComponent implements OnInit {
   public onLogout(): void {
     this.stakingService.stopStaking();
     this.activeModal.close();
-    this.walletService.clearWalletHistory(0);
+    this.walletService.clearWalletHistory();
     this.coldStakingService.setStakingAccount(null);
     this.authenticationService.SignOut();
     this.router.navigate(['/login']);

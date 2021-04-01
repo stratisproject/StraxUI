@@ -144,10 +144,15 @@ export class WalletService extends RestApi {
   }
 
   public rescanWallet(data: WalletResync): Observable<any> {
-    return this.post('wallet/sync-from-date/', data).pipe(
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('all', data.all.toString())
+      .set('reSync', data.reSync.toString());
+
+    return this.delete('wallet/remove-transactions/', params).pipe(
       tap(() => {
         this.rescanInProgress = true;
-        this.clearWalletHistory(data.date.getTime());
+        this.clearWalletHistory();
         //this.paginateHistory();
         this.getHistory();
       }),
@@ -357,10 +362,10 @@ export class WalletService extends RestApi {
       });
   }
 
-  public clearWalletHistory(fromDate: number): void {
+  public clearWalletHistory(): void {
     if (this.currentWallet) {
       const walletHistorySubject = this.getWalletHistorySubject();
-      walletHistorySubject.next(Array.from((walletHistorySubject.value || []).filter(item => item.timestamp < fromDate)));
+      walletHistorySubject.next([]);
     }
   }
 }
