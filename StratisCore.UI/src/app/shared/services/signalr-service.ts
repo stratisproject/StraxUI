@@ -36,7 +36,7 @@ export class SignalRService extends RestApi implements ISignalRService {
   private onMessageReceivedHandlers: Array<SignalRMessageHandler> = [];
   private connecting = false;
   private connectSubscription: Subscription;
-  private connectInterval: Observable<number> = interval(10000).pipe(startWith(0), tap(() => {
+  private connectInterval: Observable<number> = interval(1000).pipe(startWith(0), tap(() => {
     // TODO: consider multiple Hub support
     this.connect('events');
   }));
