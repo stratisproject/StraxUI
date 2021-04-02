@@ -6,8 +6,7 @@
         <div class="form-group clearfix">
           <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="interoperabilityFormErrors.tacAgreed" [class.is-valid]="!interoperabilityFormErrors.tacAgreed && interoperabilityForm.get('tacAgreed').valid"
             formControlName="tacAgreed" id="tacAgreed">
-            I understand that this software is experimental and accept responsibility for any funds lost
-          <div *ngIf="interoperabilityFormErrors.tacAgreed" class="invalid-feedback">{{ interoperabilityFormErrors.tacAgreed }}</div>
+            I understand that a fee will be deducted from wSTRAX received. A fee upwards of $250 should be expected and will vary based on the volatility of the Ethereum gasPrice. Please check the box to accept this fee and responsibility for any funds lost.          <div *ngIf="interoperabilityFormErrors.tacAgreed" class="invalid-feedback">{{ interoperabilityFormErrors.tacAgreed }}</div>
         </div>
       </div>
     </div>
