@@ -28,7 +28,7 @@ import { ExtPubKeyImport } from '@shared/models/extpubkey-import';
   providedIn: 'root'
 })
 export class WalletService extends RestApi {
-  private rescanInProgress: boolean;
+  public rescanInProgress: boolean;
   private transactionReceivedSubject = new Subject<SignalREvent>();
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionInfo[]> } = {};
