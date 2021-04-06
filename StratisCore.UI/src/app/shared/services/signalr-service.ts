@@ -8,7 +8,7 @@ import { RestApi } from '@shared/services/rest-api';
 import { ErrorService } from '@shared/services/error-service';
 import { interval, Observable, Subscription } from 'rxjs';
 import { startWith, tap } from 'rxjs/operators';
-import { Log } from '../../wallet/tokens/services/logger.service';
+import { Log } from '@shared/services/logger.service';
 
 export interface SignalRConnectionInfo {
   signalRUri: string;
@@ -36,7 +36,7 @@ export class SignalRService extends RestApi implements ISignalRService {
   private onMessageReceivedHandlers: Array<SignalRMessageHandler> = [];
   private connecting = false;
   private connectSubscription: Subscription;
-  private connectInterval: Observable<number> = interval(10000).pipe(startWith(0), tap(() => {
+  private connectInterval: Observable<number> = interval(1000).pipe(startWith(0), tap(() => {
     // TODO: consider multiple Hub support
     this.connect('events');
   }));

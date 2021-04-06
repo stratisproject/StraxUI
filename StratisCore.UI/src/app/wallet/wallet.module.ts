@@ -14,9 +14,7 @@ import { LogoutConfirmationComponent } from './logout-confirmation/logout-confir
 import { ReceiveComponent } from './receive/receive.component';
 import { SendConfirmationComponent } from './send/send-confirmation/send-confirmation.component';
 import { SendComponent } from './send/send.component';
-import { SmartContractsModule } from './smart-contracts/smart-contracts.module';
 import { StatusBarComponent } from './status-bar/status-bar.component';
-import { TokensModule } from './tokens/tokens.module';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletComponent } from './wallet.component';
@@ -31,9 +29,10 @@ import { AddressBookCardComponent } from './address-book-card/address-book-card.
 import { AddNodeComponent } from './advanced/components/add-node/add-node.component';
 import { TransactionDetailsModalComponent } from './transaction-details-modal/transaction-details-modal.component';
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
+import { SendSidebarItem } from './side-bar-items/send-sidebar-item';
+import { ContactsSidebarItem } from './side-bar-items/contacts-sidebar-item';
 import { StakingComponent } from './staking/staking.component';
 import { HotStakingComponent } from './staking/hot-staking/hot-staking.component';
-// import { ColdStakingComponent } from './staking/cold-staking/cold-staking.component';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ColdStakingSidebarItem } from './side-bar-items/cold-staking-sidebar-item';
@@ -43,14 +42,14 @@ import { ColdWalletComponent } from './cold-staking/cold-wallet/cold-wallet.comp
 import { SendDefaultComponent } from './send/send-default/send-default.component';
 import { SendSidechainComponent } from './send/send-sidechain/send-sidechain.component';
 import { SendInteroperabilityComponent } from './send/send-interoperability/send-interoperability.component';
+import { GlobalService } from '@shared/services/global.service';
+import { fromEventPattern } from 'rxjs';
 
 @NgModule({
   imports: [
     SnackbarModule,
     SharedModule,
     WalletRoutingModule,
-    SmartContractsModule.forRoot(),
-    TokensModule,
     BsDatepickerModule.forRoot(),
     TabsModule.forRoot(),
     ScrollingModule
@@ -89,21 +88,25 @@ import { SendInteroperabilityComponent } from './send/send-interoperability/send
   providers: [
     AccountSelectedGuard,
     AccountSidebarItem,
+    SendSidebarItem,
     StakingSidebarItem,
-    ColdStakingSidebarItem
+    ColdStakingSidebarItem,
+    ContactsSidebarItem
   ]
 })
 
 export class WalletModule {
   constructor(private sidebarItems: SideBarItemsProvider,
               accountSidebarItem: AccountSidebarItem,
+              sendSideBarItem: SendSidebarItem,
               stakingSidebarItem: StakingSidebarItem,
-              coldStakingSidebarItem: ColdStakingSidebarItem) {
+              coldStakingSidebarItem: ColdStakingSidebarItem,
+              contactsSidebarItem: ContactsSidebarItem) {
+
 
     sidebarItems.registerSideBarItem(accountSidebarItem);
 
-    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-      'Send', '/wallet/send', ['side-bar-item-send']));
+    sidebarItems.registerSideBarItem(sendSideBarItem);
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Receive', '/wallet/receive', ['side-bar-item-receive']));
@@ -112,8 +115,7 @@ export class WalletModule {
 
     sidebarItems.registerSideBarItem(coldStakingSidebarItem);
 
-    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-      'Contacts', '/wallet/address-book', ['side-bar-item-address']));
+    sidebarItems.registerSideBarItem(contactsSidebarItem);
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));

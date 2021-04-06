@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 import { GlobalService } from '@shared/services/global.service';
 import { ApiService } from '@shared/services/api.service';
@@ -26,19 +25,13 @@ export class RecoverComponent implements OnInit, OnDestroy {
   }
 
   public recoverWalletForm: FormGroup;
-  public creationDate: Date;
   public isRecovering = false;
-  public minDate = new Date("2009-08-09");
-  public maxDate = new Date();
-  public bsConfig: Partial<BsDatepickerConfig>;
-  public sidechainEnabled: boolean;
   private walletRecovery: WalletRecovery;
   private formValueChanges$: Subscription;
   private passphrase$: Subscription;
 
   ngOnInit(): void {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
-    this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
+
   }
 
   private buildRecoverForm(): void {
@@ -51,7 +44,6 @@ export class RecoverComponent implements OnInit, OnDestroy {
         ]
       ],
       walletMnemonic: ["", Validators.required],
-      walletDate: ["", Validators.required],
       walletPassword: ["", Validators.required],
       walletPasswordConfirmation: ["", Validators.required],
       walletPassphrase: [""],
@@ -92,7 +84,6 @@ export class RecoverComponent implements OnInit, OnDestroy {
   formErrors = {
     walletName: '',
     walletMnemonic: '',
-    walletDate: '',
     walletPassword: '',
     walletPasswordConfirmation: '',
     walletPassphrase: '',
@@ -109,9 +100,6 @@ export class RecoverComponent implements OnInit, OnDestroy {
     },
     walletMnemonic: {
       'required': 'Please enter your 12 word phrase.'
-    },
-    walletDate: {
-      'required': 'Please choose the date the wallet should sync from.'
     },
     walletPassword: {
       'required': 'A password is required.'
@@ -132,16 +120,11 @@ export class RecoverComponent implements OnInit, OnDestroy {
 
   public onRecoverClicked(): void {
     this.isRecovering = true;
-
-    const recoveryDate = new Date(this.recoverWalletForm.get("walletDate").value);
-    recoveryDate.setDate(recoveryDate.getDate() - 1);
-
     this.walletRecovery = new WalletRecovery(
       this.recoverWalletForm.get("walletName").value,
       this.recoverWalletForm.get("walletMnemonic").value,
       this.recoverWalletForm.get("walletPassword").value,
-      this.recoverWalletForm.get("walletPassphrase").value,
-      recoveryDate
+      this.recoverWalletForm.get("walletPassphrase").value
     );
     this.recoverWallet(this.walletRecovery);
   }

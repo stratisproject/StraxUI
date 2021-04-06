@@ -12,6 +12,7 @@ import { map } from "rxjs/operators";
 export class WalletSelectorComponent implements OnInit {
   public walletName = "Test";
   public walletNames: Observable<string[]>;
+  public isWatchOnly = false;
 
   constructor(
     public globalService: GlobalService,
@@ -22,6 +23,9 @@ export class WalletSelectorComponent implements OnInit {
 
   public ngOnInit(): void {
     this.walletService.getWalletNames()
+    this.globalService.isWatchOnly().subscribe(boolean => {
+      this.isWatchOnly = boolean;
+    })
   }
 
   public switchWallet(walletName: string): void {

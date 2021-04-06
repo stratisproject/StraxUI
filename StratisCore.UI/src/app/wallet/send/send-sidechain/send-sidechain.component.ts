@@ -32,12 +32,11 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
       private globalService: GlobalService,
-      private walletService: WalletService,
+      public walletService: WalletService,
       private addressBookService: AddressBookService,
       private taskBarService: TaskBarService,
       private activatedRoute: ActivatedRoute) {
-    this.sendToSidechainForm = this.buildSendToSidechainForm(fb,
-      () => (this.spendableBalance - this.estimatedSidechainFee) / 100000000);
+    this.sendToSidechainForm = this.buildSendToSidechainForm(fb);
 
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(500))
       .subscribe(data => this.validateForm(data)));
@@ -201,8 +200,10 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.walletService.wallet()
       .subscribe(
         response => {
-          this.totalBalance = response.amountConfirmed + response.amountUnconfirmed;
-          this.spendableBalance = response.spendableAmount;
+          if (response) {
+            this.totalBalance = response.amountConfirmed + response.amountUnconfirmed;
+            this.spendableBalance = response.spendableAmount;
+          }
         },
       ));
   }
@@ -223,7 +224,7 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
     this.estimatedSidechainFee = 0;
   }
 
-  private buildSendToSidechainForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
+  private buildSendToSidechainForm(fb: FormBuilder): FormGroup {
     return fb.group({
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       networkSelect: ['', Validators.compose([Validators.required])],
@@ -233,7 +234,7 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(1),
-        (control: AbstractControl) => Validators.max(balanceCalculator())(control)])],
+        (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedSidechainFee)(control)])],
       fee: ['medium', Validators.required],
       password: ['', Validators.required]
     });

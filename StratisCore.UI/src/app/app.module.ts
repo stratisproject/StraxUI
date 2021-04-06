@@ -10,6 +10,8 @@ import { SetupModule } from './setup/setup.module';
 import { WalletModule } from './wallet/wallet.module';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AuthenticationService } from './shared/services/auth.service';
+import { AuthenticationGuard } from './shared/guards/auth.guard';
 
 @NgModule({
   imports: [
@@ -26,7 +28,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     AppComponent,
     LoginComponent
   ],
-  providers: [ { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true} ],
+  providers: [ { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true}, AuthenticationService, AuthenticationGuard ],
   bootstrap: [ AppComponent ]
 })
 

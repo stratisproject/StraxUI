@@ -11,7 +11,7 @@ import {
   SignalREvents,
   StakingInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
-import { Log } from '../../wallet/tokens/services/logger.service';
+import { Log } from '@shared/services/logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,6 @@ export class StakingService extends RestApi {
   public stakingEnabled = new BehaviorSubject<boolean>(false);
   public isStopping: boolean;
   public isStarting: boolean;
-  public canStake: boolean;
 
   constructor(
     http: HttpClient,
@@ -29,8 +28,6 @@ export class StakingService extends RestApi {
     signalRService: SignalRService,
     errorService: ErrorService) {
     super(globalService, http, errorService);
-
-    this.canStake = !globalService.getSidechainEnabled();
 
     signalRService.registerOnMessageEventHandler<StakingInfoSignalREvent>(
       SignalREvents.StakingInfo, (stakingInfo) => {

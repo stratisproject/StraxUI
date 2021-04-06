@@ -1,13 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-
-import { Subscription } from 'rxjs';
-import { retryWhen, delay, tap } from 'rxjs/operators';
-
-import { ApiService } from '@shared/services/api.service';
+import { Observable } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { GlobalService } from '@shared/services/global.service';
+import { NodeService } from '@shared/services/node-service';
+import { FullNodeEventModel } from '@shared/services/interfaces/api.i';
 
 @Component({
   selector: 'app-root',
@@ -15,79 +13,43 @@ import { GlobalService } from '@shared/services/global.service';
   styleUrls: ['./app.component.scss'],
 })
 
-export class AppComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) {
+export class AppComponent implements OnInit {
+  constructor(private router: Router, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService, private nodeService: NodeService) {
   }
 
-  private subscription: Subscription;
-  private statusIntervalSubscription: Subscription;
-  private readonly MaxRetryCount = 50;
-  private readonly TryDelayMilliseconds = 3000;
-  public sidechainEnabled;
-  public apiConnected = false;
-  private walletFeatureNamespace = null;
-  loading = true;
-  loadingFailed = false;
+  public fullNodeEvent: Observable<FullNodeEventModel>;
+  public loading = true;
+  public loadingFailed = false;
+  public currentMessage: string;
+  public currentState: string;
 
   ngOnInit(): void {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
-    this.walletFeatureNamespace = this.sidechainEnabled
-      ? 'Stratis.Bitcoin.Features.SmartContracts.Wallet.SmartContractWalletFeature'
-      : 'Stratis.Bitcoin.Features.Wallet.WalletFeature';
-
     this.setTitle();
-    this.tryStart();
-  }
+    this.fullNodeEvent = this.nodeService.FullNodeEvent();
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-    this.statusIntervalSubscription.unsubscribe();
-  }
+    this.fullNodeEvent.subscribe(response => {
+      if (response) {
+        this.currentMessage = response.message;
+        this.currentState = response.state;
+        console.log("message: " + this.currentMessage + "\nstate: " + this.currentState);
+      }
 
-  // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
-  private tryStart(): void {
-    let retry = 0;
-    const stream$ = this.apiService.getNodeStatus(true).pipe(
-      retryWhen(errors =>
-        errors.pipe(delay(this.TryDelayMilliseconds)).pipe(
-          tap(errorStatus => {
-            if (retry++ === this.MaxRetryCount) {
-              throw errorStatus;
-            }
-            console.log(`Retrying ${retry}...`);
-          })
-        )
-      )
-    );
+      if (response.state === "Started") {
+        this.loading = false;
+        this.router.navigate(['login']);
+      }
 
-    this.subscription = stream$.subscribe(
-      () => {
-        this.apiConnected = true;
-        this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
-          .subscribe(
-            response => {
-              const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-              const walletFeatureResponse = response.featuresData.find(x => x.namespace === this.walletFeatureNamespace);
-              if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized'
-                && walletFeatureResponse && walletFeatureResponse.state === 'Initialized') {
-                this.loading = false;
-                this.statusIntervalSubscription.unsubscribe();
-                this.router.navigate(['login']);
-              }
-            }
-          );
-      }, () => {
-        console.log('Failed to start wallet');
+      if (response.state === "Failed") {
         this.loading = false;
         this.loadingFailed = true;
       }
-    );
+    })
   }
 
   private setTitle(): void {
-    const applicationName = this.sidechainEnabled ? 'Cirrus Core' : 'Strax Wallet';
+    const applicationName = 'Strax Wallet';
     const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
-    const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
+    const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix} - Community Testing`;
     this.titleService.setTitle(title);
   }
 

@@ -108,8 +108,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   }
 
   public onImportClicked(): void {
-    const recoveryDate = new Date(this.importPubKeyForm.get("creationDate").value);
-    recoveryDate.setDate(recoveryDate.getDate() - 1);
+    const recoveryDate = new Date("2020-10-01");
 
     const extPubKeyImportData = new ExtPubKeyImport(
       this.importPubKeyForm.get("extPubKey").value,
@@ -305,8 +304,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     this.importPubKeyForm = this.fb.group({
       selectBox: ['', Validators.required],
       walletName: ['', Validators.required],
-      extPubKey: ['', Validators.required],
-      creationDate: ['', Validators.required]
+      extPubKey: ['', Validators.required]
     });
 
     this.subscriptions.push(this.importPubKeyForm.valueChanges
@@ -335,8 +333,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public importPubKeyFormErrors = {
     selectBox: '',
     walletName: '',
-    extPubKey: '',
-    creationDate: ''
+    extPubKey: ''
   };
 
   public importPubKeyValidationMessages = {

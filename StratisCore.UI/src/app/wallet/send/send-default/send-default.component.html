@@ -52,7 +52,8 @@
   </form>
   <div>
     <ng-container *ngIf="status | async let _status">
-      <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200" [disabled]="!sendForm.valid || isSending || !estimatedFee || _status.estimating" (click)="send()">Send
+      <div *ngIf="walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress" class="alert alert-warning">Please note that you can only send transactions when your wallet is completely synchronised.</div>
+      <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200" [disabled]="!sendForm.valid || isSending || !estimatedFee || _status.estimating || walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress" (click)="send()">Send
       </button>
       <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
         <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

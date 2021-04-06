@@ -1,7 +1,8 @@
-import { Log } from "../../../wallet/tokens/services/logger.service";
+import { Log } from "@shared/services/logger.service";
 
 export interface WalletNamesData {
   walletNames: Array<string>;
+  watchOnlyWallets: Array<string>;
 }
 
 export interface Money {
@@ -153,4 +154,9 @@ export interface GeneralInfo {
 export interface GetColdStakingInfo {
   coldWalletAccountExists: boolean;
   hotWalletAccountExists: boolean;
+}
+
+export interface FullNodeEventModel {
+  message: string;
+  state: string;
 }

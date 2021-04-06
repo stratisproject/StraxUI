@@ -37,7 +37,7 @@ export class AddressBookCardComponent implements OnInit {
   }
 
   public getQrCodeAddress(address: string): string {
-    return `${this.globalService.networkName}:${address}`;
+    return `strax:${address}`;
   }
 
 }

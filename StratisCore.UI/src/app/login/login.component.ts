@@ -9,6 +9,7 @@ import { WalletService } from '@shared/services/wallet.service';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { AccountSidebarItem } from '../wallet/side-bar-items/account-sidebar-item';
 import { WalletInfo } from '@shared/models/wallet-info';
+import { AuthenticationService } from '@shared/services/auth.service'
 
 
 @Component({
@@ -19,7 +20,9 @@ import { WalletInfo } from '@shared/models/wallet-info';
 
 export class LoginComponent implements OnInit, OnDestroy {
   public openWalletForm: FormGroup;
-  public wallets: string[];
+  public wallets: Wallets[] = [];
+  private regularWallets: string[];
+  private watchOnlyWallets: string[];
   private subscriptions: Subscription[] = [];
 
   public formErrors = {
@@ -39,20 +42,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private sidebarItems: SideBarItemsProvider,
-    private accountSidebarItem: AccountSidebarItem,) {
+    private accountSidebarItem: AccountSidebarItem,
+    private authenticationService: AuthenticationService) {
 
     this.buildDecryptForm();
   }
 
-  public sidechainEnabled: boolean;
-  public hasWallet = false;
   public isDecrypting = false;
-
 
   public ngOnInit(): void {
     this.getWalletNames();
     this.getCurrentNetwork();
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
   }
 
   private buildDecryptForm(): void {
@@ -88,12 +88,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.walletService.getWalletNames()
       .subscribe(
         response => {
-          this.wallets = response.walletNames.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
-          if (this.wallets.length > 0) {
-            this.hasWallet = true;
-          } else {
-            this.hasWallet = false;
-          }
+          this.regularWallets = response.walletNames.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
+          this.watchOnlyWallets = response.watchOnlyWallets.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
+
+          this.regularWallets.forEach(wallet => {
+            if (this.watchOnlyWallets.find(x => x == wallet)) {
+              this.wallets.push(new Wallets(wallet, true));
+            } else {
+              this.wallets.push(new Wallets(wallet, false));
+            }
+          })
         }
       ));
   }
@@ -117,11 +121,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.walletService.loadStratisWallet(walletLoad)
       .subscribe(
         () => {
-          this.sidechainEnabled
-            ? this.router.navigate(['address-selection'])
-            : this.router.navigate(['wallet/dashboard']);
-            this.sidebarItems.setSelected(this.accountSidebarItem);
-            this.walletService.getHistory();
+          this.router.navigate(['wallet/dashboard']);
+          this.sidebarItems.setSelected(this.accountSidebarItem);
+          this.walletService.getHistory();
+          this.authenticationService.SignIn();
+          if (this.watchOnlyWallets.find(x => x == walletLoad.name)) {
+            this.globalService.setWalletWatchOnly(true);
+          } else {
+            this.globalService.setWalletWatchOnly(false);
+          }
         },
         () => {
           this.openWalletForm.patchValue({password: ""});
@@ -145,4 +153,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
+}
+
+export class Wallets {
+  constructor(walletName, isWatchOnly) {
+    this.walletName = walletName;
+    this.isWatchOnly = isWatchOnly;
+  }
+  walletName: string;
+  isWatchOnly: boolean;
 }

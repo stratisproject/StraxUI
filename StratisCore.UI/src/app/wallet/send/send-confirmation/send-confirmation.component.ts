@@ -11,7 +11,6 @@ export class SendConfirmationComponent implements OnInit {
 
   @Input() transaction: any;
   @Input() transactionFee: any;
-  @Input() sidechainEnabled: boolean;
   @Input() hasOpReturn: boolean;
   @Input() hasCustomChangeAddress: boolean;
   @Output() closeClicked: EventEmitter<boolean> = new EventEmitter<boolean>();

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppConfig } from 'src/environments/environment';
+import { AppConfig } from '../../../../src/environments/environment';
 
 @Injectable()
 export class Log {

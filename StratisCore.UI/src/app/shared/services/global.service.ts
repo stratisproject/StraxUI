@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { WalletInfo } from '@shared/models/wallet-info';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { VERSION } from '../../../environments/version';
 
 @Injectable({
@@ -11,24 +11,21 @@ export class GlobalService {
   constructor(private electronService: ElectronService) {
     this.setApplicationVersion();
     this.setGitCommit();
-    this.setSidechainEnabled();
     this.setTestnetEnabled();
     this.setApiPort();
     this.setDaemonIP();
   }
 
-  private applicationVersion = '1.2.0';
+  private applicationVersion = '1.3.0';
   private gitCommit = "";
   private testnet = false;
-  private sidechain = false;
   private mainApiPort = 17103;
   private testApiPort = 27103;
-  private mainSideChainApiPort = 37223;
-  private testSideChainApiPort = 38223;
   private apiPort: number;
   private walletPath: string;
   private currentWalletName: string;
   private currentWalletAccount: string;
+  private watchOnlySubject = new BehaviorSubject<boolean>(false);
   private network: string;
   private daemonIP: string;
   private version = VERSION;
@@ -45,6 +42,8 @@ export class GlobalService {
     if (this.electronService.isElectronApp) {
       //this.applicationVersion = this.electronService.remote.app.getVersion();
     }
+
+    this.watchOnlySubject.next(false);
   }
 
   public getGitCommit(): string {
@@ -65,20 +64,6 @@ export class GlobalService {
     }
   }
 
-  public getSidechainEnabled(): boolean {
-    return this.sidechain;
-  }
-
-  public get networkName(): string {
-    return this.sidechain ? 'cirrus' : 'stratis';
-  }
-
-  public setSidechainEnabled(): void {
-    if (this.electronService.isElectronApp) {
-      this.sidechain = this.electronService.ipcRenderer.sendSync('get-sidechain');
-    }
-  }
-
   public getApiPort(): number {
     return this.apiPort;
   }
@@ -86,14 +71,10 @@ export class GlobalService {
   public setApiPort(): void {
     if (this.electronService.isElectronApp) {
       this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
-    } else if (this.testnet && !this.sidechain) {
+    } else if (this.testnet) {
       this.apiPort = this.testApiPort;
-    } else if (!this.testnet && !this.sidechain) {
+    } else if (!this.testnet) {
       this.apiPort = this.mainApiPort;
-    } else if (this.testnet && this.sidechain) {
-      this.apiPort = this.testSideChainApiPort;
-    } else if (!this.testnet && this.sidechain) {
-      this.apiPort = this.mainSideChainApiPort;
     }
   }
 
@@ -135,8 +116,16 @@ export class GlobalService {
     return this.currentWalletAccount;
   }
 
-  public setWalletAccount(walletAccount): void {
+  public setWalletAccount(walletAccount? : string): void {
     this.currentWalletAccount = walletAccount || "account 0";
+  }
+
+  public isWatchOnly(): Observable<boolean> {
+    return this.watchOnlySubject.asObservable();
+  }
+
+  public setWalletWatchOnly(isWatchOnly: boolean) {
+    this.watchOnlySubject.next(isWatchOnly);
   }
 
   public getCoinUnit(): string {
