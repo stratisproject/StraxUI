@@ -31,17 +31,16 @@ export class AppComponent implements OnInit {
       if (response) {
         this.currentMessage = response.message;
         this.currentState = response.state;
-        console.log("message: " + this.currentMessage + "\nstate: " + this.currentState);
-      }
 
-      if (response.state === "Started") {
-        this.loading = false;
-        this.router.navigate(['login']);
-      }
+        if (response.state === "Started") {
+          this.loading = false;
+          this.router.navigate(['login']);
+        }
 
-      if (response.state === "Failed") {
-        this.loading = false;
-        this.loadingFailed = true;
+        if (response.state === "Failed") {
+          this.loading = false;
+          this.loadingFailed = true;
+        }
       }
     })
   }
