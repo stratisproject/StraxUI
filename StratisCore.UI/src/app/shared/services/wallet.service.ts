@@ -326,8 +326,7 @@ export class WalletService extends RestApi {
 
     const walletSubject = this.getWalletSubject();
     const newBalance = new WalletBalance(
-      walletBalance || walletSubject.value,
-      walletSubject.value ? walletSubject.value.currentAddress : null
+      walletBalance || walletSubject.value
     );
 
     if (!historyRefreshed && (walletSubject.value
