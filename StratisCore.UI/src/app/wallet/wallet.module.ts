@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddNewAddressComponent } from './address-book/add-new-address/add-new-address.component';
@@ -48,7 +47,6 @@ import { SendInteroperabilityComponent } from './send/send-interoperability/send
     SnackbarModule,
     SharedModule,
     WalletRoutingModule,
-    BsDatepickerModule.forRoot(),
     TabsModule.forRoot(),
     ScrollingModule
   ],
