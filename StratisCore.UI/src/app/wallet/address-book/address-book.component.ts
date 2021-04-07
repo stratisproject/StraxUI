@@ -36,7 +36,6 @@ export class AddressBookComponent implements OnInit {
   }
 
   public removeClicked(address: AddressLabel): void {
-    console.log("remove clicked")
     const modal = this.modalService.open(ConfirmationModalComponent, {
       backdrop: 'static',
     });

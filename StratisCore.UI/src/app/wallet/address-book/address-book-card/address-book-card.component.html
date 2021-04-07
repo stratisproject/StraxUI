@@ -16,15 +16,14 @@
             <ng-container *ngIf="showButtons">
               <div class="col-12 text-center">
                 <div class="btn-group btn-group-toggle right">
-                  <label (click)="copyToClipboardClicked(address)" class="btn btn-outline-primary contact-button">
-                    <input type="radio" />Copy Address
-                  </label>
-                  <label (click)="sendClicked.emit(address)" class="btn btn-outline-primary contact-button">
+                  <a (click)="copyToClipboardClicked(address)" class="btn btn-outline-primary contact-button"><input type="radio" />Copy Address
+                  </a>
+                  <a (click)="sendClicked.emit(address)" class="btn btn-outline-primary contact-button">
                     <input type="radio" />Send
-                  </label>
-                  <label (click)="removeClicked.emit(address)" class="btn btn-outline-primary contact-button">
+                  </a>
+                  <a (click)="removeClicked.emit(address)" class="btn btn-outline-primary contact-button">
                     <input type="radio" />Remove
-                  </label>
+                  </a>
                 </div>
               </div>
             </ng-container>
