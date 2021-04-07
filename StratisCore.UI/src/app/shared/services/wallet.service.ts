@@ -73,6 +73,12 @@ export class WalletService extends RestApi {
         this.refreshWallet();
       });
 
+    // Temporary workaround -> change to block staked signalR event
+    signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.BlockConnected,
+      () => {
+        this.refreshWallet();
+      })
+
     this.nodeService.generalInfo().subscribe(generalInfo => {
       if (generalInfo.percentSynced === 100 && this.rescanInProgress) {
         this.rescanInProgress = false;
