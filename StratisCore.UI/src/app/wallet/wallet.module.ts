@@ -26,7 +26,6 @@ import { SideBarItem, SimpleSideBarItem } from '@shared/components/side-bar/side
 import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
 import { AddressBookCardComponent } from './address-book/address-book-card/address-book-card.component';
 import { AddNodeComponent } from './advanced/components/add-node/add-node.component';
-import { TransactionDetailsModalComponent } from './transaction-details-modal/transaction-details-modal.component';
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 import { SendSidebarItem } from './side-bar-items/send-sidebar-item';
 import { ContactsSidebarItem } from './side-bar-items/contacts-sidebar-item';
@@ -70,7 +69,6 @@ import { SendInteroperabilityComponent } from './send/send-interoperability/send
     WalletSelectorComponent,
     AddressBookCardComponent,
     AddNodeComponent,
-    TransactionDetailsModalComponent,
     StakingComponent,
     HotStakingComponent,
     BroadcastTransactionComponent,
