@@ -45,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         if (response.state === "Started") {
           this.loading = false;
+          this.loadingFailed = false;
           this.router.navigate(['login']);
         }
 
