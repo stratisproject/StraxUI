@@ -17,7 +17,6 @@ import { StatusBarComponent } from './status-bar/status-bar.component';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletComponent } from './wallet.component';
-import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { WalletSelectorComponent } from './wallet-selector/wallet-selector.component';
 import { SnackbarModule } from 'ngx-snackbar';
@@ -80,7 +79,6 @@ import { SendInteroperabilityComponent } from './send/send-interoperability/send
     SendInteroperabilityComponent
   ],
   providers: [
-    AccountSelectedGuard,
     AccountSidebarItem,
     SendSidebarItem,
     StakingSidebarItem,

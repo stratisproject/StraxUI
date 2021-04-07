@@ -21,15 +21,10 @@ export class WalletBalance {
   private _amountConfirmed: number;
   private _amountUnconfirmed: number;
   private _spendableAmount: number;
-  private _useAddress: boolean;
 
-  constructor(balance?: WalletBalance, currentAddress?: Address) {
+  constructor(balance?: WalletBalance) {
     if (balance) {
       Object.assign(this, balance);
-    }
-
-    if (currentAddress) {
-      this.setCurrentAccountAddress(currentAddress.address);
     }
   }
 
@@ -38,7 +33,7 @@ export class WalletBalance {
   public coinType: number;
 
   public get amountConfirmed(): number {
-    return this._useAddress ? this.currentAddress.amountConfirmed : this._amountConfirmed;
+    return this._amountConfirmed;
   }
 
   public set amountConfirmed(value: number) {
@@ -46,7 +41,7 @@ export class WalletBalance {
   }
 
   public get amountUnconfirmed(): number {
-    return this._useAddress ? this.currentAddress.amountUnconfirmed : this._amountUnconfirmed;
+    return this._amountUnconfirmed;
   }
 
   public set amountUnconfirmed(value: number) {
@@ -54,9 +49,6 @@ export class WalletBalance {
   }
 
   public get spendableAmount(): number {
-    if (this._useAddress) {
-      return this.currentAddress.amountConfirmed - this.currentAddress.amountUnconfirmed;
-    }
     return this._spendableAmount;
   }
 
@@ -65,25 +57,6 @@ export class WalletBalance {
   }
 
   public addresses: Address[];
-
-  public currentAddress: Address;
-
-  public setCurrentAccountAddress(address: string): WalletBalance {
-
-    if (this.addresses) {
-      this.currentAddress = this.addresses.find(a => a.address === address);
-    }
-
-    if (this.currentAddress) {
-      this._useAddress = true;
-    } else {
-      LoggerService.error({
-        name: 'Address not found',
-        message: `The address ${address} was not found.`
-      });
-    }
-    return this;
-  }
 
   public get hasBalance(): boolean {
     return (this.amountConfirmed + this.amountUnconfirmed) > 0;

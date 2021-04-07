@@ -13,7 +13,6 @@ import { Transaction } from '@shared/models/transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';
-import { CurrentAccountService } from '@shared/services/current-account.service';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { WalletResync } from '@shared/models/wallet-rescan';
 import { AddressBalance } from '@shared/models/address-balance';
@@ -54,7 +53,6 @@ export class WalletService extends RestApi {
 
   constructor(
     private snackbarService: SnackbarService,
-    private currentAccountService: CurrentAccountService,
     private addressBookService: AddressBookService,
     private nodeService: NodeService,
     globalService: GlobalService,
@@ -66,12 +64,6 @@ export class WalletService extends RestApi {
 
     globalService.currentWallet.subscribe(wallet => {
       this.currentWallet = wallet;
-    });
-
-    currentAccountService.currentAddress.subscribe((address) => {
-      if (null != address) {
-        this.updateWalletForCurrentAddress();
-      }
     });
 
     // When we get a TransactionReceived event get the WalletBalance and History using the RestApi
@@ -205,12 +197,6 @@ export class WalletService extends RestApi {
   //     prevOutputIndex: prevOutputIndex,
   //     take: take || this.historyPageSize
   //   }) as { [key: string]: any };
-
-  //   if (this.accountsEnabled) {
-  //     extra = Object.assign(extra, {
-  //       address: this.currentAccountService.address
-  //     });
-  //   }
 
   //   this.loadingSubject.next(true);
 
