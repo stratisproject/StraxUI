@@ -1,27 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AddressLabel } from '@shared/models/address-label';
 import { ClipboardService } from 'ngx-clipboard';
 import { SnackbarService } from 'ngx-snackbar';
-import { GlobalService } from '@shared/services/global.service';
 
 @Component({
   selector: 'app-address-book-card',
   templateUrl: './address-book-card.component.html',
   styleUrls: ['./address-book-card.component.scss']
 })
-export class AddressBookCardComponent implements OnInit {
+export class AddressBookCardComponent {
 
   @Output() removeClicked: EventEmitter<AddressLabel> = new EventEmitter<AddressLabel>();
   @Output() sendClicked: EventEmitter<AddressLabel> = new EventEmitter<AddressLabel>();
   @Input() address: AddressLabel;
   @Input() showButtons: boolean;
+
   constructor(
-    private globalService: GlobalService,
     private clipboardService: ClipboardService,
     private snackbarService: SnackbarService) {
-  }
-
-  ngOnInit(): void {
   }
 
   public copyToClipboardClicked(address: AddressLabel): void {
@@ -35,9 +31,4 @@ export class AddressBookCardComponent implements OnInit {
       });
     }
   }
-
-  public getQrCodeAddress(address: string): string {
-    return `strax:${address}`;
-  }
-
 }

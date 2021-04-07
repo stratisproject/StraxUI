@@ -6,6 +6,7 @@ import { ErrorService } from '@shared/services/error-service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AddressLabel } from '@shared/models/address-label';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,9 @@ export class AddressBookService extends RestApi {
 
   constructor(globalService: GlobalService,
               httpClient: HttpClient,
-              errorService: ErrorService) {
-    super(globalService, httpClient, errorService);
+              errorService: ErrorService,
+              loggerService: LoggerService) {
+    super(globalService, httpClient, errorService, loggerService);
     this.getContacts();
   }
 

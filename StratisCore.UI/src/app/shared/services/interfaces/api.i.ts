@@ -1,4 +1,4 @@
-import { Log } from "@shared/services/logger.service";
+import { LoggerService } from "@shared/services/logger.service";
 
 export interface WalletNamesData {
   walletNames: Array<string>;
@@ -77,7 +77,7 @@ export class WalletBalance {
     if (this.currentAddress) {
       this._useAddress = true;
     } else {
-      Log.error({
+      LoggerService.error({
         name: 'Address not found',
         message: `The address ${address} was not found.`
       });

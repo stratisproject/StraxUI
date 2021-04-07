@@ -38,6 +38,4 @@ export class ConfirmationModalComponent implements OnInit {
 
     this.activeModal.close(value);
   }
-
-
 }

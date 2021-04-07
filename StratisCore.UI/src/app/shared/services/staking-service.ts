@@ -11,7 +11,7 @@ import {
   SignalREvents,
   StakingInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
-import { Log } from '@shared/services/logger.service';
+import { LoggerService } from '@shared/services/logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +26,9 @@ export class StakingService extends RestApi {
     http: HttpClient,
     globalService: GlobalService,
     signalRService: SignalRService,
-    errorService: ErrorService) {
-    super(globalService, http, errorService);
+    errorService: ErrorService,
+    loggerService: LoggerService) {
+    super(globalService, http, errorService, loggerService);
 
     signalRService.registerOnMessageEventHandler<StakingInfoSignalREvent>(
       SignalREvents.StakingInfo, (stakingInfo) => {
@@ -50,7 +51,7 @@ export class StakingService extends RestApi {
         return true;
       },
       error => {
-        Log.error(error);
+        this.loggerService.error(error);
         this.stakingEnabled.next(false);
         this.isStarting = false;
         return false;

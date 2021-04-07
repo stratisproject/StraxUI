@@ -2,27 +2,27 @@ import { Injectable } from '@angular/core';
 import { AppConfig } from '../../../../src/environments/environment';
 
 @Injectable()
-export class Log {
-  public static Logger: Log = new Log();
+export class LoggerService {
+  public static Logger: LoggerService = new LoggerService();
 
   static log(...args: any[]): void {
-    Log.Logger.log(...args);
+    LoggerService.Logger.log(...args);
   }
 
   static warn(...args: any[]): void {
-    Log.Logger.warn(...args);
+    LoggerService.Logger.warn(...args);
   }
 
   static info(...args: any[]): void {
-    Log.Logger.info(...args);
+    LoggerService.Logger.info(...args);
   }
 
   static debug(...args: any[]): void {
-    Log.Logger.debug(...args);
+    LoggerService.Logger.debug(...args);
   }
 
   static error(error: Error): void {
-    Log.Logger.error(error);
+    LoggerService.Logger.error(error);
   }
 
   constructor() { }
@@ -66,7 +66,7 @@ export class Log {
   }
 
   private getLogPrefix(): string {
-    return `%c [${this.getDateStamp()}] Stratis Core:`;
+    return `%c [${this.getDateStamp()}] STRAX Wallet:`;
   }
 
   private getLogFunction(level: string): (message?: any, ...optionalParams: any[]) => void {

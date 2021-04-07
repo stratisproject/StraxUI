@@ -8,7 +8,7 @@ import { RestApi } from '@shared/services/rest-api';
 import { ErrorService } from '@shared/services/error-service';
 import { interval, Observable, Subscription } from 'rxjs';
 import { startWith, tap } from 'rxjs/operators';
-import { Log } from '@shared/services/logger.service';
+import { LoggerService } from '@shared/services/logger.service';
 
 export interface SignalRConnectionInfo {
   signalRUri: string;
@@ -27,8 +27,9 @@ export class SignalRService extends RestApi implements ISignalRService {
 
   constructor(http: HttpClient,
               globalService: GlobalService,
-              errorService: ErrorService) {
-    super(globalService, http, errorService);
+              errorService: ErrorService,
+              loggerService: LoggerService) {
+    super(globalService, http, errorService, loggerService);
     this.connectToSignalR();
   }
 
@@ -54,7 +55,7 @@ export class SignalRService extends RestApi implements ISignalRService {
     this.getConnectionInfo().then((con: SignalRConnectionInfo) => {
 
       if (this.connection && this.connection.state && this.connection.state !== 4) {
-        Log.warn('signalR connection abort');
+        this.loggerService.warn('signalR connection abort');
         this.connection.stop();
       }
 
@@ -75,11 +76,11 @@ export class SignalRService extends RestApi implements ISignalRService {
 
       this.connection.onclose((error: Error) => {
         this.onConnectionFailed.emit(error);
-        Log.warn(`disconnected ${error.message}`);
+        this.loggerService.warn(`disconnected ${error.message}`);
         this.connectToSignalR();
       });
 
-      Log.info('connecting...');
+      this.loggerService.info('connecting...');
 
       this.connection.start()
         .then(() => {
@@ -109,7 +110,7 @@ export class SignalRService extends RestApi implements ISignalRService {
   }
 
   private markAsConnected(): void {
-    Log.info('Connected!');
+    this.loggerService.info('Connected!');
     if (this.connectSubscription) {
       this.connectSubscription.unsubscribe();
       this.connectSubscription = null;
