@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddNewAddressComponent } from './modals/add-new-address/add-new-address.component';
+import { AddNewAddressComponent } from './add-new-address/add-new-address.component';
 import { AddressLabel } from '@shared/models/address-label';
 import { Observable } from 'rxjs';
-import { GlobalService } from '@shared/services/global.service';
-import { SnackbarService } from 'ngx-snackbar';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
 import { Router } from '@angular/router';
@@ -20,10 +17,7 @@ import { Animations } from '@shared/animations/animations';
 export class AddressBookComponent implements OnInit {
   constructor(
     private router: Router,
-    private globalService: GlobalService,
-    private snackbarService: SnackbarService,
     private addressBookService: AddressBookService,
-    private clipboardService: ClipboardService,
     private modalService: NgbModal) {
   }
 
@@ -42,6 +36,7 @@ export class AddressBookComponent implements OnInit {
   }
 
   public removeClicked(address: AddressLabel): void {
+    console.log("remove clicked")
     const modal = this.modalService.open(ConfirmationModalComponent, {
       backdrop: 'static',
     });
@@ -57,8 +52,6 @@ export class AddressBookComponent implements OnInit {
       }
     });
   }
-
-
 
   public addNewAddressClicked(): void {
     const addressLabel =  this.modalService.open(AddNewAddressComponent, {backdrop: 'static'});

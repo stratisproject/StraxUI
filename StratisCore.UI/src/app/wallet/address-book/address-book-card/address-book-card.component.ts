@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AddressLabel } from '@shared/models/address-label';
 import { ClipboardService } from 'ngx-clipboard';
 import { SnackbarService } from 'ngx-snackbar';
-import { GlobalService } from '@shared/services/global.service';
 
 @Component({
   selector: 'app-address-book-card',
@@ -16,7 +15,6 @@ export class AddressBookCardComponent implements OnInit {
   @Input() address: AddressLabel;
   @Input() showButtons: boolean;
   constructor(
-    private globalService: GlobalService,
     private clipboardService: ClipboardService,
     private snackbarService: SnackbarService) {
   }
@@ -35,9 +33,4 @@ export class AddressBookCardComponent implements OnInit {
       });
     }
   }
-
-  public getQrCodeAddress(address: string): string {
-    return `strax:${address}`;
-  }
-
 }
