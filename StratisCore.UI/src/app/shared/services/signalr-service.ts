@@ -89,6 +89,14 @@ export class SignalRService extends RestApi implements ISignalRService {
     });
   }
 
+  public hasConnection(): boolean {
+    if (this.connection.state === 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   private executeMessageReceivedHandlers(message: any): void {
     this.onMessageReceivedHandlers.forEach(handler => {
       if (message.nodeEventType) {

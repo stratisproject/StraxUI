@@ -11,15 +11,13 @@
 
 <div *ngIf="loadingFailed">
   <div class="login">
-    <div class="row align-items-center h-100">
+    <div class="row align-items-center h-50">
       <div id="logoAnim" class="mx-auto">
-        <app-wallet-initializing-failed></app-wallet-initializing-failed>
-        <div class="loadingText mt-5 text-danger text-center">
-          Loading Failed - Unable to connect to Stratis Node.<br>
-          If you continue to receive this message after restarting, please have a look at the support section <a class="text-primary" (click)="openSupport()"><u>here</u></a>.
-        </div>
+        <app-wallet-initializing-failed class=""></app-wallet-initializing-failed>
       </div>
     </div>
+    <div *ngIf="(fullNodeEvent | async) as _fullNodeEvent" class="text-center">{{ _fullNodeEvent.message }}</div>
+    <div class="text-danger text-center mt-20">If you continue to receive this message after restarting, please join our <a class="text-primary" (click)="openSupport()"><u>Discord support section</u></a>.</div>
   </div>
 </div>
 
