@@ -28,9 +28,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
   private statusIntervalSubscription: Subscription;
-  private readonly MaxRetryCount = 50;
+  private readonly MaxRetryCount = 30;
   private readonly TryDelayMilliseconds = 2000;
   private lastFeatureNamespace = 'Stratis.Features.Diagnostic.DiagnosticFeature';
+  public errorMessage: string;
 
   ngOnInit(): void {
     this.setTitle();
@@ -66,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private checkResponse() {
-    if (!this.currentState && this.signalRService.hasConnection()) {
+    if (!this.currentState) {
       this.getStatusThroughApi()
     }
   }
@@ -102,7 +103,8 @@ export class AppComponent implements OnInit, OnDestroy {
               }
             }
           );
-      }, () => {
+      }, error => {
+        this.errorMessage = error.message;
         console.log('Failed to start wallet');
         this.loading = false;
         this.loadingFailed = true;
