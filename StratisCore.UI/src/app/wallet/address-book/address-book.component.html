@@ -5,26 +5,19 @@
         <h3>Contacts</h3>
       </div>
       <div>
-        <button type="button" class="btn btn-primary"
-                (click)="addNewAddressClicked()">Add Contact
-        </button>
+        <button type="button" class="btn btn-primary" (click)="addNewAddressClicked()">Add Contact</button>
       </div>
     </div>
   </div>
   <section id="content" class="light page-content">
-    <div class="row">
-      <ng-template #noAddresses>
-        <div class="col-12 text-center">
-          <p>Looks like you have no addresses in your address book yet.</p>
+    <ng-template #noAddresses>
+      <div class="col-12 text-center"><p>Looks like you have no addresses in your address book yet.</p></div>
+    </ng-template>
+    <div *ngIf="(addresses | async) as _addresses">
+      <div *ngIf="_addresses.length > 0; else noAddresses">
+        <div *ngFor="let addressRow of _addresses">
+          <app-address-book-card [address]="addressRow" [showButtons]="true" (removeClicked)="removeClicked($event)" (sendClicked)="sendClicked($event)"></app-address-book-card>
         </div>
-      </ng-template>
-    </div>
-    <div *ngIf="addresses; else noAddresses">
-      <div *ngFor="let addressRow of addresses | async">
-        <app-address-book-card [address]="addressRow" [showButtons]="true" (removeClicked)="removeClicked($event)"
-                               (sendClicked)="sendClicked($event)">
-
-        </app-address-book-card>
       </div>
     </div>
   </section>

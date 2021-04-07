@@ -5,6 +5,7 @@ import { GlobalService } from '@shared/services/global.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ErrorService } from '@shared/services/error-service';
 import { catchError } from 'rxjs/operators';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,10 @@ export class ConsensusService extends RestApi {
   constructor(
     globalService: GlobalService,
     http: HttpClient,
-    errorService: ErrorService
+    errorService: ErrorService,
+    loggerService: LoggerService
   ) {
-    super(globalService, http, errorService);
+    super(globalService, http, errorService, loggerService);
   }
 
   public getDeploymentFlags(): Observable<any> {

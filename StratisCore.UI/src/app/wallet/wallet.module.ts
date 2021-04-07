@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AddressBookComponent } from './address-book/address-book.component';
-import { AddNewAddressComponent } from './address-book/modals/add-new-address/add-new-address.component';
+import { AddNewAddressComponent } from './address-book/add-new-address/add-new-address.component';
 import { AdvancedComponent } from './advanced/advanced.component';
 import { AboutComponent } from './advanced/components/about/about.component';
 import { ExtPubkeyComponent } from './advanced/components/ext-pubkey/ext-pubkey.component';
@@ -25,7 +24,7 @@ import { SnackbarModule } from 'ngx-snackbar';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { SideBarItem, SimpleSideBarItem } from '@shared/components/side-bar/side-bar-item-base';
 import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
-import { AddressBookCardComponent } from './address-book-card/address-book-card.component';
+import { AddressBookCardComponent } from './address-book/address-book-card/address-book-card.component';
 import { AddNodeComponent } from './advanced/components/add-node/add-node.component';
 import { TransactionDetailsModalComponent } from './transaction-details-modal/transaction-details-modal.component';
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
@@ -42,15 +41,12 @@ import { ColdWalletComponent } from './cold-staking/cold-wallet/cold-wallet.comp
 import { SendDefaultComponent } from './send/send-default/send-default.component';
 import { SendSidechainComponent } from './send/send-sidechain/send-sidechain.component';
 import { SendInteroperabilityComponent } from './send/send-interoperability/send-interoperability.component';
-import { GlobalService } from '@shared/services/global.service';
-import { fromEventPattern } from 'rxjs';
 
 @NgModule({
   imports: [
     SnackbarModule,
     SharedModule,
     WalletRoutingModule,
-    BsDatepickerModule.forRoot(),
     TabsModule.forRoot(),
     ScrollingModule
   ],

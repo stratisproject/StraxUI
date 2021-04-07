@@ -20,6 +20,7 @@ import { ColdStakingWithdrawal } from '@shared/models/cold-staking-withdrawal';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { Transaction } from '@shared/models/transaction';
 import { AddressBookService } from '@shared/services/address-book-service';
+import { LoggerService } from '@shared/services/logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +37,10 @@ export class ColdStakingService extends RestApi {
     addressBookService: AddressBookService,
     signalRService: SignalRService,
     consensusService: ConsensusService,
-    errorService: ErrorService
+    errorService: ErrorService,
+    loggerService: LoggerService
     ) {
-      super(globalService, http, errorService);
+      super(globalService, http, errorService, loggerService);
 
       this.getHasColdStakingAccount();
       this.getHasHotStakingAccount();

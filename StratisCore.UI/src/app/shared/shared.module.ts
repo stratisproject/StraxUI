@@ -25,6 +25,7 @@ import { TaskBarService } from '@shared/services/task-bar-service';
 import { ConsensusService } from './services/consensus-service';
 import { WalletInitializingComponent } from './components/wallet-initializing/wallet-initializing.component';
 import { WalletInitializingFailedComponent } from './components/wallet-initializing-failed/wallet-initializing-failed.component';
+import { LoggerService } from './services/logger.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -49,7 +50,8 @@ import { WalletInitializingFailedComponent } from './components/wallet-initializ
     SignalRService,
     StakingService,
     TaskBarService,
-    ConsensusService
+    ConsensusService,
+    LoggerService
   ],
   exports: [
     CommonModule,

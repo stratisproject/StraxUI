@@ -23,6 +23,7 @@ import { TransactionInfo } from '@shared/models/transaction-info';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
 import { ExtPubKeyImport } from '@shared/models/extpubkey-import';
+import { LoggerService } from '@shared/services/logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -59,8 +60,9 @@ export class WalletService extends RestApi {
     globalService: GlobalService,
     http: HttpClient,
     errorService: ErrorService,
-    signalRService: SignalRService) {
-    super(globalService, http, errorService);
+    signalRService: SignalRService,
+    loggerService: LoggerService) {
+    super(globalService, http, errorService, loggerService);
 
     globalService.currentWallet.subscribe(wallet => {
       this.currentWallet = wallet;

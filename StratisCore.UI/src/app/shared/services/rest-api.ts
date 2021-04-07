@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Observable } from 'rxjs';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
+import { LoggerService } from './logger.service';
 
 export class RestApi {
   protected API_URL;
@@ -10,6 +11,7 @@ export class RestApi {
     protected globalService: GlobalService,
     protected httpClient: HttpClient,
     protected errorService: ErrorService,
+    protected loggerService: LoggerService,
     apiUrl?: string) {
     this.API_URL =  apiUrl || `http://${globalService.getDaemonIP()}:${globalService.getApiPort()}/api`;
   }

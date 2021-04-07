@@ -17,6 +17,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
+import { LoggerService } from '@shared/services/logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -42,8 +43,9 @@ export class NodeService extends RestApi {
     globalService: GlobalService,
     http: HttpClient,
     errorService: ErrorService,
-    signalRService: SignalRService) {
-    super(globalService, http, errorService);
+    signalRService: SignalRService,
+    loggerService: LoggerService) {
+    super(globalService, http, errorService, loggerService);
 
     globalService.currentWallet.subscribe(wallet => {
       if (wallet) {
