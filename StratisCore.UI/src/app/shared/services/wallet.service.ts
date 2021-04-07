@@ -13,7 +13,6 @@ import { Transaction } from '@shared/models/transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';
-import { CurrentAccountService } from '@shared/services/current-account.service';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { WalletResync } from '@shared/models/wallet-rescan';
 import { AddressBalance } from '@shared/models/address-balance';
@@ -54,7 +53,6 @@ export class WalletService extends RestApi {
 
   constructor(
     private snackbarService: SnackbarService,
-    private currentAccountService: CurrentAccountService,
     private addressBookService: AddressBookService,
     private nodeService: NodeService,
     globalService: GlobalService,
@@ -68,18 +66,18 @@ export class WalletService extends RestApi {
       this.currentWallet = wallet;
     });
 
-    currentAccountService.currentAddress.subscribe((address) => {
-      if (null != address) {
-        this.updateWalletForCurrentAddress();
-      }
-    });
-
     // When we get a TransactionReceived event get the WalletBalance and History using the RestApi
     signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.TransactionReceived,
       (message) => {
         this.transactionReceivedSubject.next(message);
         this.refreshWallet();
       });
+
+    // Temporary workaround -> change to block staked signalR event
+    signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.BlockConnected,
+      () => {
+        this.refreshWallet();
+      })
 
     this.nodeService.generalInfo().subscribe(generalInfo => {
       if (generalInfo.percentSynced === 100 && this.rescanInProgress) {
@@ -205,12 +203,6 @@ export class WalletService extends RestApi {
   //     prevOutputIndex: prevOutputIndex,
   //     take: take || this.historyPageSize
   //   }) as { [key: string]: any };
-
-  //   if (this.accountsEnabled) {
-  //     extra = Object.assign(extra, {
-  //       address: this.currentAccountService.address
-  //     });
-  //   }
 
   //   this.loadingSubject.next(true);
 
@@ -340,8 +332,7 @@ export class WalletService extends RestApi {
 
     const walletSubject = this.getWalletSubject();
     const newBalance = new WalletBalance(
-      walletBalance || walletSubject.value,
-      walletSubject.value ? walletSubject.value.currentAddress : null
+      walletBalance || walletSubject.value
     );
 
     if (!historyRefreshed && (walletSubject.value

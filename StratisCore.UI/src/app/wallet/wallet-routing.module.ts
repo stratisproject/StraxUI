@@ -8,7 +8,6 @@ import { GenerateAddressesComponent } from './advanced/components/generate-addre
 import { ResyncComponent } from './advanced/components/resync/resync.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WalletComponent } from './wallet.component';
-import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { ReceiveComponent } from './receive/receive.component';
 import { SendComponent } from './send/send.component';
 import { StakingComponent } from './staking/staking.component';

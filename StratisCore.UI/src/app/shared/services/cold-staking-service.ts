@@ -11,7 +11,6 @@ import {
   ColdStakingInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { ConsensusService } from '@shared/services/consensus-service';
 import { DeploymentInfo } from '@shared/models/deployment-info';
 import { ColdStakingAccount } from '@shared/models/cold-staking-account';
 import { ColdStakingAddress } from '@shared/models/cold-staking-address';
@@ -36,7 +35,6 @@ export class ColdStakingService extends RestApi {
     globalService: GlobalService,
     addressBookService: AddressBookService,
     signalRService: SignalRService,
-    consensusService: ConsensusService,
     errorService: ErrorService,
     loggerService: LoggerService
     ) {
