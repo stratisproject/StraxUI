@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GlobalService } from '@shared/services/global.service';
 import { WalletBalance } from '@shared/services/interfaces/api.i';
 import { WalletService } from '@shared/services/wallet.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Animations } from '@shared/animations/animations';
 
@@ -14,8 +14,9 @@ import { Animations } from '@shared/animations/animations';
 })
 export class DashboardComponent implements OnInit {
 
-  public wallet: Observable<WalletBalance>;
-  public transactionCount: Observable<number>;
+  private subscriptions: Subscription[] = [];
+  public amountConfirmed: number;
+  public amountUnconfirmed: number;
 
   constructor(
     public walletService: WalletService,
@@ -23,7 +24,17 @@ export class DashboardComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.wallet = this.walletService.wallet();
-    this.transactionCount = this.walletService.walletHistory().pipe(map(items => items ? items.length : 0));
+    this.subscriptions.push(this.walletService.wallet().subscribe(
+      response => {
+        if (response) {
+          this.amountConfirmed = response.amountConfirmed;
+          this.amountUnconfirmed = response.amountUnconfirmed;
+        }
+      }
+    ))
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }
