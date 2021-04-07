@@ -5,7 +5,7 @@ import { TransactionInfo } from '@shared/models/transaction-info';
 import { NodeService } from '@shared/services/node-service';
 import { tap } from 'rxjs/operators';
 import { SnackbarService } from 'ngx-snackbar';
-import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
+import { AddNewAddressComponent } from '../address-book/add-new-address/add-new-address.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
