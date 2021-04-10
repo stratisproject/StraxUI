@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { GeneralInfo, WalletBalance } from '@shared/services/interfaces/api.i';
 import { NodeService } from '@shared/services/node-service';
@@ -11,12 +11,14 @@ import { GlobalService } from '@shared/services/global.service';
   templateUrl: './status-bar.component.html',
   styleUrls: ['./status-bar.component.scss']
 })
-export class StatusBarComponent implements OnInit {
-  public generalInfo: Observable<GeneralInfo>;
-  public walletInfo: Observable<WalletBalance>;
+export class StatusBarComponent implements OnInit, OnDestroy {
+  public amountConfirmed: number;
+  public amountUnconfirmed: number;
   public percentSynced: string;
+  public connectedNodes: number;
   public toolTip = '';
   public connectedNodesTooltip = '';
+  private subscriptions: Subscription[] = [];
 
   constructor(
     public globalService: GlobalService,
@@ -25,10 +27,27 @@ export class StatusBarComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.walletInfo = this.walletService.wallet();
-    this.generalInfo = this.nodeService.generalInfo()
-      .pipe(tap(
-        response => {
+    this.startWalletInfoSubscription();
+    this.startGeneralInfoSubscription();
+  }
+
+  private startWalletInfoSubscription(): void {
+    this.subscriptions.push(this.walletService.wallet().subscribe(
+      response => {
+        if (response) {
+          this.amountConfirmed = response.amountConfirmed;
+          this.amountUnconfirmed = response.amountUnconfirmed;
+        }
+      }
+    ))
+  }
+
+  private startGeneralInfoSubscription(): void {
+    this.subscriptions.push(this.nodeService.generalInfo().subscribe(
+      response => {
+        if (response) {
+          this.connectedNodes = response.connectedNodes;
+
           // Don't show if wallet is ahead of chainTip
           if (response.lastBlockSyncedHeight > response.chainTip) {
             response.chainTip = response.lastBlockSyncedHeight;
@@ -48,7 +67,12 @@ export class StatusBarComponent implements OnInit {
           if (response.percentSynced === 100) {
             this.toolTip = `Up to date.  ${processedText}`;
           }
-        }));
+        }
+      }
+    ));
   }
 
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
 }
