@@ -33,9 +33,9 @@
                   [disabled]="!stakingForm.valid || stakingService.isStarting || walletService.isSyncing || walletService.ibdMode"
                   (click)="startStaking()">Unlock
           </button>
-          <div *ngIf="walletService.isSyncing || walletService.ibdMode" class="text-warn">Please note staking can only be started when the wallet is completely synchronized.</div>
         </div>
       </form>
+      <label *ngIf="walletService.isSyncing || walletService.ibdMode" class="alert alert-warning py-1">Staking can only be started when the wallet is completely synchronized.</label>
     </div>
     <div *ngIf="stakingEnabled">
       <button type="button" class="btn btn-outline-primary mb-3" [disabled]="stakingService.isStopping"
