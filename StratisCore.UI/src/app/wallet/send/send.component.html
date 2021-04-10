@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between align-items-start">
       <div>
         <h3>Send</h3>
-        <span *ngIf="(wallet| async) as _wallet" class="text-small font-weight-light">{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }} {{ coinUnit }} available</span>
+        <span class="text-small font-weight-light">{{ (amountConfirmed | coinNotation) || (0 | coinNotation) }} {{ coinUnit }} available</span>
       </div>
       <div class="btn-group btn-group-toggle">
         <label [ngClass]="{'active' : selectedTab === 'Standard'}" class="btn btn-outline-primary">
