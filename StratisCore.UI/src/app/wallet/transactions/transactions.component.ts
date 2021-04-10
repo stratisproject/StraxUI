@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { GlobalService } from '@shared/services/global.service';
-import { Observable, Subscription } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
 import { SnackbarService } from 'ngx-snackbar';
 import { Animations } from '@shared/animations/animations';
@@ -16,11 +16,9 @@ import { TransactionDetailsComponent } from '../transaction-details/transaction-
   animations: Animations.collapseExpand
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
-  public transactions: Observable<TransactionInfo[]>;
-  public transactionsArray: TransactionInfo[];
+  public transactions: TransactionInfo[];
   private subscriptions: Subscription[] = [];
   public loading = false;
-  public state: { [key: number]: string } = {};
   public paginationConfig: any;
   @Input() public enablePagination: boolean;
   @Input() public maxTransactionCount: number;
@@ -47,6 +45,24 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       }));
   }
 
+  public ngOnInit(): void {
+    this.startTransactionSubscription();
+  }
+
+  private startTransactionSubscription(): void {
+    this.subscriptions.push(this.walletService.walletHistory()
+      .pipe(
+        map((items) => {
+          return this.stakingOnly ? items.filter(i => i.transactionType === 'staked') : items;
+        }))
+
+      .subscribe(response => {
+        if (response) {
+          this.transactions = response;
+        }
+      }))
+  }
+
   public pageChanged(event){
     this.paginationConfig.currentPage = event;
   }
@@ -65,27 +81,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.snackBarService.clear();
       }
     }
-  }
-
-  public ngOnInit(): void {
-    this.assignTransactionObservable();
-  }
-
-  private assignTransactionObservable(): void {
-    this.transactions = this.walletService.walletHistory().pipe(
-      map((items) => {
-        return this.stakingOnly ? items.filter(i => i.transactionType === 'staked') : items;
-      }));
-
-    this.startTransactionSubscription();
-  }
-
-  private startTransactionSubscription(): void {
-    this.subscriptions.push(this.transactions.subscribe(response => {
-      if (response) {
-        this.transactionsArray = response;
-      }
-    }))
   }
 
   public showTransactionDetails(transaction: TransactionInfo) {
