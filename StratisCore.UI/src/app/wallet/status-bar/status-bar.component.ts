@@ -18,6 +18,7 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   public connectedNodes: number;
   public toolTip = '';
   public connectedNodesTooltip = '';
+  private processedText: string;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -54,9 +55,13 @@ export class StatusBarComponent implements OnInit, OnDestroy {
           }
 
           this.percentSynced = (response.percentSynced || 0).toFixed(0) + '%';
-          const processedText = `Processed ${response.lastBlockSyncedHeight || '0'} out of ${response.chainTip} blocks.`;
+          if (response.isChainSynced) {
+            this.processedText = `Processed ${response.lastBlockSyncedHeight || '0'} out of ${response.chainTip} blocks.`;
+          } else {
+            this.processedText = `Processed ${response.lastBlockSyncedHeight || '0'} out of (estimated) ${response.chainTip} blocks.`;
+          }
 
-          this.toolTip = `Synchronizing. ${processedText}`;
+          this.toolTip = `Synchronizing. ${this.processedText}`;
 
           if (response.connectedNodes === 1) {
             this.connectedNodesTooltip = '1 connection';
@@ -65,7 +70,7 @@ export class StatusBarComponent implements OnInit, OnDestroy {
           }
 
           if (response.percentSynced === 100) {
-            this.toolTip = `Up to date.  ${processedText}`;
+            this.toolTip = `Up to date.  ${this.processedText}`;
           }
         }
       }
