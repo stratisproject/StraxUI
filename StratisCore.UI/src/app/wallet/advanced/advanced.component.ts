@@ -5,6 +5,7 @@ import { ResyncComponent } from './components/resync/resync.component';
 import { AddNodeComponent } from './components/add-node/add-node.component';
 import { GenerateAddressesComponent } from './components/generate-addresses/generate-addresses.component';
 import { BroadcastTransactionComponent } from './components/broadcast-transaction/broadcast-transaction.component';
+import { RemoveWalletComponent } from './components/remove-wallet/remove-wallet.component'
 
 @Component({
   selector: 'app-advanced',
@@ -46,6 +47,14 @@ export class AdvancedComponent {
       showCloseButton: true,
       taskBarWidth: '500px',
       title: 'Generate Addresses'
+    });
+  }
+
+  removeWallet(): void{
+    this.taskBarService.open(RemoveWalletComponent, {}, {
+      showCloseButton: true,
+      taskBarWidth: '500px',
+      title: 'Remove Wallet'
     });
   }
 }

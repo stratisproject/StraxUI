@@ -39,6 +39,7 @@ import { ColdWalletComponent } from './cold-staking/cold-wallet/cold-wallet.comp
 import { SendDefaultComponent } from './send/send-default/send-default.component';
 import { SendSidechainComponent } from './send/send-sidechain/send-sidechain.component';
 import { SendInteroperabilityComponent } from './send/send-interoperability/send-interoperability.component';
+import { RemoveWalletComponent } from './advanced/components/remove-wallet/remove-wallet.component';
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import { SendInteroperabilityComponent } from './send/send-interoperability/send
     ColdWalletComponent,
     SendDefaultComponent,
     SendSidechainComponent,
-    SendInteroperabilityComponent
+    SendInteroperabilityComponent,
+    RemoveWalletComponent
   ],
   providers: [
     AccountSidebarItem,

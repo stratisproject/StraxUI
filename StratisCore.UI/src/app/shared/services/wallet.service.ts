@@ -123,6 +123,15 @@ export class WalletService extends RestApi {
     );
   }
 
+  public removeWallet(walletName: string) {
+    let params = new HttpParams()
+      .set('walletName', walletName)
+
+    return this.delete('wallet/remove-wallet', params).pipe(
+      catchError(err => this.handleHttpError(err))
+    )
+  }
+
   public transactionReceived(): Observable<any> {
     return this.transactionReceivedSubject.asObservable();
   }
