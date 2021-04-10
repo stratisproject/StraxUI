@@ -5,7 +5,6 @@ import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
 import { SnackbarService } from 'ngx-snackbar';
-import { AddressBookService } from '@shared/services/address-book-service';
 import { Animations } from '@shared/animations/animations';
 import { TaskBarService } from '@shared/services/task-bar-service';
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
@@ -23,7 +22,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public loading = false;
   public state: { [key: number]: string } = {};
   public paginationConfig: any;
-  public expandedElement: TransactionInfo | null;
   @Input() public enablePagination: boolean;
   @Input() public maxTransactionCount: number;
   @Input() public title: string;
@@ -35,7 +33,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public constructor(
     public globalService: GlobalService,
     private snackBarService: SnackbarService,
-    private addressBookService: AddressBookService,
     private taskBarService: TaskBarService,
     public walletService: WalletService,
     public coldStakingService: ColdStakingService) {
@@ -95,10 +92,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         }));
     }
   }
-
-  // public toggleExpandItem(index: number): void {
-  //   this.state[index] = (this.state[index] || 'collapsed') === 'collapsed' ? 'expanded' : 'collapsed'
-  // }
 
   public showTransactionDetails(transaction: TransactionInfo) {
     this.taskBarService.open(TransactionDetailsComponent, {transaction: transaction}, {
