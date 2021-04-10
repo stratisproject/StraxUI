@@ -8,7 +8,6 @@ import { SnackbarService } from 'ngx-snackbar';
 import { Animations } from '@shared/animations/animations';
 import { TaskBarService } from '@shared/services/task-bar-service';
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
-import { ColdStakingService } from '@shared/services/cold-staking-service';
 
 @Component({
   selector: 'app-transactions',
@@ -18,6 +17,7 @@ import { ColdStakingService } from '@shared/services/cold-staking-service';
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
   public transactions: Observable<TransactionInfo[]>;
+  public transactionsArray: TransactionInfo[];
   private subscriptions: Subscription[] = [];
   public loading = false;
   public state: { [key: number]: string } = {};
@@ -28,14 +28,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   @Input() public stakingOnly: boolean;
   @Input() public coldStaking = false;
   @Output() public rowClicked: EventEmitter<TransactionInfo> = new EventEmitter();
-  private last: TransactionInfo;
 
   public constructor(
     public globalService: GlobalService,
     private snackBarService: SnackbarService,
     private taskBarService: TaskBarService,
-    public walletService: WalletService,
-    public coldStakingService: ColdStakingService) {
+    public walletService: WalletService) {
 
     this.paginationConfig = {
       itemsPerPage: 7,
@@ -70,27 +68,24 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    if(!this.coldStaking) {
-      this.transactions = this.walletService.walletHistory()
-      .pipe(
-        map((items) => {
-          return this.stakingOnly ? items.filter(i => i.transactionType === 'staked') : items;
-        }),
-        tap(items => {
-          const history = items;
-          this.last = history && history.length > 0 ? history[history.length - 1] : {} as TransactionInfo;
-        }));
-    } else {
-      this.transactions = this.coldStakingService.coldStakingHistory(this.coldStakingService.getColdStakingAccount())
-      .pipe(
-        map((items) => {
-          return items;
-        }),
-        tap(items => {
-          const history = items;
-          this.last = history && history.length > 0 ? history[history.length - 1] : {} as TransactionInfo;
-        }));
-    }
+    this.assignTransactionObservable();
+  }
+
+  private assignTransactionObservable(): void {
+    this.transactions = this.walletService.walletHistory().pipe(
+      map((items) => {
+        return this.stakingOnly ? items.filter(i => i.transactionType === 'staked') : items;
+      }));
+
+    this.startTransactionSubscription();
+  }
+
+  private startTransactionSubscription(): void {
+    this.subscriptions.push(this.transactions.subscribe(response => {
+      if (response) {
+        this.transactionsArray = response;
+      }
+    }))
   }
 
   public showTransactionDetails(transaction: TransactionInfo) {

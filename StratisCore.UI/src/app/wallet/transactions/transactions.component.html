@@ -1,42 +1,40 @@
-<div *ngIf="(transactions | async) let _transactions;">
-  <div *ngIf="loading && _transactions.length === 0" class="page-load"></div>
-    <table class="table">
-      <tbody>
-        <tr *ngFor="let _transaction of _transactions | paginate: paginationConfig; index as i">
-          <td class="text-center">
-            <span class="bubble"
-              [ngClass]="{
-                'bg-warning' : !_transaction.transactionConfirmedInBlock,
-                'bg-success' : _transaction.transactionConfirmedInBlock
-              }">
-            </span>
-          </td>
-          <td class="text-uppercase text-left">{{ _transaction.transactionType }}</td>
-          <td>
-            <span *ngIf="_transaction.contact">
-              {{_transaction.contact.label}}
-            </span>
-          </td>
-          <td class="text-left">{{_transaction.transactionType == 'sent' ? '- ' : '+ '}}
-            <strong> {{ _transaction.transactionAmount + _transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
-          </td>
-          <td class="text-left">{{ _transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-          <td class="text-center"><span (click)="showTransactionDetails(_transaction)" class="lnr-transaction lnr-menu-circle"></span></td>
-        </tr>
-      </tbody>
-    </table>
-    <pagination-controls *ngIf="!loading && _transactions.length != 0" (pageChange)="pageChanged($event)"></pagination-controls>
-    <div *ngIf="!loading && _transactions.length === 0">
-      <div class="d-flex align-items-center">
-        <div class="row mx-auto">
-          <div class="col-12 text-center my-4">
-            <img src="./assets/images/notransactions.svg" alt="Go to the receive page to get a receive address.">
-            <p *ngIf="!stakingOnly">You currently have no transactions</p>
 
-            <p *ngIf="stakingOnly">You currently have no staking transactions</p>
-            <p>Please note that your transaction history and balances can only show when you are completely synchronized.</p>
-          </div>
-        </div>
+<div *ngIf="loading && !transactionsArray" class="page-load"></div>
+<table class="table">
+  <tbody>
+    <tr *ngFor="let transaction of transactionsArray | paginate: paginationConfig; index as i">
+      <td class="text-center">
+        <span class="bubble"
+          [ngClass]="{
+            'bg-warning' : !transaction.transactionConfirmedInBlock,
+            'bg-success' : transaction.transactionConfirmedInBlock
+          }">
+        </span>
+      </td>
+      <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
+      <td>
+        <span *ngIf="transaction.contact">
+          {{transaction.contact.label}}
+        </span>
+      </td>
+      <td class="text-left">{{transaction.transactionType == 'sent' ? '- ' : '+ '}}
+        <strong> {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
+      </td>
+      <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
+      <td class="text-center"><span (click)="showTransactionDetails(transaction)" class="lnr-transaction lnr-menu-circle"></span></td>
+    </tr>
+  </tbody>
+</table>
+<pagination-controls *ngIf="!loading && transactionsArray.length != 0" (pageChange)="pageChanged($event)"></pagination-controls>
+<div *ngIf="!loading && transactionsArray.length === 0">
+  <div class="d-flex align-items-center">
+    <div class="row mx-auto">
+      <div class="col-12 text-center my-4">
+        <img src="./assets/images/notransactions.svg" alt="Go to the receive page to get a receive address.">
+        <p *ngIf="!stakingOnly">You currently have no transactions</p>
+        <p *ngIf="stakingOnly">You currently have no staking transactions</p>
+        <p>Please note that your transaction history and balances can only show when you are completely synchronized.</p>
       </div>
     </div>
+  </div>
 </div>
