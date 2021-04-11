@@ -289,12 +289,11 @@ Thumbs.db
 
 *.user
 project.lock.json
-/StratisCore/.vscode
-/StratisCore.UI/daemon
-/StratisCore.UI/app-builds
-/StratisCore.UI/dist
-/StratisCore.UI/main.js
-/StratisCore.UI/main.js.map
+.vscode
+daemon
+app-builds
+dist
+main.js
+main.js.map
 .vscode/
-StratisCore.UI/.idea/.idea.StratisCore.UI.dir/.idea/
 version.ts

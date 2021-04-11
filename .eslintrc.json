@@ -25,7 +25,6 @@
           "./src/tsconfig.spec.json",
           "./e2e/tsconfig.e2e.json"
         ],
-        "tsconfigRootDir": "StratisCore.UI",
         "sourceType": "module",
         "ecmaFeatures": {
           "modules": true
