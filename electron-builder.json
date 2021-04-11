@@ -33,7 +33,7 @@
       "deb",
       "tar.gz"
     ],
-    "synopsis": "StratisCore.UI: STRAX' Wallet.",
+    "synopsis": "STRAX Wallet.",
     "category": "Utility",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
   },
