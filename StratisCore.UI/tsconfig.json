@@ -11,7 +11,7 @@
     "allowJs": true,
     "target": "es5",
     "paths": {
-      "@shared/*": ["./src/app/shared/*"]
+      "@shared/*": ["./app/shared/*"]
     },
     "typeRoots": [
       "node_modules/@types"

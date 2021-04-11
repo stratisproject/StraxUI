@@ -30,7 +30,7 @@
     "start": "npm run && npm-run-all -p ng:serve \"electron:serve -- {@}\" --",
     "mainnet": "npm start --",
     "testnet": "npm run && npm-run-all -p ng:serve \"electron:serve:testnet -- {@}\" --",
-    "build": "npm run electron:serve-tsc && ng build",
+    "build": "npm run electron:serve-tsc && ng build --base-href ./",
     "build:dev": "npm run build -- -c dev",
     "build:prod": "npm run build -- -c production",
     "electron:serve-tsc": "tsc -p tsconfig.serve.json",
@@ -52,7 +52,7 @@
   "dependencies": {
     "@aspnet/signalr": "1.1.4",
     "electron-context-menu": "2.3.0",
-    "@electron/remote": "1.1.0",
+    "@electron/remote": "1.0.4",
     "minimist": "1.2.5",
     "ngx-pagination": "5.0.0",
     "@techiediaries/ngx-qrcode": "9.1.0",
