@@ -10,7 +10,7 @@ describe('TaskBarComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ TaskBarComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

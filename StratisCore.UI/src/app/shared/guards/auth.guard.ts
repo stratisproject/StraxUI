@@ -12,9 +12,9 @@ export class AuthenticationGuard implements CanActivate {
 
   canActivate(): boolean {
     if (!this.authenticationService.isLoggedIn) {
-      this.modalService.openModal("Access Denied", "You can only access this page when you have decrypted your wallet.")
-      this.router.navigate(['login'])
+      this.modalService.openModal("Access Denied", "You can only access this page when you have decrypted your wallet.");
+      this.router.navigate(['login']);
     }
-    return true
+    return true;
   }
 }

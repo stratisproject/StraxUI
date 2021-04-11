@@ -10,7 +10,7 @@ describe('BroadcastTransactionComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ BroadcastTransactionComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

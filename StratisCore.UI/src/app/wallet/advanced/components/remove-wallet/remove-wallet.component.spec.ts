@@ -10,7 +10,7 @@ describe('RemoveWalletComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ RemoveWalletComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

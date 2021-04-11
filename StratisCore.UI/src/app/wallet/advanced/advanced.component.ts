@@ -5,7 +5,7 @@ import { ResyncComponent } from './components/resync/resync.component';
 import { AddNodeComponent } from './components/add-node/add-node.component';
 import { GenerateAddressesComponent } from './components/generate-addresses/generate-addresses.component';
 import { BroadcastTransactionComponent } from './components/broadcast-transaction/broadcast-transaction.component';
-import { RemoveWalletComponent } from './components/remove-wallet/remove-wallet.component'
+import { RemoveWalletComponent } from './components/remove-wallet/remove-wallet.component';
 
 @Component({
   selector: 'app-advanced',

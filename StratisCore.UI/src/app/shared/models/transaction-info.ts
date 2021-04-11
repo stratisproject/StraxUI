@@ -36,8 +36,8 @@ export class TransactionInfo {
 
     const toMap = maxTransactionCount ? transactions.slice(0, maxTransactionCount) : transactions;
     return toMap.map(transaction => {
-        return this.mapFromTransactionsHistoryItem(transaction, addressBookService)
-      }
+      return this.mapFromTransactionsHistoryItem(transaction, addressBookService);
+    }
     );
   }
 

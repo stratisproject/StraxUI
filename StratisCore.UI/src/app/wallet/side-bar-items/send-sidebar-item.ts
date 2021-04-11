@@ -9,7 +9,7 @@ export class SendSidebarItem extends SideBarItemBase {
 
     this.globalService.isWatchOnly().subscribe(boolean => {
       this.visible = !boolean;
-    })
+    });
 
     if (this.visible == null) {
       this.visible = true;

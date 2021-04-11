@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public loadingFailed = false;
   public currentMessage: string;
   public currentState: string;
-  private subscriptions: Subscription[] = []
+  private subscriptions: Subscription[] = [];
 
   private statusIntervalSubscription: Subscription;
   private readonly MaxRetryCount = 30;
@@ -64,14 +64,14 @@ export class AppComponent implements OnInit, OnDestroy {
           }
         }
       }
-    ))
+    ));
   }
 
   private checkResponse() {
     // Use API as a fallback. Needed when the SignalR handshake has been completed after node initialization, at that point we wont get any FullNodeEvent messages anymore.
     // TO-DO: ask the node for its status through SignalR.
     if (!this.currentState) {
-      this.getStatusThroughApi()
+      this.getStatusThroughApi();
     }
   }
 

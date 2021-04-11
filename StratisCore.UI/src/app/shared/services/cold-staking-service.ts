@@ -23,13 +23,13 @@ export class ColdStakingService extends RestApi {
     globalService: GlobalService,
     errorService: ErrorService,
     loggerService: LoggerService
-    ) {
-      super(globalService, http, errorService, loggerService);
+  ) {
+    super(globalService, http, errorService, loggerService);
 
-      this.getHasColdStakingAccount();
-      this.getHasHotStakingAccount();
-      this.setStakingAccount(null);
-    }
+    this.getHasColdStakingAccount();
+    this.getHasHotStakingAccount();
+    this.setStakingAccount(null);
+  }
 
   private getWalletName(): string {
     return this.globalService.getWalletName();

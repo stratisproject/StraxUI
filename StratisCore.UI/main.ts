@@ -146,12 +146,12 @@ function startDaemon(): void {
   console.log('Starting daemon ' + daemonPath);
   console.log(spawnArgs);
 
-  let daemonProcess
+  let daemonProcess;
 
   if (os.platform() === 'win32') {
     daemonProcess = spawnDaemon(daemonPath, spawnArgs, {
       detached: false
-    })
+    });
   } else {
     daemonProcess = spawnDaemon(daemonPath, spawnArgs, {
       detached: true

@@ -26,12 +26,12 @@ export class NumberToStringPipe implements PipeTransform {
         }
       }
     } else {
-        let e = parseInt(num.toString().split('+')[1]);
-        if (e > 20) {
-            e -= 20;
-            num /= Math.pow(10, e);
-            numStr = num.toString() + (new Array(e + 1)).join('0');
-        }
+      let e = parseInt(num.toString().split('+')[1]);
+      if (e > 20) {
+        e -= 20;
+        num /= Math.pow(10, e);
+        numStr = num.toString() + (new Array(e + 1)).join('0');
+      }
     }
     return numStr;
   }

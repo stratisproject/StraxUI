@@ -61,10 +61,10 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     const addressData = new ColdStakingAddress(
       walletName,
       false
-    )
+    );
     this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
       this.hotStakingAddress = response.address;
-    })
+    });
   }
 
   public confirmSetup(): void {
@@ -73,13 +73,13 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       this.walletName,
       this.passwordForm.get("password").value,
       false
-    )
+    );
     this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(response => {
       if (response) {
         const addressData = new ColdStakingAddress(
           this.walletName,
           false
-        )
+        );
         this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
           if (response) {
             this.hotStakingAddress = response.address;
@@ -95,7 +95,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
           } else {
             this.isConfirming = false;
           }
-        })
+        });
       } else {
         this.isConfirming = false;
       }
@@ -110,7 +110,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       +this.importPubKeyForm.get("selectBox").value, // account 0
       this.importPubKeyForm.get("walletName").value,
       recoveryDate
-    )
+    );
 
     this.walletService.importExtPubKey(extPubKeyImportData).toPromise().then(
       response => {
@@ -139,12 +139,12 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       this.estimatedFee / 100000000,
       null,
       true
-    )
+    );
     this.coldStakingService.invokePostSetupOfflineColdStakingApiCall(setupData).toPromise().then(response => {
       const objJsonStr = JSON.stringify(response);
       this.unsignedTransactionEncoded = Buffer.from(objJsonStr).toString("base64");
       this.hasColdStakingSetup = true;
-    })
+    });
   }
 
   private estimateColdStakingSetupFee(): void {
@@ -157,7 +157,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       0,
       null,
       true
-    )
+    );
     this.coldStakingService.postColdStakingSetupOfflineFeeEstimation(data).toPromise().then(response => {
       this.estimatedFee = response;
       this.hasEstimatedSetupFee = true;
@@ -182,7 +182,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     this.coldStakingService.invokePostColdStakingOfflineWithdrawalApiCall(withdrawData).toPromise().then(response => {
       const objJsonStr = JSON.stringify(response);
       this.unsignedWithdrawelTransactionEncoded = Buffer.from(objJsonStr).toString("base64");
-    })
+    });
   }
 
   private estimateOfflineWithdrawFee(): void {
@@ -211,13 +211,13 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       this.walletName,
       this.recoveryForm.get("password").value,
       false
-    )
+    );
     this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(response => {
       if (response) {
         const addressData = new ColdStakingAddress(
           this.walletName,
           false
-        )
+        );
         this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
           localStorage.setItem("hasHotStaking" + this.walletName, "true");
           this.snackbarService.add({
@@ -228,7 +228,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
             }
           });
           this.getHotStakingAccountAddress(this.walletName);
-        })
+        });
       }
     });
 

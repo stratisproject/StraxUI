@@ -37,11 +37,11 @@ export class RecoverComponent implements OnInit, OnDestroy {
   private buildRecoverForm(): void {
     this.recoverWalletForm = this.fb.group({
       walletName: ["", [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(24),
-          Validators.pattern(/^[a-zA-Z0-9]*$/)
-        ]
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(24),
+        Validators.pattern(/^[a-zA-Z0-9]*$/)
+      ]
       ],
       walletMnemonic: ["", Validators.required],
       walletPassword: ["", Validators.required],
@@ -136,7 +136,7 @@ export class RecoverComponent implements OnInit, OnDestroy {
         () => {
           const body = "Your wallet has been recovered. \nYou will be redirected to the decryption page.";
           this.genericModalService.openModal("Wallet Recovered", body);
-          this.router.navigate([''])
+          this.router.navigate(['']);
         },
         () => {
           this.isRecovering = false;

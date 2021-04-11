@@ -10,7 +10,7 @@ describe('AddressBookCardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ AddressBookCardComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

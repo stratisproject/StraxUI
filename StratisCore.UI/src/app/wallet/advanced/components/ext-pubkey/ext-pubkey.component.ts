@@ -25,10 +25,10 @@ export class ExtPubkeyComponent implements OnInit {
   private getExtPubKey(walletInfo: WalletInfo): void {
     this.apiService.getExtPubkey(walletInfo)
       .toPromise().then(
-      response => {
-        this.extPubKey = response;
-      }
-    );
+        response => {
+          this.extPubKey = response;
+        }
+      );
   }
 
   public onCopiedClick(): void {

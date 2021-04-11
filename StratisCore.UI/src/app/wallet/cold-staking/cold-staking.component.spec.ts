@@ -10,7 +10,7 @@ describe('ColdStakingComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ ColdStakingComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -39,7 +39,7 @@ export class AddNodeComponent implements OnInit {
         Validators.required,
         Validators.pattern(/^([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})$/)
       ])
-    ]});
+      ]});
 
     this.addNodeForm.valueChanges
       .subscribe(() => this.onValueChanged());

@@ -39,7 +39,7 @@ export class BroadcastTransactionComponent implements OnInit {
         Validators.required,
         Validators.minLength(20)
       ])
-    ]});
+      ]});
 
     this.broadcastTransactionForm.valueChanges
       .subscribe(() => this.onValueChanged());

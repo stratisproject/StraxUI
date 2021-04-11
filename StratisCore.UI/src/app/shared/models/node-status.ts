@@ -1,6 +1,6 @@
 export class NodeStatus {
   constructor(agent: string, version: string, network: string, coinTicker: string, processId: number, consensusHeight: number, blockStoreHeight: number, inboundPeers: [Peer],
-      outbountPeers: [Peer], featuresData: [FeatureData], dataDirectoryPath: string, runningtime: string, difficulty: number, protocolVersion: number, testnet: boolean, relayFee: number, state: string) {
+              outbountPeers: [Peer], featuresData: [FeatureData], dataDirectoryPath: string, runningtime: string, difficulty: number, protocolVersion: number, testnet: boolean, relayFee: number, state: string) {
     this.agent = agent;
     this.version = version;
     this.network = network;

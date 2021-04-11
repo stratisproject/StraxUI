@@ -40,7 +40,7 @@ export class StatusBarComponent implements OnInit, OnDestroy {
           this.amountUnconfirmed = response.amountUnconfirmed;
         }
       }
-    ))
+    ));
   }
 
   private startGeneralInfoSubscription(): void {

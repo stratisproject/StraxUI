@@ -10,7 +10,7 @@ describe('SendInteroperabilityComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ SendInteroperabilityComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

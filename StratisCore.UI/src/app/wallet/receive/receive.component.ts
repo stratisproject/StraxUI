@@ -62,8 +62,8 @@ export class ReceiveComponent implements OnInit {
       .toPromise()
       .then(
         response => {
-            this.address = response;
-            this.setQrString(response);
+          this.address = response;
+          this.setQrString(response);
         }
       );
   }

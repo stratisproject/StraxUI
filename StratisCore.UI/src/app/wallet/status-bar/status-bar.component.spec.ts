@@ -10,7 +10,7 @@ describe('StatusBarComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ StatusBarComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

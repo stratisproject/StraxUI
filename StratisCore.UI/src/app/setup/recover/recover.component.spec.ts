@@ -10,7 +10,7 @@ describe('RecoverComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ RecoverComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

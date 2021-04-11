@@ -9,7 +9,7 @@ import { WalletService } from '@shared/services/wallet.service';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { AccountSidebarItem } from '../wallet/side-bar-items/account-sidebar-item';
 import { WalletInfo } from '@shared/models/wallet-info';
-import { AuthenticationService } from '@shared/services/auth.service'
+import { AuthenticationService } from '@shared/services/auth.service';
 
 
 @Component({
@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             } else {
               this.wallets.push(new Wallets(wallet, false));
             }
-          })
+          });
         }
       ));
   }

@@ -56,13 +56,13 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
       this.walletName,
       this.setupColdStakingAccountForm.get("password").value,
       true
-    )
+    );
     this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(() => {
       localStorage.setItem("hasColdStaking"  + this.walletName, "true");
       this.getColdStakingAccountAddress(this.walletName);
       this.getExtPubKey();
       this.hasColdStakingAccount = (localStorage.getItem("hasColdStaking" + this.walletName) === "true") ? true : false;
-    })
+    });
 
     this.snackbarService.add({
       msg: `This node has been set up as a cold staking wallet.`,
@@ -77,21 +77,21 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     const addressData = new ColdStakingAddress(
       walletName,
       true
-    )
+    );
 
     this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
       this.coldStakingAddress = response.address;
-    })
+    });
   }
 
   private getExtPubKey(): void {
     const walletInfo = new WalletInfo(this.walletName, "coldStakingColdAddresses");
     this.apiService.getExtPubkey(walletInfo)
       .toPromise().then(
-      response => {
-        this.extPubKey = response;
-      }
-    );
+        response => {
+          this.extPubKey = response;
+        }
+      );
   }
 
   public decodeUnsignedTransaction(): void {
@@ -102,7 +102,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     this.decodedTransaction.fee = this.decodedTransaction.fee.replace(/,/g, '.');
     this.decodedTransaction.utxos.forEach(function (utxo) {
       utxo.amount = utxo.amount.replace(/,/g, '.');
-    })
+    });
     this.decodedTransaction.walletName = this.walletName;
     this.coldStakingService.invokeOfflineSignRequest(this.decodedTransaction).toPromise().then(response => {
       this.transactionHex = response.hex;
@@ -110,7 +110,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
       this.unsignedTransaction = "";
       this.transactionHex = "";
       this.coldStakingForm.reset();
-    })
+    });
   }
 
   public confirmColdStakingSetup(): void {
@@ -124,7 +124,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
       this.walletName,
       this.recoveryForm.get("password").value,
       true
-    )
+    );
     this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(response => {
       if (response) {
         localStorage.setItem("hasColdStaking" + this.walletName, "true");

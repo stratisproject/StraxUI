@@ -45,17 +45,17 @@ export class StakingService extends RestApi {
 
     return this.invokeStartStakingApiCall(walletData)
       .toPromise().then(
-      () => {
-        this.stakingEnabled.next(true);
-        this.isStarting = false;
-        return true;
-      },
-      error => {
-        this.loggerService.error(error);
-        this.stakingEnabled.next(false);
-        this.isStarting = false;
-        return false;
-      });
+        () => {
+          this.stakingEnabled.next(true);
+          this.isStarting = false;
+          return true;
+        },
+        error => {
+          this.loggerService.error(error);
+          this.stakingEnabled.next(false);
+          this.isStarting = false;
+          return false;
+        });
   }
 
   public stopStaking(): Promise<boolean> {

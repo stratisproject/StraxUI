@@ -16,7 +16,7 @@ export interface FeeStatus {
 })
 export class SendComponent implements OnInit, OnDestroy {
   public coinUnit: string;
-  public selectedTab: string = "Standard";
+  public selectedTab = "Standard";
   public amountConfirmed: number;
   private subscriptions: Subscription[] = [];
 
@@ -38,7 +38,7 @@ export class SendComponent implements OnInit, OnDestroy {
           this.amountConfirmed = response.amountConfirmed;
         }
       }
-    ))
+    ));
   }
 
   public ngOnDestroy(): void {

@@ -10,7 +10,7 @@ describe('SendComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ SendComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

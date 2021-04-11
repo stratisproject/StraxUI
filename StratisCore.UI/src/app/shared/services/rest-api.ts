@@ -21,13 +21,13 @@ export class RestApi {
     contentType: string,
     httpParams?: HttpParams,
   ): {
-    headers?: HttpHeaders | {
-      [header: string]: string | string[];
-    };
-    params?: HttpParams | {
-      [param: string]: string | string[];
-    };
-  } {
+      headers?: HttpHeaders | {
+        [header: string]: string | string[];
+      };
+      params?: HttpParams | {
+        [param: string]: string | string[];
+      };
+    } {
     return {
       headers: new HttpHeaders({
         'Accept': accept,

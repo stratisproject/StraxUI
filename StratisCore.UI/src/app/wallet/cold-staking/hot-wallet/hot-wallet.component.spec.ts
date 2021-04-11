@@ -10,7 +10,7 @@ describe('HotWalletComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ HotWalletComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

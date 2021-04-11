@@ -66,13 +66,13 @@ export class SignalRService extends RestApi implements ISignalRService {
         .build();
 
       this.connection.on('receiveEvent',
-        (message) => {
-          try {
-            this.executeMessageReceivedHandlers(message);
-          } catch (e) {
-            this.errorService.handleError(e, true);
-          }
-        });
+                         (message) => {
+                           try {
+                             this.executeMessageReceivedHandlers(message);
+                           } catch (e) {
+                             this.errorService.handleError(e, true);
+                           }
+                         });
 
       this.connection.onclose((error: Error) => {
         this.onConnectionFailed.emit(error);

@@ -33,16 +33,16 @@ export class ResyncComponent implements OnInit {
     this.walletService
       .rescanWallet(rescanData)
       .toPromise().then(
-      () => {
-        this.rescanStarted.emit(true);
-        this.snackbarService.add({
-          msg: 'Your wallet is now re-syncing in the background, this may take a few minutes.',
-          customClass: 'notify-snack-bar',
-          action: {
-            text: null
-          }
-        });
-      }
-    );
+        () => {
+          this.rescanStarted.emit(true);
+          this.snackbarService.add({
+            msg: 'Your wallet is now re-syncing in the background, this may take a few minutes.',
+            customClass: 'notify-snack-bar',
+            action: {
+              text: null
+            }
+          });
+        }
+      );
   }
 }

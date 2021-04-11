@@ -33,7 +33,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   @Input() address: string;
 
   public interoperabilityForm: FormGroup;
-  public networks: Network[]
+  public networks: Network[];
   public totalBalance = 0;
   public spendableBalance = 0;
   public estimatedSidechainFee = 0;
@@ -54,26 +54,26 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   private minimumInteroperabilityAmount = 1000;
 
   constructor(private fb: FormBuilder,
-    private globalService: GlobalService,
-    public walletService: WalletService,
-    private addressBookService: AddressBookService,
-    private taskBarService: TaskBarService,
-    private activatedRoute: ActivatedRoute,
-    private snackbarService: SnackbarService) {
-  this.interoperabilityForm = this.buildInteroperabilityForm(fb);
+              private globalService: GlobalService,
+              public walletService: WalletService,
+              private addressBookService: AddressBookService,
+              private taskBarService: TaskBarService,
+              private activatedRoute: ActivatedRoute,
+              private snackbarService: SnackbarService) {
+    this.interoperabilityForm = this.buildInteroperabilityForm(fb);
 
-  this.subscriptions.push(this.interoperabilityForm.valueChanges.pipe(debounceTime(500))
-    .subscribe(data => this.validateForm(data)));
+    this.subscriptions.push(this.interoperabilityForm.valueChanges.pipe(debounceTime(500))
+      .subscribe(data => this.validateForm(data)));
 
-  this.subscriptions.push(this.interoperabilityForm.get('networkSelect').valueChanges.subscribe(data => this.networkSelectChanged(data)));
-}
+    this.subscriptions.push(this.interoperabilityForm.get('networkSelect').valueChanges.subscribe(data => this.networkSelectChanged(data)));
+  }
 
   ngOnInit(): void {
     this.coinUnit = this.globalService.getCoinUnit();
 
     this.explanatoryText = `${this.coinUnit} Tokens will be released to the defined Ethereum address via the wSTRAX (ERC20) Token on the Ethereum blockchain.`;
     this.confirmationText = `Amounts clear in 500 confirmations`;
-    this.contractText = `The official wSTRAX contract address on Ethereum is ${this.ercContractAddress}`
+    this.contractText = `The official wSTRAX contract address on Ethereum is ${this.ercContractAddress}`;
 
 
     if (this.activatedRoute.snapshot.params['address']) {
@@ -103,7 +103,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     try {
       FormHelper.ValidateForm(this.interoperabilityForm, this.interoperabilityFormErrors, this.interoperabilityFormValidationMessages);
       this.apiError = '';
-      const isValidForFeeEstimate = this.interoperabilityForm.get('amount').valid && this.interoperabilityForm.get('destinationAddress').valid && this.interoperabilityForm.get('federationAddress').valid && this.interoperabilityForm.get('fee').valid
+      const isValidForFeeEstimate = this.interoperabilityForm.get('amount').valid && this.interoperabilityForm.get('destinationAddress').valid && this.interoperabilityForm.get('federationAddress').valid && this.interoperabilityForm.get('fee').valid;
       if (isValidForFeeEstimate) {
         this.estimateFee(this.interoperabilityForm);
       }
@@ -114,9 +114,9 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 
   private networkSelectChanged(data: any): void {
     if (this.interoperabilityForm.get('networkSelect').value && this.interoperabilityForm.get('networkSelect').value !== 'customNetwork') {
-      this.interoperabilityForm.patchValue({'federationAddress': this.interoperabilityForm.get('networkSelect').value})
+      this.interoperabilityForm.patchValue({'federationAddress': this.interoperabilityForm.get('networkSelect').value});
     } else if (this.interoperabilityForm.get('networkSelect').value && this.interoperabilityForm.get('networkSelect').value === 'customNetwork') {
-      this.interoperabilityForm.patchValue({'federationAddress': ''})
+      this.interoperabilityForm.patchValue({'federationAddress': ''});
     }
   }
 
@@ -143,20 +143,20 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 
       this.walletService.estimateFee(transaction).toPromise()
         .then(response => {
-            this.estimatedSidechainFee = response;
-            this.last.response = response;
-            clearTimeout(progressDelay);
-            this.status.next({estimating: false});
-          },
-          error => {
-            clearTimeout(progressDelay);
-            this.status.next({estimating: false});
-            this.apiError = error.error.errors[0].message;
-            if (this.apiError == 'Invalid address') {
-              this.interoperabilityFormErrors.destinationAddress = this.apiError
-              this.last.error = this.apiError;
-            }
-          }
+          this.estimatedSidechainFee = response;
+          this.last.response = response;
+          clearTimeout(progressDelay);
+          this.status.next({estimating: false});
+        },
+              error => {
+                clearTimeout(progressDelay);
+                this.status.next({estimating: false});
+                this.apiError = error.error.errors[0].message;
+                if (this.apiError == 'Invalid address') {
+                  this.interoperabilityFormErrors.destinationAddress = this.apiError;
+                  this.last.error = this.apiError;
+                }
+              }
         );
     } else if (transaction.equals(this.last) && !this.status.value.estimating) {
       // Use the cached value
@@ -173,9 +173,9 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
         this.openConfirmationModal(transactionResponse);
         this.isSending = false;
       }).catch(error => {
-      this.isSending = false;
-      this.apiError = error.error.errors[0].message;
-    });
+        this.isSending = false;
+        this.apiError = error.error.errors[0].message;
+      });
   }
 
   private getTransaction(): Transaction {
@@ -279,32 +279,32 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       required: 'Please accept responsibility for any transfers made to and from the Ethereum Blockchain.'
     },
     destinationAddress: {
-     required: 'An address is required.',
-     minlength: 'An address is at least 26 characters long.'
-   },
-   networkSelect: {
-     required: 'Please select a network to send to.'
-   },
-   federationAddress: {
-     required: 'An address is required.',
-     minlength: 'An address is at least 26 characters long.'
-   },
-   changeAddress: {
-     minlength: 'An address is at least 26 characters long.'
-   },
-   amount: {
-     required: 'An amount is required.',
-     pattern: 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-     min: `The amount has to be more or equal to ${this.minimumInteroperabilityAmount}.`,
-     max: 'The total transaction amount exceeds your spendable balance.'
-   },
-   fee: {
-     required: 'A fee is required.'
-   },
-   password: {
-     required: 'Your password is required.'
-   }
- };
+      required: 'An address is required.',
+      minlength: 'An address is at least 26 characters long.'
+    },
+    networkSelect: {
+      required: 'Please select a network to send to.'
+    },
+    federationAddress: {
+      required: 'An address is required.',
+      minlength: 'An address is at least 26 characters long.'
+    },
+    changeAddress: {
+      minlength: 'An address is at least 26 characters long.'
+    },
+    amount: {
+      required: 'An amount is required.',
+      pattern: 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
+      min: `The amount has to be more or equal to ${this.minimumInteroperabilityAmount}.`,
+      max: 'The total transaction amount exceeds your spendable balance.'
+    },
+    fee: {
+      required: 'A fee is required.'
+    },
+    password: {
+      required: 'Your password is required.'
+    }
+  };
 
   ngOnDestroy() {
     this.resetInteroperabilityForm();

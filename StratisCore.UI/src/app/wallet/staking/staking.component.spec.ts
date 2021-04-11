@@ -10,7 +10,7 @@ describe('StakingComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ StakingComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

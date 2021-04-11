@@ -38,7 +38,7 @@ export class HotStakingComponent implements OnInit, OnDestroy {
 
   private buildStakingForm(): void {
     this.stakingForm = this.fb.group({
-        walletPassword: ['', Validators.required]
+      walletPassword: ['', Validators.required]
     });
   }
 
@@ -50,7 +50,7 @@ export class HotStakingComponent implements OnInit, OnDestroy {
           this.awaitingMaturityIfStaking = response.awaitingMaturityIfStaking;
         }
       }
-    ))
+    ));
   }
 
   private startStakingServiceSubscription(): void {
@@ -61,7 +61,7 @@ export class HotStakingComponent implements OnInit, OnDestroy {
           this.netStakeWeight = response.netStakeWeight;
         }
       }
-    ))
+    ));
   }
 
   public startStaking(): void {
@@ -85,7 +85,7 @@ export class HotStakingComponent implements OnInit, OnDestroy {
           });
         }
       }
-    )
+    );
   }
 
   public stopStaking(): void {
@@ -102,6 +102,6 @@ export class HotStakingComponent implements OnInit, OnDestroy {
           });
         }
       }
-    )
+    );
   }
 }

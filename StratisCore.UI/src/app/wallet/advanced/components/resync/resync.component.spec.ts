@@ -10,7 +10,7 @@ describe('ResyncComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ ResyncComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

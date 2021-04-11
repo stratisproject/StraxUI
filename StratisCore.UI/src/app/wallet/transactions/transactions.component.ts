@@ -60,7 +60,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         if (response) {
           this.transactions = response;
         }
-      }))
+      }));
   }
 
   public pageChanged(event){

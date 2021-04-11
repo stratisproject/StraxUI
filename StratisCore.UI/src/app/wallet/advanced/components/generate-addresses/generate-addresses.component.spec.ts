@@ -10,7 +10,7 @@ describe('GenerateAddressesComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ GenerateAddressesComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -72,7 +72,7 @@ export class AddNewAddressComponent {
     const addressLabel = new AddressLabel(this.addressForm.get('label').value, this.addressForm.get('address').value, "");
     this.addressBookService.addAddressBookAddress(addressLabel)
       .then(() => {
-          this.activeModel.close();
+        this.activeModel.close();
         setTimeout(() => {
           this.snackbarService.add({
             msg: `Contact ${addressLabel.label} has been created.`,
@@ -83,7 +83,7 @@ export class AddNewAddressComponent {
           });
         },500);
 
-        }
+      }
       );
   }
 

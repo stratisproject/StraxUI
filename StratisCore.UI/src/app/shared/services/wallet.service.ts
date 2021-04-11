@@ -68,16 +68,16 @@ export class WalletService extends RestApi {
 
     // When we get a TransactionReceived event get the WalletBalance and History using the RestApi
     signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.TransactionReceived,
-      (message) => {
-        this.transactionReceivedSubject.next(message);
-        this.refreshWallet();
-      });
+                                                               (message) => {
+                                                                 this.transactionReceivedSubject.next(message);
+                                                                 this.refreshWallet();
+                                                               });
 
     // Temporary workaround -> change to block staked signalR event
     signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.BlockConnected,
-      () => {
-        this.refreshWallet();
-      })
+                                                               () => {
+                                                                 this.refreshWallet();
+                                                               });
 
     this.nodeService.generalInfo().subscribe(generalInfo => {
       if (generalInfo.percentSynced === 100 && this.rescanInProgress) {
@@ -93,22 +93,22 @@ export class WalletService extends RestApi {
     });
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
-      (message) => {
-        // Update wallet history after chain is synced or IBD mode completed
-        const syncCompleted = (this.isSyncing && message.lastBlockSyncedHeight === message.chainTip);
-        let historyRefreshed = false;
-        this.isSyncing = message.lastBlockSyncedHeight !== message.chainTip;
-        this.ibdMode = !message.isChainSynced;
+                                                                         (message) => {
+                                                                           // Update wallet history after chain is synced or IBD mode completed
+                                                                           const syncCompleted = (this.isSyncing && message.lastBlockSyncedHeight === message.chainTip);
+                                                                           let historyRefreshed = false;
+                                                                           this.isSyncing = message.lastBlockSyncedHeight !== message.chainTip;
+                                                                           this.ibdMode = !message.isChainSynced;
 
-        if (syncCompleted) {
-          historyRefreshed = true;
-        }
+                                                                           if (syncCompleted) {
+                                                                             historyRefreshed = true;
+                                                                           }
 
-        if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
-          const walletBalance = message.accountsBalances.find(acc => acc.accountName === this.currentWallet.account);
-          this.updateWalletForCurrentAddress(walletBalance, historyRefreshed);
-        }
-      });
+                                                                           if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
+                                                                             const walletBalance = message.accountsBalances.find(acc => acc.accountName === this.currentWallet.account);
+                                                                             this.updateWalletForCurrentAddress(walletBalance, historyRefreshed);
+                                                                           }
+                                                                         });
   }
 
   public getWalletNames(): Observable<WalletNamesData> {
@@ -124,12 +124,12 @@ export class WalletService extends RestApi {
   }
 
   public removeWallet(walletName: string) {
-    let params = new HttpParams()
-      .set('walletName', walletName)
+    const params = new HttpParams()
+      .set('walletName', walletName);
 
     return this.delete('wallet/remove-wallet', params).pipe(
       catchError(err => this.handleHttpError(err))
-    )
+    );
   }
 
   public transactionReceived(): Observable<any> {
@@ -153,7 +153,7 @@ export class WalletService extends RestApi {
   }
 
   public rescanWallet(data: WalletResync): Observable<any> {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('walletName', data.walletName)
       .set('all', data.all.toString())
       .set('reSync', data.reSync.toString());
@@ -195,15 +195,15 @@ export class WalletService extends RestApi {
 
     this.get<WalletHistory>('wallet/history', this.getWalletParams(this.currentWallet))
       .pipe(map((response) => {
-          return response.history[0].transactionsHistory;
-        }),
-        catchError((err) => {
-          this.loadingSubject.next(false);
-          return this.handleHttpError(err);
-        })).toPromise().then(history => {
-      this.applyHistory(history);
-      this.loadingSubject.next(false);
-    });
+        return response.history[0].transactionsHistory;
+      }),
+            catchError((err) => {
+              this.loadingSubject.next(false);
+              return this.handleHttpError(err);
+            })).toPromise().then(history => {
+        this.applyHistory(history);
+        this.loadingSubject.next(false);
+      });
   }
 
   // public paginateHistory(take?: number, prevOutputTxTime?: number, prevOutputIndex?: number): void {
