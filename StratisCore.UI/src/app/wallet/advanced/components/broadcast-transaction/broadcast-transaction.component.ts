@@ -36,10 +36,11 @@ export class BroadcastTransactionComponent implements OnInit {
   private buildBroadcastTransactionForm(): void {
     this.broadcastTransactionForm = this.fb.group({
       transactionHex: ['', Validators.compose([
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.minLength(20)
       ])
-    ]});
+      ]});
 
     this.broadcastTransactionForm.valueChanges
       .subscribe(() => this.onValueChanged());
@@ -58,7 +59,7 @@ export class BroadcastTransactionComponent implements OnInit {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }

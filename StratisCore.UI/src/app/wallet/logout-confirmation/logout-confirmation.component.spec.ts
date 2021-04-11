@@ -10,7 +10,7 @@ describe('LogoutConfirmationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ LogoutConfirmationComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

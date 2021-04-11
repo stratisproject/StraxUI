@@ -5,7 +5,7 @@ import { ErrorService } from '@shared/services/error-service';
 import { LoggerService } from './logger.service';
 
 export class RestApi {
-  protected API_URL;
+  protected API_URL: string;
 
   constructor(
     protected globalService: GlobalService,
@@ -21,13 +21,13 @@ export class RestApi {
     contentType: string,
     httpParams?: HttpParams,
   ): {
-    headers?: HttpHeaders | {
-      [header: string]: string | string[];
-    };
-    params?: HttpParams | {
-      [param: string]: string | string[];
-    };
-  } {
+      headers?: HttpHeaders | {
+        [header: string]: string | string[];
+      };
+      params?: HttpParams | {
+        [param: string]: string | string[];
+      };
+    } {
     return {
       headers: new HttpHeaders({
         'Accept': accept,

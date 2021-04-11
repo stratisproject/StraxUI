@@ -10,7 +10,7 @@ describe('GenericModalComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ GenericModalComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -38,6 +38,8 @@ export class NodeService extends RestApi {
   });
 
   private currentWallet: WalletInfo;
+  private lastBlockTimestamp: number;
+  private calculatedChainTip: number;
 
   constructor(
     globalService: GlobalService,
@@ -62,6 +64,7 @@ export class NodeService extends RestApi {
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(
       SignalREvents.WalletGeneralInfo, (message) => {
         if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
+          this.applyChainTip(message);
           this.applyPercentSynced(message);
           this.generalInfoSubject.next(message);
         }
@@ -71,17 +74,17 @@ export class NodeService extends RestApi {
     // This feels a little weak as we could un-sync? + Other properties we don't update
     // So maybe we should just get all the data once in a while?
     signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
-      (message) => {
-        const generalInfo = this.generalInfoSubject.value;
-        if (generalInfo.isChainSynced) {
-          if (generalInfo.chainTip < message.height) {
-            this.patchAndUpdateGeneralInfo({
-              chainTip: message.height,
-              lastBlockSyncedHeight: message.height
-            });
-          }
-        }
-      });
+                                                                             (message) => {
+                                                                               const generalInfo = this.generalInfoSubject.value;
+                                                                               if (generalInfo.isChainSynced) {
+                                                                                 if (generalInfo.chainTip < message.height) {
+                                                                                   this.patchAndUpdateGeneralInfo({
+                                                                                     chainTip: message.height,
+                                                                                     lastBlockSyncedHeight: message.height
+                                                                                   });
+                                                                                 }
+                                                                               }
+                                                                             });
   }
 
   public generalInfo(): Observable<GeneralInfo> {
@@ -109,9 +112,29 @@ export class NodeService extends RestApi {
       this.get<GeneralInfo>('wallet/general-info', params).pipe(
         catchError(err => this.handleHttpError(err)))
         .toPromise().then(generalInfo => {
-        this.applyPercentSynced(generalInfo);
-        this.generalInfoSubject.next(generalInfo);
+          this.applyChainTip(generalInfo);
+          this.applyPercentSynced(generalInfo);
+          this.generalInfoSubject.next(generalInfo);
+        });
+    }
+  }
+
+  private applyChainTip(message: GeneralInfo): void {
+    if (!message.isChainSynced && !this.calculatedChainTip) {
+      this.getBlockHash(message.lastBlockSyncedHeight).toPromise().then(response=> {
+        this.getBlockInfo(response).toPromise().then(response => {
+          if (response) {
+            this.lastBlockTimestamp = response.time;
+          }
+        });
       });
+
+      const timeLeft: number = Date.now()/1000 - this.lastBlockTimestamp;
+      const blocksLeft: number = timeLeft / 45;
+      this.calculatedChainTip = (message.lastBlockSyncedHeight + blocksLeft) | 0;
+      message.chainTip = this.calculatedChainTip;
+    } else if (!message.isChainSynced && this.calculatedChainTip) {
+      message.chainTip = this.calculatedChainTip;
     }
   }
 
@@ -123,6 +146,25 @@ export class NodeService extends RestApi {
       percentSynced = 99;
     }
     message.percentSynced = percentSynced;
+  }
+
+  public getBlockHash(height: number): Observable<any> {
+    const params = new HttpParams()
+      .set('height', height.toString());
+
+    return this.get('consensus/getblockhash', params).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  public getBlockInfo(hash: string): Observable<any> {
+    const params = new HttpParams()
+      .set('hash', hash)
+      .set('outputJson', 'true');
+
+    return this.get('blockstore/block', params).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
   private patchAndUpdateGeneralInfo(patch: any): void {

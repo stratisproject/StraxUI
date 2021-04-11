@@ -10,7 +10,7 @@ describe('TransactionDetailsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ TransactionDetailsComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

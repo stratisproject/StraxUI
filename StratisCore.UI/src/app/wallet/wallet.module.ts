@@ -31,7 +31,6 @@ import { ContactsSidebarItem } from './side-bar-items/contacts-sidebar-item';
 import { StakingComponent } from './staking/staking.component';
 import { HotStakingComponent } from './staking/hot-staking/hot-staking.component';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ColdStakingSidebarItem } from './side-bar-items/cold-staking-sidebar-item';
 import { ColdStakingComponent } from './cold-staking/cold-staking.component';
 import { HotWalletComponent } from './cold-staking/hot-wallet/hot-wallet.component';
@@ -39,14 +38,14 @@ import { ColdWalletComponent } from './cold-staking/cold-wallet/cold-wallet.comp
 import { SendDefaultComponent } from './send/send-default/send-default.component';
 import { SendSidechainComponent } from './send/send-sidechain/send-sidechain.component';
 import { SendInteroperabilityComponent } from './send/send-interoperability/send-interoperability.component';
+import { RemoveWalletComponent } from './advanced/components/remove-wallet/remove-wallet.component';
 
 @NgModule({
   imports: [
     SnackbarModule,
     SharedModule,
     WalletRoutingModule,
-    TabsModule.forRoot(),
-    ScrollingModule
+    TabsModule.forRoot()
   ],
   declarations: [
     WalletComponent,
@@ -76,7 +75,8 @@ import { SendInteroperabilityComponent } from './send/send-interoperability/send
     ColdWalletComponent,
     SendDefaultComponent,
     SendSidechainComponent,
-    SendInteroperabilityComponent
+    SendInteroperabilityComponent,
+    RemoveWalletComponent
   ],
   providers: [
     AccountSidebarItem,

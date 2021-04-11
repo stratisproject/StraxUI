@@ -10,7 +10,7 @@ describe('AdvancedComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ AdvancedComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

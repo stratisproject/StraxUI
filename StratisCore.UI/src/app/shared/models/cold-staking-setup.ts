@@ -6,7 +6,7 @@ export class ColdStakingSetup {
     this.walletAccount = walletAccount;
     this.amount = amount;
     this.fees = fees;
-    this.walletPassword = walletPassword
+    this.walletPassword = walletPassword;
     this.subtractFeeFromAmount = subtractFeeFromAmount;
   }
 

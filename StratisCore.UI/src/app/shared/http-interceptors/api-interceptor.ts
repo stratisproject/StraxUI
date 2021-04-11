@@ -1,7 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpInterceptor, HttpRequest, HttpHandler } from "@angular/common/http";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
+
 export class ApiInterceptor implements HttpInterceptor {
   constructor() {}
 

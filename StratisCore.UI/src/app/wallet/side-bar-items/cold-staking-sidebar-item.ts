@@ -3,7 +3,9 @@ import { StakingService } from '@shared/services/staking-service';
 import { SideBarItemBase } from '@shared/components/side-bar/side-bar-item-base';
 import { GlobalService } from '@shared/services/global.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ColdStakingSidebarItem extends SideBarItemBase {
   private isStaking: boolean;
 
@@ -12,7 +14,7 @@ export class ColdStakingSidebarItem extends SideBarItemBase {
 
     this.globalService.isWatchOnly().subscribe(boolean => {
       this.visible = !boolean;
-    })
+    });
 
     if (this.visible == null) {
       this.visible = true;

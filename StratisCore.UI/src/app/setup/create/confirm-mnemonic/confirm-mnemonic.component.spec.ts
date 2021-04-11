@@ -10,7 +10,7 @@ describe('ConfirmMnemonicComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ ConfirmMnemonicComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -10,7 +10,7 @@ describe('AddNewAddressComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ AddNewAddressComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

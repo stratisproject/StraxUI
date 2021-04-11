@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GlobalService } from '@shared/services/global.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
 import { Animations } from '@shared/animations/animations';
-import { WalletBalance } from '@shared/services/interfaces/api.i';
 
 export interface FeeStatus {
   estimating: boolean;
@@ -17,22 +16,29 @@ export interface FeeStatus {
 })
 export class SendComponent implements OnInit, OnDestroy {
   public coinUnit: string;
-  public selectedTab: string;
-  public testnetEnabled = false;
+  public selectedTab = "Standard";
+  public amountConfirmed: number;
   private subscriptions: Subscription[] = [];
-  public wallet: Observable<WalletBalance>;
 
   constructor(private walletService: WalletService, private globalService: GlobalService) { }
 
   public ngOnInit(): void {
-    this.selectedTab = "Standard";
     this.coinUnit = this.globalService.getCoinUnit();
-    this.testnetEnabled = this.globalService.getTestnetEnabled();
-    this.wallet = this.walletService.wallet();
+    this.startWalletSubscription();
   }
 
   public switchForms(selectedTab: string): void {
     this.selectedTab = selectedTab;
+  }
+
+  private startWalletSubscription(): void {
+    this.subscriptions.push(this.walletService.wallet().subscribe(
+      response => {
+        if (response) {
+          this.amountConfirmed = response.amountConfirmed;
+        }
+      }
+    ));
   }
 
   public ngOnDestroy(): void {

@@ -39,7 +39,7 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
       if (data) {
         Object.keys(data).forEach(key => {
           componentRef.instance[key] = data[key];
-        })
+        });
       }
       this.opened = true;
       return componentRef.instance;
@@ -57,7 +57,7 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
   }
 
   public close(): Promise<any> {
-   this.opened = false;
+    this.opened = false;
     return new Promise<any>(resolve => {
       const sub = this.closedComplete.subscribe(() => {
         this.host.viewContainerRef.clear();
@@ -72,6 +72,6 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.taskBarService.clearReference()
+    this.taskBarService.clearReference();
   }
 }

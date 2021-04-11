@@ -1,7 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { CoinNotationPipe } from '../../shared/pipes/coin-notation.pipe';
-import { CoinAbbreviationPipe } from '../../shared/pipes/coin-abbreviation.pipe';
-
 import { DashboardComponent } from './dashboard.component';
 
 describe('DashboardComponent', () => {
@@ -12,7 +9,7 @@ describe('DashboardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ DashboardComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

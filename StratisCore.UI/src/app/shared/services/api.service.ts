@@ -101,10 +101,10 @@ export class ApiService extends RestApi implements IApiService {
    */
   public getMaximumBalance(data: WalletInfoRequest): Observable<any> {
     return this.get('wallet/maxbalance',
-      this.getWalletParams(data, {
-        feeType: data.feeType,
-        allowUnconfirmed: 'true'
-      })).pipe(
+                    this.getWalletParams(data, {
+                      feeType: data.feeType,
+                      allowUnconfirmed: 'true'
+                    })).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }

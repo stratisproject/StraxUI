@@ -38,6 +38,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.createWalletForm = this.fb.group({
       walletName: ['',
         Validators.compose([
+          // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.required,
           Validators.minLength(1),
           Validators.maxLength(24),
@@ -47,14 +48,18 @@ export class CreateComponent implements OnInit, OnDestroy {
       walletPassphrase : [''],
       walletPassphraseConfirmation: [''],
       walletPassword: ['',
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         // Validators.compose([
         //   Validators.required,
         //   Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{10,})/)])
-        ],
+      ],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       walletPasswordConfirmation: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       selectNetwork: ["test", Validators.required]
     }, {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       validator: PasswordValidationDirective.MatchPassword
     });
 
@@ -80,7 +85,7 @@ export class CreateComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -143,13 +148,16 @@ export class CreateComponent implements OnInit, OnDestroy {
 
     if (passphraseValue.length) {
       // passphrase and confirmation should be required if passphrase is not null
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       passphrase.setValidators(Validators.required);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       passphraseConfirmation.setValidators(Validators.required);
 
       // Update form group validators to include MatachPassword and MatchPassphrase
       this.createWalletForm.setValidators([
-
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         PasswordValidationDirective.MatchPassword,
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         PasswordValidationDirective.MatchPassphrase
       ]);
     } else { // Else, passphrase field is null, clear validators
@@ -166,6 +174,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
       // clear then set MatchPassword validator on form
       this.createWalletForm.clearValidators();
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       this.createWalletForm.setValidators(PasswordValidationDirective.MatchPassword);
     }
 

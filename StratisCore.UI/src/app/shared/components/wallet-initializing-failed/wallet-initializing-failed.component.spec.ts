@@ -10,7 +10,7 @@ describe('WalletInitializingFailedComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ WalletInitializingFailedComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -31,21 +31,21 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
   @Input() address: string;
 
   constructor(private fb: FormBuilder,
-      private globalService: GlobalService,
-      public walletService: WalletService,
-      private addressBookService: AddressBookService,
-      private taskBarService: TaskBarService,
-      private activatedRoute: ActivatedRoute) {
+              private globalService: GlobalService,
+              public walletService: WalletService,
+              private addressBookService: AddressBookService,
+              private taskBarService: TaskBarService,
+              private activatedRoute: ActivatedRoute) {
     this.sendToSidechainForm = this.buildSendToSidechainForm(fb);
 
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(500))
-      .subscribe(data => this.validateForm(data)));
+      .subscribe(() => this.validateForm()));
 
-    this.subscriptions.push(this.sendToSidechainForm.get('networkSelect').valueChanges.subscribe(data => this.networkSelectChanged(data)));
+    this.subscriptions.push(this.sendToSidechainForm.get('networkSelect').valueChanges.subscribe(() => this.networkSelectChanged()));
   }
 
   public sendToSidechainForm: FormGroup;
-  public networks: Network[]
+  public networks: Network[];
   public totalBalance = 0;
   public spendableBalance = 0;
   public estimatedSidechainFee = 0;
@@ -84,11 +84,11 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
     }
   }
 
-  private validateForm(data: any): void {
+  private validateForm(): void {
     try {
       FormHelper.ValidateForm(this.sendToSidechainForm, this.sendToSidechainFormErrors, this.sendToSidechainValidationMessages);
       this.apiError = '';
-      const isValidForFeeEstimate = this.sendToSidechainForm.get('amount').valid && this.sendToSidechainForm.get('destinationAddress').valid && this.sendToSidechainForm.get('federationAddress').valid && this.sendToSidechainForm.get('fee').valid
+      const isValidForFeeEstimate = this.sendToSidechainForm.get('amount').valid && this.sendToSidechainForm.get('destinationAddress').valid && this.sendToSidechainForm.get('federationAddress').valid && this.sendToSidechainForm.get('fee').valid;
       if (isValidForFeeEstimate) {
         this.estimateFee(this.sendToSidechainForm);
       }
@@ -97,11 +97,11 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
     }
   }
 
-  private networkSelectChanged(data: any): void {
+  private networkSelectChanged(): void {
     if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value !== 'customNetwork') {
-      this.sendToSidechainForm.patchValue({'federationAddress': this.sendToSidechainForm.get('networkSelect').value})
+      this.sendToSidechainForm.patchValue({'federationAddress': this.sendToSidechainForm.get('networkSelect').value});
     } else if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value === 'customNetwork') {
-      this.sendToSidechainForm.patchValue({'federationAddress': ''})
+      this.sendToSidechainForm.patchValue({'federationAddress': ''});
     }
   }
 
@@ -128,20 +128,20 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
 
       this.walletService.estimateFee(transaction).toPromise()
         .then(response => {
-            this.estimatedSidechainFee = response;
-            this.last.response = response;
-            clearTimeout(progressDelay);
-            this.status.next({estimating: false});
-          },
-          error => {
-            clearTimeout(progressDelay);
-            this.status.next({estimating: false});
-            this.apiError = error.error.errors[0].message;
-            if (this.apiError == 'Invalid address') {
-              this.sendToSidechainFormErrors.destinationAddress = this.apiError
-              this.last.error = this.apiError;
-            }
-          }
+          this.estimatedSidechainFee = response;
+          this.last.response = response;
+          clearTimeout(progressDelay);
+          this.status.next({estimating: false});
+        },
+              error => {
+                clearTimeout(progressDelay);
+                this.status.next({estimating: false});
+                this.apiError = error.error.errors[0].message;
+                if (this.apiError == 'Invalid address') {
+                  this.sendToSidechainFormErrors.destinationAddress = this.apiError;
+                  this.last.error = this.apiError;
+                }
+              }
         );
     } else if (transaction.equals(this.last) && !this.status.value.estimating) {
       // Use the cached value
@@ -158,9 +158,9 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
         this.openConfirmationModal(transactionResponse);
         this.isSending = false;
       }).catch(error => {
-      this.isSending = false;
-      this.apiError = error.error.errors[0].message;
-    });
+        this.isSending = false;
+        this.apiError = error.error.errors[0].message;
+      });
   }
 
   private getTransaction(): Transaction {
@@ -226,16 +226,22 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
 
   private buildSendToSidechainForm(fb: FormBuilder): FormGroup {
     return fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       networkSelect: ['', Validators.compose([Validators.required])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       destinationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       changeAddressCheckbox: [false],
       changeAddress: ['', Validators.compose([Validators.minLength(26)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(1),
         (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedSidechainFee)(control)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       fee: ['medium', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
   }

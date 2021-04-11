@@ -10,7 +10,7 @@ describe('SendSidechainComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ SendSidechainComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

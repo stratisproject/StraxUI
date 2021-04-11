@@ -41,7 +41,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     this.buildRecoveryForm();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.walletName = this.globalService.getWalletName();
     this.coinUnit = this.globalService.getCoinUnit();
     this.hasColdStakingAccount = (localStorage.getItem("hasColdStaking" + this.walletName) === "true") ? true : false;
@@ -56,13 +56,13 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
       this.walletName,
       this.setupColdStakingAccountForm.get("password").value,
       true
-    )
+    );
     this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(() => {
       localStorage.setItem("hasColdStaking"  + this.walletName, "true");
       this.getColdStakingAccountAddress(this.walletName);
       this.getExtPubKey();
       this.hasColdStakingAccount = (localStorage.getItem("hasColdStaking" + this.walletName) === "true") ? true : false;
-    })
+    });
 
     this.snackbarService.add({
       msg: `This node has been set up as a cold staking wallet.`,
@@ -77,21 +77,21 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     const addressData = new ColdStakingAddress(
       walletName,
       true
-    )
+    );
 
     this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
       this.coldStakingAddress = response.address;
-    })
+    });
   }
 
   private getExtPubKey(): void {
     const walletInfo = new WalletInfo(this.walletName, "coldStakingColdAddresses");
     this.apiService.getExtPubkey(walletInfo)
       .toPromise().then(
-      response => {
-        this.extPubKey = response;
-      }
-    );
+        response => {
+          this.extPubKey = response;
+        }
+      );
   }
 
   public decodeUnsignedTransaction(): void {
@@ -102,15 +102,15 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
     this.decodedTransaction.fee = this.decodedTransaction.fee.replace(/,/g, '.');
     this.decodedTransaction.utxos.forEach(function (utxo) {
       utxo.amount = utxo.amount.replace(/,/g, '.');
-    })
+    });
     this.decodedTransaction.walletName = this.walletName;
     this.coldStakingService.invokeOfflineSignRequest(this.decodedTransaction).toPromise().then(response => {
       this.transactionHex = response.hex;
-    }).catch(error => {
+    }).catch(() => {
       this.unsignedTransaction = "";
       this.transactionHex = "";
       this.coldStakingForm.reset();
-    })
+    });
   }
 
   public confirmColdStakingSetup(): void {
@@ -124,7 +124,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
       this.walletName,
       this.recoveryForm.get("password").value,
       true
-    )
+    );
     this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(response => {
       if (response) {
         localStorage.setItem("hasColdStaking" + this.walletName, "true");
@@ -176,6 +176,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
 
   private buildSetupColdStakingAccountForm(): void {
     this.setupColdStakingAccountForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
 
@@ -196,7 +197,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessagesSetup[field];
         for (const key in control.errors) {
-          this.formErrorsSetup[field] += messages[key] + ' ';
+          this.formErrorsSetup[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -214,7 +215,9 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
 
   private buildColdStakingForm(): void {
     this.coldStakingForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       unsignedTransaction: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
 
@@ -235,7 +238,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.coldStakingFormValidationMessages[field];
         for (const key in control.errors) {
-          this.coldStakingFormErrors[field] += messages[key] + ' ';
+          this.coldStakingFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -257,6 +260,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
 
   private buildRecoveryForm(): void {
     this.recoveryForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
 
@@ -277,7 +281,7 @@ export class ColdWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.recoveryFormValidationMessages[field];
         for (const key in control.errors) {
-          this.recoveryFormErrors[field] += messages[key] + ' ';
+          this.recoveryFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }

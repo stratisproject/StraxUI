@@ -30,16 +30,16 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
   @Input() address: string;
 
   constructor(private globalService: GlobalService,
-      private addressBookService: AddressBookService,
-      private activatedRoute: ActivatedRoute,
-      private fb: FormBuilder,
-      public walletService: WalletService,
-      private taskBarService: TaskBarService) {
+              private addressBookService: AddressBookService,
+              private activatedRoute: ActivatedRoute,
+              private fb: FormBuilder,
+              public walletService: WalletService,
+              private taskBarService: TaskBarService) {
     this.sendForm = this.buildSendForm(fb);
 
     this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(500))
-      .subscribe(data => this.validateForm(data)));
-   }
+      .subscribe(() => this.validateForm()));
+  }
 
   public sendForm: FormGroup;
   public coinUnit: string;
@@ -72,7 +72,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     }
   }
 
-  private validateForm(data: any): void {
+  private validateForm(): void {
     try {
       FormHelper.ValidateForm(this.sendForm, this.sendFormErrors, this.sendValidationMessages);
       this.apiError = '';
@@ -127,24 +127,24 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
 
       this.walletService.estimateFee(transaction).toPromise()
         .then(response => {
-            this.estimatedFee = response;
-            this.last.response = response;
-            clearTimeout(progressDelay);
-            this.status.next({estimating: false});
-          },
-          error => {
-            clearTimeout(progressDelay);
-            this.status.next({estimating: false});
-            this.apiError = error.error.errors[0].message;
-            if (this.apiError == 'Invalid address') {
-              this.sendFormErrors.address = this.apiError;
-              this.last.error = this.apiError;
-            }
-          }
+          this.estimatedFee = response;
+          this.last.response = response;
+          clearTimeout(progressDelay);
+          this.status.next({estimating: false});
+        },
+              error => {
+                clearTimeout(progressDelay);
+                this.status.next({estimating: false});
+                this.apiError = error.error.errors[0].message;
+                if (this.apiError == 'Invalid address') {
+                  this.sendFormErrors.address = this.apiError;
+                  this.last.error = this.apiError;
+                }
+              }
         );
     } else if (transaction.equals(this.last) && !this.status.value.estimating) {
       this.estimatedFee = this.last.response;
-      this.sendFormErrors.address = this.last.error
+      this.sendFormErrors.address = this.last.error;
     }
   }
 
@@ -156,9 +156,9 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
         this.openConfirmationModal(transactionResponse);
         this.isSending = false;
       }).catch(error => {
-      this.isSending = false;
-      this.apiError = error.error.errors[0].message;
-    });
+        this.isSending = false;
+        this.apiError = error.error.errors[0].message;
+      });
   }
 
   private getTransaction(): Transaction {
@@ -219,14 +219,18 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
 
   private buildSendForm(fb: FormBuilder): FormGroup {
     return fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       address: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       changeAddressCheckbox: [false],
       changeAddress: ['', Validators.compose([Validators.minLength(26)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(0.00001),
         (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedFee)(control)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       fee: ['medium', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
   }

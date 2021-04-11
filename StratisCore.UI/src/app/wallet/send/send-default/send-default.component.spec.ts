@@ -10,7 +10,7 @@ describe('SendDefaultComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ SendDefaultComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -36,10 +36,11 @@ export class AddNodeComponent implements OnInit {
   private buildAddNodeForm(): void {
     this.addNodeForm = this.fb.group({
       nodeIP: ['', Validators.compose([
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.pattern(/^([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})$/)
       ])
-    ]});
+      ]});
 
     this.addNodeForm.valueChanges
       .subscribe(() => this.onValueChanged());
@@ -58,7 +59,7 @@ export class AddNodeComponent implements OnInit {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }

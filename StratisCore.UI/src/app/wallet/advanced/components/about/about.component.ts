@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { ApiService } from '@shared/services/api.service';
 import { NodeStatus } from '@shared/models/node-status';
 import { GlobalService } from '@shared/services/global.service';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '@shared/services/electron.service';
 
 @Component({
   selector: 'app-about',
@@ -20,11 +20,11 @@ export class AboutComponent implements OnInit {
   constructor(
     private globalService: GlobalService,
     private apiService: ApiService,
-    private electron: ElectronService
+    private electronService: ElectronService
   ) { }
 
   ngOnInit(): void {
-    this.isElectron = this.electron.isElectronApp;
+    this.isElectron = this.electronService.isElectron;
     this.applicationVersion = this.globalService.getApplicationVersion();
     this.gitCommit = this.globalService.getGitCommit();
     this.nodeStatusSubscription$ = this.apiService.getNodeStatusInterval();
@@ -34,6 +34,6 @@ export class AboutComponent implements OnInit {
   openWalletDirectory(directory: string): void {
     if (!this.isElectron) { return; }
 
-    this.electron.shell.showItemInFolder(directory);
+    this.electronService.shell.showItemInFolder(directory);
   }
 }

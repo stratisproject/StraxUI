@@ -9,7 +9,7 @@ import { WalletService } from '@shared/services/wallet.service';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { AccountSidebarItem } from '../wallet/side-bar-items/account-sidebar-item';
 import { WalletInfo } from '@shared/models/wallet-info';
-import { AuthenticationService } from '@shared/services/auth.service'
+import { AuthenticationService } from '@shared/services/auth.service';
 
 
 @Component({
@@ -57,7 +57,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private buildDecryptForm(): void {
     this.openWalletForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       selectWallet: [{value: '', disabled: this.isDecrypting}, Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: [{value: '', disabled: this.isDecrypting}, Validators.required]
     });
 
@@ -78,7 +80,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -97,7 +99,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             } else {
               this.wallets.push(new Wallets(wallet, false));
             }
-          })
+          });
         }
       ));
   }
@@ -156,7 +158,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 }
 
 export class Wallets {
-  constructor(walletName, isWatchOnly) {
+  constructor(walletName: string, isWatchOnly: boolean) {
     this.walletName = walletName;
     this.isWatchOnly = isWatchOnly;
   }

@@ -3,14 +3,17 @@ import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 
+// Initialize remote module
+require('@electron/remote/main').initialize();
+
 if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
 }
 
 const applicationName = 'Strax Wallet';
 const daemonName = 'Stratis.StraxD';
-const args = process.argv.slice(1);
 
+const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve' || val === '-serve');
 const testnet = args.some(val => val === '--testnet' || val === '-testnet');
 let nodaemon = args.some(val => val === '--nodaemon' || val === '-nodaemon');
@@ -67,8 +70,8 @@ function writeLog(msg): void {
   console.log(msg);
 }
 
-function writeError(msg) {
-  console.log("Error: " + msg);
+function writeError(msg: string) {
+  console.log(`Error: ${msg}`);
 }
 
 function createMenu(): void {
@@ -112,11 +115,11 @@ function shutdownDaemon(daemonAddr, portNumber): void {
     if (res.statusCode === 200) {
       writeLog('Request to shutdown daemon returned HTTP success code.');
     } else {
-      writeError('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
+      writeError(`Request to shutdown daemon returned HTTP failure code: ${Number(res.statusCode)}`);
     }
   });
 
-  req.on('error', (err) => {
+  req.on('error', () => {
     writeError('Request to shutdown daemon failed.');
   });
 
@@ -128,7 +131,7 @@ function shutdownDaemon(daemonAddr, portNumber): void {
 function startDaemon(): void {
   const spawnDaemon = require('child_process').spawn;
 
-  let daemonPath;
+  let daemonPath: string;
   if (os.platform() === 'win32') {
     daemonPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\' + daemonName + '.exe');
   } else if (os.platform() === 'linux') {
@@ -140,15 +143,15 @@ function startDaemon(): void {
   const spawnArgs = args.filter(arg => arg.startsWith('-'))
     .join('&').replace(/--/g, '-').split('&');
 
-  console.log('Starting daemon ' + daemonPath);
+  console.log(`Starting daemon ${daemonPath}`);
   console.log(spawnArgs);
 
-  let daemonProcess
+  let daemonProcess;
 
   if (os.platform() === 'win32') {
     daemonProcess = spawnDaemon(daemonPath, spawnArgs, {
       detached: false
-    })
+    });
   } else {
     daemonProcess = spawnDaemon(daemonPath, spawnArgs, {
       detached: true
@@ -156,7 +159,7 @@ function startDaemon(): void {
   }
 
 
-  daemonProcess.stdout.on('data', (data) => {
+  daemonProcess.stdout.on('data', (data: string) => {
     writeLog(`Stratis: ${data}`);
   });
 }
@@ -221,11 +224,16 @@ function createWindow(): void {
     title: applicationName,
     webPreferences: {
       nodeIntegration: true,
+      allowRunningInsecureContent: (serve) ? true : false,
+      contextIsolation: false,  // false if you want to run 2e2 test with Spectron
+      enableRemoteModule : true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
     },
   });
 
   if (serve) {
-    require('electron-reload')(__dirname, {});
+    require('electron-reload')(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
     mainWindow.loadURL('http://localhost:4200');
   } else {
     mainWindow.loadURL(url.format({

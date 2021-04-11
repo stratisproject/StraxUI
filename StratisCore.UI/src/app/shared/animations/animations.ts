@@ -26,10 +26,10 @@ export class Animations {
         animate(400)
       ]),
       transition(':leave',
-        animate(
-          400,
-          style({ opacity: 0 })
-        )
+                 animate(
+                   400,
+                   style({ opacity: 0 })
+                 )
       )
     ])
   ];
@@ -62,7 +62,7 @@ export class Animations {
         animate(400)
       ]),
       transition(':leave',
-        animate(400, style({opacity: 0})))
+                 animate(400, style({opacity: 0})))
     ])
   ];
 
@@ -98,5 +98,5 @@ export class Animations {
       transition('* => expanded', animate('200ms ease-out')),
       transition('expanded => collapsed', animate('150ms ease-in'))
     ])
-  ]
+  ];
 }

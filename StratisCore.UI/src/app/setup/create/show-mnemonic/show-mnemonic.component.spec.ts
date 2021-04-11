@@ -10,7 +10,7 @@ describe('ShowMnemonicComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ ShowMnemonicComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

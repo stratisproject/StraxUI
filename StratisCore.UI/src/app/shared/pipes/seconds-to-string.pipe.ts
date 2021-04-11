@@ -15,25 +15,25 @@ export class SecondsToStringPipe implements PipeTransform {
 
     if (numDays > 0) {
       if (numDays > 1) {
-        dateString += numDays + ' days ';
+        dateString += `${numDays} days `;
       } else {
-        dateString += numDays + ' day ';
+        dateString += `${numDays} day `;
       }
     }
 
     if (numHours > 0) {
       if (numHours > 1) {
-        dateString += numHours + ' hours ';
+        dateString += `${numHours} hours `;
       } else {
-        dateString += numHours + ' hour ';
+        dateString += `${numHours} hour `;
       }
     }
 
     if (numMinutes > 0) {
       if (numMinutes > 1) {
-        dateString += numMinutes + ' minutes ';
+        dateString += `${numMinutes} minutes `;
       } else {
-        dateString += numMinutes + ' minute ';
+        dateString += `${numMinutes} minute `;
       }
     }
 

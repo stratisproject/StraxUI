@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { StakingService } from '@shared/services/staking-service';
 import { SideBarItemBase } from '@shared/components/side-bar/side-bar-item-base';
 import { WalletService } from '@shared/services/wallet.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AccountSidebarItem extends SideBarItemBase {
   private balanceChanged: boolean;
   private selectedField: boolean;

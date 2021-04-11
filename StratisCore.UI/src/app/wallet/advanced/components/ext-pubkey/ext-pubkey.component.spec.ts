@@ -10,7 +10,7 @@ describe('ExtPubkeyComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ ExtPubkeyComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

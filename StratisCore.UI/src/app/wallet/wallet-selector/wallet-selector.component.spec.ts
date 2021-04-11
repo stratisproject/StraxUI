@@ -10,7 +10,7 @@ describe('WalletSelectorComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ WalletSelectorComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

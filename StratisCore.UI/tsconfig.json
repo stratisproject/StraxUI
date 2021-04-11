@@ -1,17 +1,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "module": "es2020",
     "outDir": "./dist/out-tsc",
+    "module": "es2020",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowJs": true,
     "target": "es5",
     "paths": {
-      "@shared/*": ["./src/app/shared/*"]
+      "@shared/*": ["./app/shared/*"]
     },
     "typeRoots": [
       "node_modules/@types"
@@ -23,10 +23,6 @@
       "dom"
     ]
   },
-  "files": [
-    "src/main.ts",
-    "src/polyfills.ts"
-  ],
   "include": [
     "src/**/*.d.ts"
   ],

@@ -7,7 +7,6 @@ import { ColdStakingAddress } from '@shared/models/cold-staking-address';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from 'ngx-snackbar';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ExtPubKeyImport } from '@shared/models/extpubkey-import';
 import { WalletService } from '@shared/services/wallet.service';
 import { ColdStakingSetup } from '@shared/models/cold-staking-setup';
@@ -31,9 +30,6 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public walletName: string;
   public hotStakingAddress: string;
   public creationDate: Date;
-  public minDate = new Date("2016-01-01");
-  public maxDate = new Date();
-  public bsConfig: Partial<BsDatepickerConfig>;
   public estimatedFee: number;
   public estimatedWithdrawFee: number;
   public hasEstimatedSetupFee = false;
@@ -50,7 +46,6 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     this.buildColdStakingForm();
     this.buildRecoveryForm();
     this.buildWithdrawColdFundsForm();
-    this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
     this.coinUnit = this.globalService.getCoinUnit();
   }
 
@@ -66,10 +61,10 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     const addressData = new ColdStakingAddress(
       walletName,
       false
-    )
+    );
     this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
       this.hotStakingAddress = response.address;
-    })
+    });
   }
 
   public confirmSetup(): void {
@@ -78,13 +73,13 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       this.walletName,
       this.passwordForm.get("password").value,
       false
-    )
+    );
     this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(response => {
       if (response) {
         const addressData = new ColdStakingAddress(
           this.walletName,
           false
-        )
+        );
         this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
           if (response) {
             this.hotStakingAddress = response.address;
@@ -100,7 +95,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
           } else {
             this.isConfirming = false;
           }
-        })
+        });
       } else {
         this.isConfirming = false;
       }
@@ -115,10 +110,10 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       +this.importPubKeyForm.get("selectBox").value, // account 0
       this.importPubKeyForm.get("walletName").value,
       recoveryDate
-    )
+    );
 
     this.walletService.importExtPubKey(extPubKeyImportData).toPromise().then(
-      response => {
+      () => {
         this.snackbarService.add({
           msg: `Succesfully imported your cold wallet extended public key.`,
           customClass: 'notify-snack-bar',
@@ -144,12 +139,12 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       this.estimatedFee / 100000000,
       null,
       true
-    )
+    );
     this.coldStakingService.invokePostSetupOfflineColdStakingApiCall(setupData).toPromise().then(response => {
       const objJsonStr = JSON.stringify(response);
       this.unsignedTransactionEncoded = Buffer.from(objJsonStr).toString("base64");
       this.hasColdStakingSetup = true;
-    })
+    });
   }
 
   private estimateColdStakingSetupFee(): void {
@@ -162,7 +157,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       0,
       null,
       true
-    )
+    );
     this.coldStakingService.postColdStakingSetupOfflineFeeEstimation(data).toPromise().then(response => {
       this.estimatedFee = response;
       this.hasEstimatedSetupFee = true;
@@ -187,7 +182,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     this.coldStakingService.invokePostColdStakingOfflineWithdrawalApiCall(withdrawData).toPromise().then(response => {
       const objJsonStr = JSON.stringify(response);
       this.unsignedWithdrawelTransactionEncoded = Buffer.from(objJsonStr).toString("base64");
-    })
+    });
   }
 
   private estimateOfflineWithdrawFee(): void {
@@ -205,7 +200,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       this.estimatedWithdrawFee = response;
       this.hasEstimatedWithdrawFee = true;
       this.isEstimatingWithdrawFee = false;
-    }).catch(error => {
+    }).catch(() => {
       this.isEstimatingWithdrawFee = false;
       this.hasEstimatedWithdrawFee = false;
     });
@@ -216,14 +211,14 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       this.walletName,
       this.recoveryForm.get("password").value,
       false
-    )
+    );
     this.coldStakingService.invokePostColdStakingAccountApiCall(data).toPromise().then(response => {
       if (response) {
         const addressData = new ColdStakingAddress(
           this.walletName,
           false
-        )
-        this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
+        );
+        this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(() => {
           localStorage.setItem("hasHotStaking" + this.walletName, "true");
           this.snackbarService.add({
             msg: `This node has been set up as a hot staking node`,
@@ -233,7 +228,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
             }
           });
           this.getHotStakingAccountAddress(this.walletName);
-        })
+        });
       }
     });
 
@@ -264,6 +259,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildPasswordForm(): void {
     this.passwordForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
 
@@ -284,7 +280,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -302,8 +298,11 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildImportPubKeyForm(): void {
     this.importPubKeyForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       selectBox: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       walletName: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       extPubKey: ['', Validators.required]
     });
 
@@ -324,7 +323,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.importPubKeyValidationMessages[field];
         for (const key in control.errors) {
-          this.importPubKeyFormErrors[field] += messages[key] + ' ';
+          this.importPubKeyFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -353,9 +352,13 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildColdStakingForm(): void {
     this.coldStakingForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       coldWalletName: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required, Validators.min(0)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       coldWalletAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       hotWalletAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])]
     });
 
@@ -376,7 +379,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.coldStakingFormValidationMessages[field];
         for (const key in control.errors) {
-          this.coldStakingFormErrors[field] += messages[key] + ' ';
+          this.coldStakingFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -409,6 +412,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildRecoveryForm(): void {
     this.recoveryForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
 
@@ -429,7 +433,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.recoveryFormValidationMessages[field];
         for (const key in control.errors) {
-          this.recoveryFormErrors[field] += messages[key] + ' ';
+          this.recoveryFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -447,8 +451,11 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildWithdrawColdFundsForm(): void {
     this.withdrawColdFundsForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       walletName: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       destinationAddress: ['', Validators.required]
     });
 
@@ -469,7 +476,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.withdrawColdFundsFormValidationMessages[field];
         for (const key in control.errors) {
-          this.withdrawColdFundsFormErrors[field] += messages[key] + ' ';
+          this.withdrawColdFundsFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }

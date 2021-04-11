@@ -10,7 +10,7 @@ describe('SendConfirmationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ SendConfirmationComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

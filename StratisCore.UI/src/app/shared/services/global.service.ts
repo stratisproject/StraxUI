@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '@shared/services/electron.service';
 import { WalletInfo } from '@shared/models/wallet-info';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { VERSION } from '../../../environments/version';
 
 @Injectable({
@@ -39,8 +39,8 @@ export class GlobalService {
   }
 
   public setApplicationVersion(): void {
-    if (this.electronService.isElectronApp) {
-      //this.applicationVersion = this.electronService.remote.app.getVersion();
+    if (this.electronService.isElectron) {
+      this.applicationVersion = this.electronService.remote.app.getVersion();
     }
 
     this.watchOnlySubject.next(false);
@@ -59,7 +59,7 @@ export class GlobalService {
   }
 
   public setTestnetEnabled(): void {
-    if (this.electronService.isElectronApp) {
+    if (this.electronService.isElectron) {
       this.testnet = this.electronService.ipcRenderer.sendSync('get-testnet');
     }
   }
@@ -69,7 +69,7 @@ export class GlobalService {
   }
 
   public setApiPort(): void {
-    if (this.electronService.isElectronApp) {
+    if (this.electronService.isElectron) {
       this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
     } else if (this.testnet) {
       this.apiPort = this.testApiPort;
@@ -124,7 +124,7 @@ export class GlobalService {
     return this.watchOnlySubject.asObservable();
   }
 
-  public setWalletWatchOnly(isWatchOnly: boolean) {
+  public setWalletWatchOnly(isWatchOnly: boolean): void {
     this.watchOnlySubject.next(isWatchOnly);
   }
 
@@ -141,7 +141,7 @@ export class GlobalService {
   }
 
   public setDaemonIP(): void {
-    if (this.electronService.isElectronApp) {
+    if (this.electronService.isElectron) {
       this.daemonIP = this.electronService.ipcRenderer.sendSync('get-daemonip');
     } else {
       this.daemonIP = 'localhost';

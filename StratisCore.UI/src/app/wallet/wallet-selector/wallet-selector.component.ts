@@ -22,10 +22,10 @@ export class WalletSelectorComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.walletService.getWalletNames()
+    this.walletService.getWalletNames();
     this.globalService.isWatchOnly().subscribe(boolean => {
       this.isWatchOnly = boolean;
-    })
+    });
   }
 
   public switchWallet(walletName: string): void {

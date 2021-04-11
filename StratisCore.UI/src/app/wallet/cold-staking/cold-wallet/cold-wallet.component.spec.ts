@@ -10,7 +10,7 @@ describe('ColdWalletComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ ColdWalletComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

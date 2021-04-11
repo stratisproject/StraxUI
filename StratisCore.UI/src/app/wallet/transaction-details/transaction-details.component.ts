@@ -53,10 +53,10 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     let addresses = null;
     if (this.transaction.payments) {
       addresses = this.transaction.payments.reduce((s, n) => {
-        return `${n.destinationAddress} ${s}`
+        return `${n.destinationAddress} ${s}`;
       }, '');
     }
-    return this.transaction.contact ? `${this.transaction.contact.label} - (${this.transaction.contact.address})` : addresses
+    return this.transaction.contact ? `${this.transaction.contact.label} - (${this.transaction.contact.address})` : addresses;
   }
 
   private subscribeToGeneralWalletInfo(): void {
@@ -76,7 +76,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   public createNewContact(address: string): void {
     const addressLabel = this.modalService.open(AddNewAddressComponent,
-      {backdrop: 'static'}).componentInstance;
+                                                {backdrop: 'static'}).componentInstance;
     addressLabel.addressForm.controls.address.setValue(address.split(' ')[0]);
   }
 }

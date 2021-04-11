@@ -10,7 +10,7 @@ describe('ReceiveComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ ReceiveComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
