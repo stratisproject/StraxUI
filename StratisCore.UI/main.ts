@@ -3,14 +3,17 @@ import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 
+// Initialize remote module
+require('@electron/remote/main').initialize();
+
 if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
 }
 
 const applicationName = 'Strax Wallet';
 const daemonName = 'Stratis.StraxD';
-const args = process.argv.slice(1);
 
+const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve' || val === '-serve');
 const testnet = args.some(val => val === '--testnet' || val === '-testnet');
 let nodaemon = args.some(val => val === '--nodaemon' || val === '-nodaemon');
@@ -221,11 +224,16 @@ function createWindow(): void {
     title: applicationName,
     webPreferences: {
       nodeIntegration: true,
+      allowRunningInsecureContent: (serve) ? true : false,
+      contextIsolation: false,  // false if you want to run 2e2 test with Spectron
+      enableRemoteModule : true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
     },
   });
 
   if (serve) {
-    require('electron-reload')(__dirname, {});
+    require('electron-reload')(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
     mainWindow.loadURL('http://localhost:4200');
   } else {
     mainWindow.loadURL(url.format({

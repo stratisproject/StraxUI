@@ -7,7 +7,6 @@ import { ColdStakingAddress } from '@shared/models/cold-staking-address';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from 'ngx-snackbar';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ExtPubKeyImport } from '@shared/models/extpubkey-import';
 import { WalletService } from '@shared/services/wallet.service';
 import { ColdStakingSetup } from '@shared/models/cold-staking-setup';
@@ -31,9 +30,6 @@ export class HotWalletComponent implements OnInit, OnDestroy {
   public walletName: string;
   public hotStakingAddress: string;
   public creationDate: Date;
-  public minDate = new Date("2016-01-01");
-  public maxDate = new Date();
-  public bsConfig: Partial<BsDatepickerConfig>;
   public estimatedFee: number;
   public estimatedWithdrawFee: number;
   public hasEstimatedSetupFee = false;
@@ -50,7 +46,6 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     this.buildColdStakingForm();
     this.buildRecoveryForm();
     this.buildWithdrawColdFundsForm();
-    this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
     this.coinUnit = this.globalService.getCoinUnit();
   }
 

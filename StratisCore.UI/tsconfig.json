@@ -9,6 +9,7 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowJs": true,
     "target": "es5",
     "paths": {
       "@shared/*": ["./src/app/shared/*"]
@@ -23,10 +24,6 @@
       "dom"
     ]
   },
-  "files": [
-    "src/main.ts",
-    "src/polyfills.ts"
-  ],
   "include": [
     "src/**/*.d.ts"
   ],

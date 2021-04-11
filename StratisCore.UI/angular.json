@@ -1,9 +1,12 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "stratis-core": {
+    "strax-ui": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -32,7 +35,6 @@
               "optimization": false,
               "outputHashing": "all",
               "sourceMap": true,
-              "extractCss": true,
               "namedChunks": false,
               "aot": false,
               "extractLicenses": true,
@@ -49,7 +51,6 @@
               "optimization": false,
               "outputHashing": "all",
               "sourceMap": true,
-              "extractCss": true,
               "namedChunks": false,
               "aot": false,
               "extractLicenses": true,
@@ -66,7 +67,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -84,24 +84,24 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "stratis-core:build"
+            "browserTarget": "strax-ui:build"
           },
           "configurations": {
             "dev": {
-              "browserTarget": "stratis-core:build:dev"
+              "browserTarget": "strax-ui:build:dev"
             },
             "web": {
-              "browserTarget": "stratis-core:build:web"
+              "browserTarget": "strax-ui:build:web"
             },
             "production": {
-              "browserTarget": "stratis-core:build:production"
+              "browserTarget": "strax-ui:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "stratis-core:build"
+            "browserTarget": "strax-ui:build"
           }
         },
         "test": {
@@ -128,14 +128,14 @@
           "options": {
             "eslintConfig": ".eslintrc.json",
             "lintFilePatterns": [
-              "src/**.ts",
+              "src/**/*.ts",
               "main.ts"
             ]
           }
         }
       }
     },
-    "stratis-core-e2e": {
+    "strax-ui-e2e": {
       "root": "e2e",
       "projectType": "application",
       "architect": {
@@ -144,14 +144,14 @@
           "options": {
             "eslintConfig": ".eslintrc.json",
             "lintFilePatterns": [
-              "e2e/**.ts"
+              "e2e/**/*.ts"
             ]
           }
         }
       }
     }
   },
-  "defaultProject": "stratis-core",
+  "defaultProject": "strax-ui",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
@@ -160,8 +160,5 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
-  },
-  "cli": {
-    "analytics": false
   }
 }
