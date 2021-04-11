@@ -13,10 +13,10 @@ import * as fs from 'fs';
 export class ElectronService {
   ipcRenderer: typeof ipcRenderer;
   webFrame: typeof webFrame;
+  shell: typeof shell;
   remote: typeof remote;
   childProcess: typeof childProcess;
   fs: typeof fs;
-  shell: typeof shell;
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
@@ -27,6 +27,7 @@ export class ElectronService {
     if (this.isElectron) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
+      this.shell = window.require('electron').shell
 
       // If you want to use remote object in renderer process, please set enableRemoteModule to true in main.ts
       this.remote = window.require('@electron/remote');
