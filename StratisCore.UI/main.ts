@@ -70,8 +70,8 @@ function writeLog(msg): void {
   console.log(msg);
 }
 
-function writeError(msg) {
-  console.log("Error: " + msg);
+function writeError(msg: string) {
+  console.log(`Error: ${msg}`);
 }
 
 function createMenu(): void {
@@ -115,11 +115,11 @@ function shutdownDaemon(daemonAddr, portNumber): void {
     if (res.statusCode === 200) {
       writeLog('Request to shutdown daemon returned HTTP success code.');
     } else {
-      writeError('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
+      writeError(`Request to shutdown daemon returned HTTP failure code: ${Number(res.statusCode)}`);
     }
   });
 
-  req.on('error', (err) => {
+  req.on('error', () => {
     writeError('Request to shutdown daemon failed.');
   });
 
@@ -131,7 +131,7 @@ function shutdownDaemon(daemonAddr, portNumber): void {
 function startDaemon(): void {
   const spawnDaemon = require('child_process').spawn;
 
-  let daemonPath;
+  let daemonPath: string;
   if (os.platform() === 'win32') {
     daemonPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\' + daemonName + '.exe');
   } else if (os.platform() === 'linux') {
@@ -143,7 +143,7 @@ function startDaemon(): void {
   const spawnArgs = args.filter(arg => arg.startsWith('-'))
     .join('&').replace(/--/g, '-').split('&');
 
-  console.log('Starting daemon ' + daemonPath);
+  console.log(`Starting daemon ${daemonPath}`);
   console.log(spawnArgs);
 
   let daemonProcess;
@@ -159,7 +159,7 @@ function startDaemon(): void {
   }
 
 
-  daemonProcess.stdout.on('data', (data) => {
+  daemonProcess.stdout.on('data', (data: string) => {
     writeLog(`Stratis: ${data}`);
   });
 }

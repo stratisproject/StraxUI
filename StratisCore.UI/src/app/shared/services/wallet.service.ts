@@ -123,7 +123,7 @@ export class WalletService extends RestApi {
     );
   }
 
-  public removeWallet(walletName: string) {
+  public removeWallet(walletName: string): Observable<any> {
     const params = new HttpParams()
       .set('walletName', walletName);
 

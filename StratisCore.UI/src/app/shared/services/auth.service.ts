@@ -14,11 +14,11 @@ export class AuthenticationService {
     return this.authorized;
   }
 
-  SignIn() {
+  SignIn(): void {
     this.authorized = true;
   }
 
-  SignOut() {
+  SignOut(): void {
     this.authorized = false;
   }
 }

@@ -113,7 +113,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
     );
 
     this.walletService.importExtPubKey(extPubKeyImportData).toPromise().then(
-      response => {
+      () => {
         this.snackbarService.add({
           msg: `Succesfully imported your cold wallet extended public key.`,
           customClass: 'notify-snack-bar',
@@ -200,7 +200,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       this.estimatedWithdrawFee = response;
       this.hasEstimatedWithdrawFee = true;
       this.isEstimatingWithdrawFee = false;
-    }).catch(error => {
+    }).catch(() => {
       this.isEstimatingWithdrawFee = false;
       this.hasEstimatedWithdrawFee = false;
     });
@@ -218,7 +218,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
           this.walletName,
           false
         );
-        this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(response => {
+        this.coldStakingService.invokeGetColdStakingAddressApiCall(addressData).toPromise().then(() => {
           localStorage.setItem("hasHotStaking" + this.walletName, "true");
           this.snackbarService.add({
             msg: `This node has been set up as a hot staking node`,
@@ -259,6 +259,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildPasswordForm(): void {
     this.passwordForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
 
@@ -279,7 +280,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -297,8 +298,11 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildImportPubKeyForm(): void {
     this.importPubKeyForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       selectBox: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       walletName: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       extPubKey: ['', Validators.required]
     });
 
@@ -319,7 +323,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.importPubKeyValidationMessages[field];
         for (const key in control.errors) {
-          this.importPubKeyFormErrors[field] += messages[key] + ' ';
+          this.importPubKeyFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -348,9 +352,13 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildColdStakingForm(): void {
     this.coldStakingForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       coldWalletName: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required, Validators.min(0)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       coldWalletAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       hotWalletAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])]
     });
 
@@ -371,7 +379,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.coldStakingFormValidationMessages[field];
         for (const key in control.errors) {
-          this.coldStakingFormErrors[field] += messages[key] + ' ';
+          this.coldStakingFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -404,6 +412,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildRecoveryForm(): void {
     this.recoveryForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
 
@@ -424,7 +433,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.recoveryFormValidationMessages[field];
         for (const key in control.errors) {
-          this.recoveryFormErrors[field] += messages[key] + ' ';
+          this.recoveryFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -442,8 +451,11 @@ export class HotWalletComponent implements OnInit, OnDestroy {
 
   private buildWithdrawColdFundsForm(): void {
     this.withdrawColdFundsForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       walletName: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       destinationAddress: ['', Validators.required]
     });
 
@@ -464,7 +476,7 @@ export class HotWalletComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.withdrawColdFundsFormValidationMessages[field];
         for (const key in control.errors) {
-          this.withdrawColdFundsFormErrors[field] += messages[key] + ' ';
+          this.withdrawColdFundsFormErrors[field] += `${String(messages[key])} `;
         }
       }
     }

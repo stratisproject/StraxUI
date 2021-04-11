@@ -37,19 +37,25 @@ export class RecoverComponent implements OnInit, OnDestroy {
   private buildRecoverForm(): void {
     this.recoverWalletForm = this.fb.group({
       walletName: ["", [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(24),
         Validators.pattern(/^[a-zA-Z0-9]*$/)
       ]
       ],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       walletMnemonic: ["", Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       walletPassword: ["", Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       walletPasswordConfirmation: ["", Validators.required],
       walletPassphrase: [""],
       walletPassphraseConfirmation: [""],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       selectNetwork: ["test", Validators.required]
     }, {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       validator: PasswordValidationDirective.MatchPassword
     });
 
@@ -75,7 +81,7 @@ export class RecoverComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }
@@ -149,13 +155,16 @@ export class RecoverComponent implements OnInit, OnDestroy {
 
     if (passphraseValue.length) {
       // passphrase and confirmation should be required if passphrase is not null
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       passphrase.setValidators(Validators.required);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       passphraseConfirmation.setValidators(Validators.required);
 
       // Update form group validators to include MatachPassword and MatchPassphrase
       this.recoverWalletForm.setValidators([
-
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         PasswordValidationDirective.MatchPassword,
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         PasswordValidationDirective.MatchPassphrase
       ]);
     } else { // Else, passphrase field is null, clear validators
@@ -172,6 +181,7 @@ export class RecoverComponent implements OnInit, OnDestroy {
 
       // clear then set MatchPassword validator on form
       this.recoverWalletForm.clearValidators();
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       this.recoverWalletForm.setValidators(PasswordValidationDirective.MatchPassword);
     }
 

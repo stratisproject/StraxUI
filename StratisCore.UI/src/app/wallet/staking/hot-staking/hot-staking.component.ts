@@ -38,6 +38,7 @@ export class HotStakingComponent implements OnInit, OnDestroy {
 
   private buildStakingForm(): void {
     this.stakingForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       walletPassword: ['', Validators.required]
     });
   }

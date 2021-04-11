@@ -69,7 +69,7 @@ export class ColdStakingService extends RestApi {
     this.coldStakingAccount = accountName;
   }
 
-  public postColdStakingSetupFeeEstimation(data: ColdStakingSetup) {
+  public postColdStakingSetupFeeEstimation(data: ColdStakingSetup): Observable<any> {
     return this.post('coldstaking/estimate-cold-staking-setup-tx-fee', data).pipe(
       catchError(err => {
         return this.handleHttpError(err);
@@ -77,7 +77,7 @@ export class ColdStakingService extends RestApi {
     );
   }
 
-  public postColdStakingSetupOfflineFeeEstimation(data: ColdStakingSetup) {
+  public postColdStakingSetupOfflineFeeEstimation(data: ColdStakingSetup): Observable<any> {
     return this.post('coldstaking/estimate-offline-cold-staking-setup-tx-fee', data).pipe(
       catchError(err => {
         return this.handleHttpError(err);
@@ -85,7 +85,7 @@ export class ColdStakingService extends RestApi {
     );
   }
 
-  public postColdStakingWithdrawOfflineFeeEstimation(data: ColdStakingWithdrawal) {
+  public postColdStakingWithdrawOfflineFeeEstimation(data: ColdStakingWithdrawal): Observable<any> {
     return this.post('coldStaking/estimate-offline-cold-staking-withdrawal-tx-fee', data).pipe(
       catchError(err => {
         return this.handleHttpError(err);

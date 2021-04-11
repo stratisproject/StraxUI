@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { SideBarItemBase } from '@shared/components/side-bar/side-bar-item-base';
 import { GlobalService } from '@shared/services/global.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ContactsSidebarItem extends SideBarItemBase {
   constructor(private globalService: GlobalService) {
     super('Contacts', '/wallet/address-book', ['side-bar-item-address']);

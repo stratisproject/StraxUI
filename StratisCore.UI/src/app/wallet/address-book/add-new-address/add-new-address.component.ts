@@ -43,7 +43,9 @@ export class AddNewAddressComponent {
 
   private buildAddressForm(): void {
     this.addressForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       'label': ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(40)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       'address': ['', Validators.required],
     });
 
@@ -62,7 +64,7 @@ export class AddNewAddressComponent {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }

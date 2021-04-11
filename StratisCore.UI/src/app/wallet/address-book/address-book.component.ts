@@ -53,6 +53,6 @@ export class AddressBookComponent implements OnInit {
   }
 
   public addNewAddressClicked(): void {
-    const addressLabel =  this.modalService.open(AddNewAddressComponent, {backdrop: 'static'});
+    this.modalService.open(AddNewAddressComponent, {backdrop: 'static'});
   }
 }

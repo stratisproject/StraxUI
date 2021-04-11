@@ -38,7 +38,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     this.sendForm = this.buildSendForm(fb);
 
     this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(500))
-      .subscribe(data => this.validateForm(data)));
+      .subscribe(() => this.validateForm()));
   }
 
   public sendForm: FormGroup;
@@ -72,7 +72,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     }
   }
 
-  private validateForm(data: any): void {
+  private validateForm(): void {
     try {
       FormHelper.ValidateForm(this.sendForm, this.sendFormErrors, this.sendValidationMessages);
       this.apiError = '';
@@ -219,14 +219,18 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
 
   private buildSendForm(fb: FormBuilder): FormGroup {
     return fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       address: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       changeAddressCheckbox: [false],
       changeAddress: ['', Validators.compose([Validators.minLength(26)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(0.00001),
         (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedFee)(control)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       fee: ['medium', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
   }

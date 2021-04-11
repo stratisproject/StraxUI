@@ -63,9 +63,9 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     this.interoperabilityForm = this.buildInteroperabilityForm(fb);
 
     this.subscriptions.push(this.interoperabilityForm.valueChanges.pipe(debounceTime(500))
-      .subscribe(data => this.validateForm(data)));
+      .subscribe(() => this.validateForm()));
 
-    this.subscriptions.push(this.interoperabilityForm.get('networkSelect').valueChanges.subscribe(data => this.networkSelectChanged(data)));
+    this.subscriptions.push(this.interoperabilityForm.get('networkSelect').valueChanges.subscribe(() => this.networkSelectChanged()));
   }
 
   ngOnInit(): void {
@@ -99,7 +99,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     }
   }
 
-  private validateForm(data: any): void {
+  private validateForm(): void {
     try {
       FormHelper.ValidateForm(this.interoperabilityForm, this.interoperabilityFormErrors, this.interoperabilityFormValidationMessages);
       this.apiError = '';
@@ -112,7 +112,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     }
   }
 
-  private networkSelectChanged(data: any): void {
+  private networkSelectChanged(): void {
     if (this.interoperabilityForm.get('networkSelect').value && this.interoperabilityForm.get('networkSelect').value !== 'customNetwork') {
       this.interoperabilityForm.patchValue({'federationAddress': this.interoperabilityForm.get('networkSelect').value});
     } else if (this.interoperabilityForm.get('networkSelect').value && this.interoperabilityForm.get('networkSelect').value === 'customNetwork') {
@@ -250,18 +250,25 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 
   public buildInteroperabilityForm(fb: FormBuilder): FormGroup {
     return fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       tacAgreed: ['', Validators.requiredTrue],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       networkSelect: ['', Validators.compose([Validators.required])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       destinationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       changeAddressCheckbox: [false],
       changeAddress: ['', Validators.compose([Validators.minLength(26)])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(this.minimumInteroperabilityAmount),
         (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedSidechainFee)(control)
       ])],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       fee: ['medium', Validators.required],
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       password: ['', Validators.required]
     });
   }
@@ -306,7 +313,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     }
   };
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.resetInteroperabilityForm();
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }

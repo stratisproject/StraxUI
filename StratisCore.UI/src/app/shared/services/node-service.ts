@@ -148,7 +148,7 @@ export class NodeService extends RestApi {
     message.percentSynced = percentSynced;
   }
 
-  public getBlockHash(height: number) {
+  public getBlockHash(height: number): Observable<any> {
     const params = new HttpParams()
       .set('height', height.toString());
 
@@ -157,7 +157,7 @@ export class NodeService extends RestApi {
     );
   }
 
-  public getBlockInfo(hash: string) {
+  public getBlockInfo(hash: string): Observable<any> {
     const params = new HttpParams()
       .set('hash', hash)
       .set('outputJson', 'true');

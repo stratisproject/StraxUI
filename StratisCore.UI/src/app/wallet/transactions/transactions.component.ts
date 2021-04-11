@@ -63,7 +63,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public pageChanged(event){
+  public pageChanged(event: any): void {
     this.paginationConfig.currentPage = event;
   }
 
@@ -83,7 +83,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public showTransactionDetails(transaction: TransactionInfo) {
+  public showTransactionDetails(transaction: TransactionInfo): void {
     this.taskBarService.open(TransactionDetailsComponent, {transaction: transaction}, {
       showCloseButton: true,
       taskBarWidth: '600px',

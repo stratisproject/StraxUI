@@ -11,7 +11,7 @@ export class ColdStakingComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }

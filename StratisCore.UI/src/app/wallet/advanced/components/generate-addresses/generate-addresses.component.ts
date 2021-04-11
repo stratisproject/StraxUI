@@ -38,6 +38,7 @@ export class GenerateAddressesComponent implements OnInit {
 
   private buildGenerateAddressesForm(): void {
     this.generateAddressesForm = this.fb.group({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       'generateAddresses': ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(1), Validators.max(1000)])]
     });
 
@@ -56,7 +57,7 @@ export class GenerateAddressesComponent implements OnInit {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }

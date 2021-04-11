@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from '@shared/services/electron.service';
 import { WalletInfo } from '@shared/models/wallet-info';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { VERSION } from '../../../environments/version';
 
 @Injectable({
@@ -124,7 +124,7 @@ export class GlobalService {
     return this.watchOnlySubject.asObservable();
   }
 
-  public setWalletWatchOnly(isWatchOnly: boolean) {
+  public setWalletWatchOnly(isWatchOnly: boolean): void {
     this.watchOnlySubject.next(isWatchOnly);
   }
 

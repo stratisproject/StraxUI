@@ -1,7 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { GeneralInfo, WalletBalance } from '@shared/services/interfaces/api.i';
+import { Subscription } from 'rxjs';
 import { NodeService } from '@shared/services/node-service';
 import { WalletService } from '@shared/services/wallet.service';
 import { GlobalService } from '@shared/services/global.service';

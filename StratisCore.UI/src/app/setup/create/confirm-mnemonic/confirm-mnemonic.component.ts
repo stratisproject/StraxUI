@@ -77,6 +77,7 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
     this.mnemonicForm = this.fb.group({
       'word1': ['',
         Validators.compose([
+          // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.required,
           Validators.minLength(1),
           Validators.maxLength(24),
@@ -85,6 +86,7 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
       ],
       'word2': ['',
         Validators.compose([
+          // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.required,
           Validators.minLength(1),
           Validators.maxLength(24),
@@ -93,6 +95,7 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
       ],
       'word3': ['',
         Validators.compose([
+          // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.required,
           Validators.minLength(1),
           Validators.maxLength(24),
@@ -118,7 +121,7 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          this.formErrors[field] += `${String(messages[key])} `;
         }
       }
     }

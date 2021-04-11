@@ -36,7 +36,7 @@ export class ReceiveComponent implements OnInit {
     this.getUnusedReceiveAddresses();
   }
 
-  public copyToClipboardClicked(address): void {
+  public copyToClipboardClicked(address: string): void {
     if (this.clipboardService.copyFromContent(address)) {
       this.snackbarService.add({
         msg: `Address ${address} copied to clipboard`,

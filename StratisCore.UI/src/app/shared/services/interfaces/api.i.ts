@@ -1,5 +1,3 @@
-import { LoggerService } from "@shared/services/logger.service";
-
 export interface WalletNamesData {
   walletNames: Array<string>;
   watchOnlyWallets: Array<string>;
