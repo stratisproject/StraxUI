@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
 import { retryWhen, delay, tap } from 'rxjs/operators';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '@shared/services/electron.service';
 import { GlobalService } from '@shared/services/global.service';
 import { NodeService } from '@shared/services/node-service';
 import { FullNodeEventModel } from '@shared/services/interfaces/api.i';

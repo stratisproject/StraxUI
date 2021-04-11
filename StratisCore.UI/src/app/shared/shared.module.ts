@@ -5,7 +5,6 @@ import { NumberToStringPipe } from './pipes/number-to-string.pipe';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
 import { PasswordValidationDirective } from './directives/password-validation.directive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxElectronModule } from 'ngx-electron';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -25,6 +24,7 @@ import { TaskBarService } from '@shared/services/task-bar-service';
 import { WalletInitializingComponent } from './components/wallet-initializing/wallet-initializing.component';
 import { WalletInitializingFailedComponent } from './components/wallet-initializing-failed/wallet-initializing-failed.component';
 import { LoggerService } from './services/logger.service';
+import { ElectronService } from './services/electron.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -49,14 +49,14 @@ import { LoggerService } from './services/logger.service';
     SignalRService,
     StakingService,
     TaskBarService,
-    LoggerService
+    LoggerService,
+    ElectronService
   ],
   exports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     NgbModule,
-    NgxElectronModule,
     NgxQRCodeModule,
     NgxPaginationModule,
     ClipboardModule,
