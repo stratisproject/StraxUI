@@ -7,7 +7,6 @@ import { ElectronService } from '@shared/services/electron.service';
 import { GlobalService } from '@shared/services/global.service';
 import { NodeService } from '@shared/services/node-service';
 import { FullNodeEventModel } from '@shared/services/interfaces/api.i';
-import { SignalRService } from '@shared/services/signalr-service';
 import { ApiService } from '@shared/services/api.service';
 
 @Component({
@@ -17,7 +16,7 @@ import { ApiService } from '@shared/services/api.service';
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private globalService: GlobalService, private apiService: ApiService, private titleService: Title, private electronService: ElectronService, private nodeService: NodeService, private signalRService: SignalRService) {
+  constructor(private router: Router, private globalService: GlobalService, private apiService: ApiService, private titleService: Title, private electronService: ElectronService, private nodeService: NodeService) {
   }
 
   public fullNodeEvent: Observable<FullNodeEventModel>;
