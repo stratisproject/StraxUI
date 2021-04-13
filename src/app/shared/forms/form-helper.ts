@@ -8,7 +8,7 @@ export class FormHelper {
         const control = form.controls[field];
         if (control && control.dirty && !control.valid) {
           const messages = errorResources[field];
-          Object.keys(control.errors).forEach(key => errorObject[field] = (errorObject[field] || '') + messages[key] + ' ');
+          Object.keys(control.errors).forEach(key => errorObject[field] = errorObject[field] += `${String(messages[key])} `);
         }
       });
     }

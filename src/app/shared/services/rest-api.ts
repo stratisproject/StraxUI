@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Observable } from 'rxjs';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
-import { LoggerService } from './logger.service';
+import { LoggerService } from '@shared/services/logger.service';
 
 export class RestApi {
   protected API_URL: string;
