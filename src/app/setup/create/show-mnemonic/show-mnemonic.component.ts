@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { WalletCreation } from '@shared/models/wallet-creation';
-import { GlobalService } from '@shared/services/global.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { SnackbarService } from 'ngx-snackbar';
 
@@ -13,7 +12,7 @@ import { SnackbarService } from 'ngx-snackbar';
   styleUrls: ['./show-mnemonic.component.scss']
 })
 export class ShowMnemonicComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute, private router: Router, private globalService: GlobalService, private clipboardService: ClipboardService, private snackbarService: SnackbarService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private clipboardService: ClipboardService, private snackbarService: SnackbarService) { }
   private mnemonic: string;
   private subscription: Subscription;
   private newWallet: WalletCreation;
