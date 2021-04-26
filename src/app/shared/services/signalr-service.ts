@@ -12,7 +12,7 @@ import { LoggerService } from '@shared/services/logger.service';
 
 export interface SignalRConnectionInfo {
   signalRUri: string;
-  //signalRPort: string;
+  signalRPort: string;
 }
 
 export interface SignalRMessageHandler {
@@ -60,8 +60,7 @@ export class SignalRService extends RestApi implements ISignalRService {
       }
 
       this.connection = new signalR.HubConnectionBuilder()
-        //.withUrl(`http://${this.globalService.getDaemonIP()}:${con.signalRPort}/${hubName}-hub`, {})
-        .withUrl(`${con.signalRUri}/${hubName}-hub`, {})
+        .withUrl(`http://${this.globalService.getDaemonIP()}:${con.signalRPort}/${hubName}-hub`, {})
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
