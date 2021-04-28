@@ -73,11 +73,11 @@ export class WalletService extends RestApi {
                                                                  this.refreshWallet();
                                                                });
 
-    // Temporary workaround -> change to block staked signalR event
-    signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.BlockConnected,
-                                                               () => {
-                                                                 this.refreshWallet();
-                                                               });
+    // This will cover sending and receiving as well as staking events.
+    signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.WalletProcessedTransactionOfInterestEvent,
+    () => {
+      this.refreshWallet();
+    });
 
     this.nodeService.generalInfo().subscribe(generalInfo => {
       if (generalInfo.percentSynced === 100 && this.rescanInProgress) {
