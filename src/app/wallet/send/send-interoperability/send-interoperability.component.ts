@@ -51,7 +51,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public interoperabilityFormErrors: any = {};
   private last: FeeEstimation = null;
-  private minimumInteroperabilityAmount = 1000;
+  private minimumInteroperabilityAmount = 90000;
 
   constructor(private fb: FormBuilder,
               private globalService: GlobalService,
