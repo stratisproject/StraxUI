@@ -19,7 +19,9 @@ const testnet = args.some(val => val === '--testnet' || val === '-testnet');
 let nodaemon = args.some(val => val === '--nodaemon' || val === '-nodaemon');
 const devtools = args.some(val => val === '--devtools' || val === '-devtools');
 
-args.push('--dbtype=rocksdb');
+if (os.platform() === 'darwin') {
+  args.push('-dbtype=rocksdb');
+}
 
 // Set default API port according to network
 let apiPortDefault;
