@@ -66,14 +66,7 @@ export class WalletService extends RestApi {
       this.currentWallet = wallet;
     });
 
-    // When we get a TransactionReceived event get the WalletBalance and History using the RestApi
-    signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.TransactionReceived,
-                                                               (message) => {
-                                                                 this.transactionReceivedSubject.next(message);
-                                                                 this.refreshWallet();
-                                                               });
-
-    // This will cover sending and receiving as well as staking events.
+    // This covers sending and receiving as well as staking/mining events.
     signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.WalletProcessedTransactionOfInterestEvent,
     () => {
       this.refreshWallet();
@@ -192,8 +185,13 @@ export class WalletService extends RestApi {
 
   public getHistory(): void {
     this.loadingSubject.next(true);
+  
+     let extra = Object.assign({}, {
+      skip: 0,
+      take: 1000
+     }) as { [key: string]: any };
 
-    this.get<WalletHistory>('wallet/history', this.getWalletParams(this.currentWallet))
+    this.get<WalletHistory>('wallet/history', this.getWalletParams(this.currentWallet, extra))
       .pipe(map((response) => {
         return response.history[0].transactionsHistory;
       }),
