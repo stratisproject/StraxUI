@@ -42,8 +42,13 @@ export class TransactionInfo {
   }
 
   public static mapFromTransactionsHistoryItem(transaction: TransactionsHistoryItem, addressBookService?: AddressBookService): TransactionInfo {
-    const contact = addressBookService ? transaction.payments
-      .map(payment => addressBookService.findContactByAddress(payment.destinationAddress)).find(p => p != null) : null;
+
+    var contact = null;
+    if(addressBookService != null) {
+      if (transaction.payments !== undefined && transaction.payments.length > 0) {
+        contact = transaction.payments.map(payment => addressBookService.findContactByAddress(payment.destinationAddress)).find(p => p != null) : null;
+      }
+    }
 
     return new TransactionInfo(
       transaction.type === 'send' ? 'sent' : transaction.type,
@@ -52,6 +57,9 @@ export class TransactionInfo {
       transaction.fee || 0,
       transaction.txOutputIndex,
       transaction.confirmedInBlock,
-      transaction.timestamp, transaction.payments, transaction.toAddress, contact);
+      transaction.timestamp, 
+      transaction.payments, 
+      transaction.toAddress, 
+      contact);
   }
 }
