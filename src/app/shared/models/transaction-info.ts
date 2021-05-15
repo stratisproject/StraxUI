@@ -46,7 +46,7 @@ export class TransactionInfo {
     var contact = null;
     if(addressBookService != null) {
       if (transaction.payments !== undefined && transaction.payments.length > 0) {
-        contact = transaction.payments.map(payment => addressBookService.findContactByAddress(payment.destinationAddress)).find(p => p != null) : null;
+        contact = transaction.payments.map(payment => addressBookService.findContactByAddress(payment.destinationAddress)).find(p => p != null);
       }
     }
 
