@@ -128,6 +128,37 @@ function shutdownDaemon(daemonAddr, portNumber): void {
   req.setHeader('content-type', 'application/json-patch+json');
   req.write('true');
   req.end();
+
+  writeLog('Waiting for shutdown to end...');
+
+  var shutDownCompleted = false;
+  do {
+    const http = require('http');
+    const options = {
+      hostname: daemonAddr,
+      port: portNumber,
+      path: '/api/node/status',
+      method: 'GET'
+    };
+  
+    const req = http.request(options);
+  
+    req.on('response', (res) => {
+      if (res.statusCode === 200) {
+        writeLog('Node is still shutting down...');
+      } else {
+        shutDownCompleted = true;
+      }
+    });
+  
+    req.on('error', () => {
+      writeError('Node has shutdown...');
+      shutDownCompleted = true;
+    });
+
+    if(shutdownDaemon)
+      break;
+  } while(true)
 }
 
 function startDaemon(): void {
@@ -294,11 +325,11 @@ app.on('before-quit', () => {
   }
 });
 
-app.on('quit', () => {
-  if (!serve && !nodaemon) {
-    shutdownDaemon(daemonIP, apiPort);
-  }
-});
+// app.on('quit', () => {
+//   if (!serve && !nodaemon) {
+//     shutdownDaemon(daemonIP, apiPort);
+//   }
+// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
