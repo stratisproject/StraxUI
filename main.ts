@@ -104,14 +104,15 @@ function createMenu(): void {
 function shutdownDaemon(daemonAddr, portNumber): void {
   writeLog('Sending POST request to shut down daemon.');
   const http = require('http');
-  const options = {
+  
+  var options = {
     hostname: daemonAddr,
     port: portNumber,
     path: '/api/node/shutdown',
     method: 'POST'
   };
 
-  const req = http.request(options);
+  var req = http.request(options);
 
   req.on('response', (res) => {
     if (res.statusCode === 200) {
@@ -132,16 +133,19 @@ function shutdownDaemon(daemonAddr, portNumber): void {
   writeLog('Waiting for shutdown to end...');
 
   var shutDownCompleted = false;
+
   do {
-    const http = require('http');
-    const options = {
+
+    writeLog('Calling not status...');
+
+    options = {
       hostname: daemonAddr,
       port: portNumber,
       path: '/api/node/status',
       method: 'GET'
     };
   
-    const req = http.request(options);
+    req = http.request(options);
   
     req.on('response', (res) => {
       if (res.statusCode === 200) {
@@ -156,8 +160,14 @@ function shutdownDaemon(daemonAddr, portNumber): void {
       shutDownCompleted = true;
     });
 
-    if(shutdownDaemon)
+    req.setHeader('content-type', 'application/json-patch+json');
+    req.write('true');
+    req.end();
+
+    if(shutDownCompleted)
       break;
+
+    setTimeout(function(){}, 1000)
   } while(true)
 }
 
