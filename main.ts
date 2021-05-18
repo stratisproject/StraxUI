@@ -189,7 +189,7 @@ function waitForShutdown(daemonAddr, portNumber): boolean {
     method: 'GET'
   };
   
-  do {
+//  do {
 
     var callback = function(response) {
       response.on('data', function (chunk) {
@@ -208,9 +208,9 @@ function waitForShutdown(daemonAddr, portNumber): boolean {
     }
     
     http.request(options, callback).end();
-    if(shutDownCompleted)
-      break;
-  } while(true)
+  //   if(shutDownCompleted)
+  //     break;
+  // } while(true)
 
   return true;
 }
