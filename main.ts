@@ -131,44 +131,6 @@ function shutdownDaemon(daemonAddr, portNumber): void {
   req.end();
 }
 
-function waitForShutdown(daemonAddr, portNumber): boolean {
-
-  var shutDownCompleted = false;
-
-  writeLog('Waiting for shutdown to end...');
-  
-  const http = require('http');
-
-  var options = {
-    hostname: daemonAddr,
-    port: portNumber,
-    path: '/api/node/status',
-    method: 'GET'
-  };
-  
-  var callback = function(response) {
-
-    writeLog(response.statusCode);
-
-    response.on('data', function (chunk) {
-      writeLog('Node is still shutting down...');
-    });
-
-    response.on('error', error => {
-      writeError('Node has shutdown...');
-      shutDownCompleted = true;
-    });
-  
-    response.on('end', function () {
-      writeLog('Call completed...');
-    });
-  }
-      
-  http.request(options, callback).end();
-
-  return shutDownCompleted;
-}
-
 function startDaemon(): void {
   const spawnDaemon = require('child_process').spawn;
 
@@ -344,6 +306,53 @@ app.on('before-quit', async (event) => {
     }      
   }
 });
+
+function waitForShutdown(daemonAddr, portNumber): boolean {
+
+  var shutDownCompleted = false;
+
+  writeLog('Waiting for shutdown to end...');
+  
+  const http = require('http');
+
+  var options = {
+    hostname: daemonAddr,
+    port: portNumber,
+    path: '/api/node/status',
+    method: 'GET'
+  };
+  
+  var callback = function(error, response) {
+
+    writeLog(error);
+    
+    if(error)
+    {
+      shutDownCompleted = true;
+    }
+    else
+    {
+      writeLog(response.statusCode);
+
+      response.on('data', function (chunk) {
+        writeLog('Node is still shutting down...');
+      });
+
+      response.on('error', error => {
+        writeError('Node has shutdown...');
+        shutDownCompleted = true;
+      });
+    
+      response.on('end', function () {
+        writeLog('Call completed...');
+      });
+    }
+  }
+      
+  http.request(options, callback).end();
+
+  return shutDownCompleted;
+}
 
 // app.on('quit', () => {
 //   if (!serve && !nodaemon) {
