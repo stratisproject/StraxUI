@@ -322,7 +322,7 @@ function waitForShutdown(daemonAddr, portNumber): boolean {
     method: 'GET'
   };
   
-  var callback = function(error, response) {
+  var callback = function(response, error) {
 
     writeLog(error);
     
