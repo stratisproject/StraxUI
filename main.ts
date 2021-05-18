@@ -101,7 +101,7 @@ function createMenu(): void {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
-function shutdownDaemon(daemonAddr, portNumber): void {
+async function shutdownDaemon(daemonAddr, portNumber): void {
   writeLog('Sending POST request to shut down daemon.');
   const http = require('http');
   
@@ -161,8 +161,15 @@ function shutdownDaemon(daemonAddr, portNumber): void {
     if(shutDownCompleted)
       break;
 
-    setTimeout(function(){}, 1000);
+    writeLog('Executing wait...');
+    await sleep(1000);
+    writeLog('Executing wait... done.');
+
   } while(true)
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function startDaemon(): void {
@@ -194,7 +201,6 @@ function startDaemon(): void {
       detached: true
     });
   }
-
 
   daemonProcess.stdout.on('data', (data: string) => {
     writeLog(`Stratis: ${data}`);
@@ -323,7 +329,7 @@ app.on('ready', () => {
 
 /* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
-app.on('before-quit', () => {
+app.on('before-quit', async () => {
   if (!serve && !nodaemon) {
     shutdownDaemon(daemonIP, apiPort);
   }
