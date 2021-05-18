@@ -189,30 +189,29 @@ function waitForShutdown(daemonAddr, portNumber): boolean {
     method: 'GET'
   };
   
-//  do {
+  var callback = function(response) {
 
-    var callback = function(response) {
-      response.on('data', function (chunk) {
-        writeLog('Node is still shutting down...');
-        sleep(1000);
-      });
+    writeLog(response.statusCode);
 
-      response.on('error', error => {
-        writeError('Node has shutdown...');
-        shutDownCompleted = true;
-      });
-    
-      response.on('end', function () {
-        writeError('Call completed...');
-      });
-    }
-    
-    http.request(options, callback).end();
-  //   if(shutDownCompleted)
-  //     break;
-  // } while(true)
+    response.on('data', async function (chunk) {
+      writeLog('Node is still shutting down...');
+      await sleep(1000);
+    });
 
-  return true;
+    response.on('error', error => {
+      writeError('Node has shutdown...');
+      shutDownCompleted = true;
+    });
+  
+    response.on('end', async function () {
+      writeLog('Call completed...');
+      await sleep(1000);
+    });
+  }
+      
+  http.request(options, callback).end();
+
+  return shutDownCompleted;
 }
 
 function startDaemon(): void {
@@ -374,11 +373,13 @@ app.on('ready', () => {
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', (event) => {
   if (!serve && !nodaemon) {
-    event.preventDefault();
 
     shutdownDaemon(daemonIP, apiPort);
-    
-    waitForShutdown(daemonIP, apiPort);
+
+    for (let index = 0; index < 5; index++) {
+      if(waitForShutdown(daemonIP, apiPort))
+        event.preventDefault();      
+    }      
   }
 });
 
