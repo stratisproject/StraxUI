@@ -101,7 +101,7 @@ function createMenu(): void {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
-async function shutdownDaemon(daemonAddr, portNumber): void {
+async function shutdownDaemon(daemonAddr, portNumber): Promise<void> {
   writeLog('Sending POST request to shut down daemon.');
   const http = require('http');
   
