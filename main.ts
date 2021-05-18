@@ -101,7 +101,11 @@ function createMenu(): void {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
-async function shutdownDaemon(daemonAddr, portNumber): Promise<void> {
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function shutdownDaemon(daemonAddr, portNumber): void {
   writeLog('Sending POST request to shut down daemon.');
   const http = require('http');
   
@@ -132,44 +136,44 @@ async function shutdownDaemon(daemonAddr, portNumber): Promise<void> {
 
   writeLog('Waiting for shutdown to end...');
 
-  var shutDownCompleted = false;
+  const waitForShutdown = async () => {
 
-  do {
+    var shutDownCompleted = false;
 
-    writeLog('Getting node status...');
-    
-    var options = {
-      hostname: daemonAddr,
-      port: portNumber,
-      path: '/api/node/status',
-      method: 'GET'
-    };
-    
-    var req = http.request(options, res => {
-      res.on('data', d => {
-        writeLog('Node is still shutting down...');
+    do {
+      writeLog('Getting node status...');
+      
+      var options = {
+        hostname: daemonAddr,
+        port: portNumber,
+        path: '/api/node/status',
+        method: 'GET'
+      };
+      
+      var req = http.request(options, res => {
+        res.on('data', d => {
+          writeLog('Node is still shutting down...');
+        });
       });
-    });
-    
-    req.on('error', error => {
-      writeError('Node has shutdown...');
-      shutDownCompleted = true;
-    });
-    
-    req.end();
+      
+      req.on('error', error => {
+        writeError('Node has shutdown...');
+        shutDownCompleted = true;
+      });
+      
+      req.end();
 
-    if(shutDownCompleted)
-      break;
+      writeLog('Executing wait...');
+      await sleep(1000);
+      writeLog('Executing wait... done.');
 
-    writeLog('Executing wait...');
-    await sleep(1000);
-    writeLog('Executing wait... done.');
+      if(shutDownCompleted)
+        break;
 
-  } while(true)
-}
+    } while (true);
+  }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  waitForShutdown();
 }
 
 function startDaemon(): void {
@@ -329,7 +333,7 @@ app.on('ready', () => {
 
 /* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
-app.on('before-quit', async () => {
+app.on('before-quit', () => {
   if (!serve && !nodaemon) {
     shutdownDaemon(daemonIP, apiPort);
   }
