@@ -101,10 +101,6 @@ function createMenu(): void {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function shutdownDaemon(daemonAddr, portNumber): void {
   writeLog('Sending POST request to shut down daemon.');
   const http = require('http');
@@ -133,45 +129,6 @@ function shutdownDaemon(daemonAddr, portNumber): void {
   req.setHeader('content-type', 'application/json-patch+json');
   req.write('true');
   req.end();
-
-//   const waitForShutdown = async () => {
-
-//     var shutDownCompleted = false;
-
-//     do {
-//       writeLog('Getting node status...');
-      
-//       var options = {
-//         hostname: daemonAddr,
-//         port: portNumber,
-//         path: '/api/node/status',
-//         method: 'GET'
-//       };
-      
-//       var req = http.request(options, res => {
-//         res.on('data', d => {
-//           writeLog('Node is still shutting down...');
-//         });
-//       });
-      
-//       req.on('error', error => {
-//         writeError('Node has shutdown...');
-//         shutDownCompleted = true;
-//       });
-      
-//       req.end();
-
-//       writeLog('Executing wait...');
-//       await sleep(1000);
-//       writeLog('Executing wait... done.');
-
-//       if(shutDownCompleted)
-//         break;
-
-//     } while (true);
-//   }
-
-//   waitForShutdown();
 }
 
 function waitForShutdown(daemonAddr, portNumber): boolean {
@@ -193,9 +150,8 @@ function waitForShutdown(daemonAddr, portNumber): boolean {
 
     writeLog(response.statusCode);
 
-    response.on('data', async function (chunk) {
+    response.on('data', function (chunk) {
       writeLog('Node is still shutting down...');
-      await sleep(1000);
     });
 
     response.on('error', error => {
@@ -203,9 +159,8 @@ function waitForShutdown(daemonAddr, portNumber): boolean {
       shutDownCompleted = true;
     });
   
-    response.on('end', async function () {
+    response.on('end', function () {
       writeLog('Call completed...');
-      await sleep(1000);
     });
   }
       
@@ -369,16 +324,23 @@ app.on('ready', () => {
   }
 });
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 /* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
-app.on('before-quit', (event) => {
+app.on('before-quit', async (event) => {
   if (!serve && !nodaemon) {
 
     shutdownDaemon(daemonIP, apiPort);
 
     for (let index = 0; index < 5; index++) {
-      if(waitForShutdown(daemonIP, apiPort))
-        event.preventDefault();      
+      if(!waitForShutdown(daemonIP, apiPort))
+      {
+        event.preventDefault();
+        await sleep(1000);
+      }
     }      
   }
 });
