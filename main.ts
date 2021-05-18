@@ -136,38 +136,32 @@ function shutdownDaemon(daemonAddr, portNumber): void {
 
   do {
 
-    writeLog('Calling not status...');
-
-    options = {
+    writeLog('Getting node status...');
+    
+    var options = {
       hostname: daemonAddr,
       port: portNumber,
       path: '/api/node/status',
       method: 'GET'
     };
-  
-    req = http.request(options);
-  
-    req.on('response', (res) => {
-      if (res.statusCode === 200) {
+    
+    var req = http.request(options, res => {
+      res.on('data', d => {
         writeLog('Node is still shutting down...');
-      } else {
-        shutDownCompleted = true;
-      }
+      });
     });
-  
-    req.on('error', () => {
+    
+    req.on('error', error => {
       writeError('Node has shutdown...');
       shutDownCompleted = true;
     });
-
-    req.setHeader('content-type', 'application/json-patch+json');
-    req.write('true');
+    
     req.end();
 
     if(shutDownCompleted)
       break;
 
-    setTimeout(function(){}, 1000)
+    setTimeout(function(){}, 1000);
   } while(true)
 }
 
@@ -291,11 +285,11 @@ function createWindow(): void {
   }
 
   // Emitted when the window is going to close.
-  mainWindow.on('close', () => {
-    if (!serve && !nodaemon) {
-      shutdownDaemon(daemonIP, apiPort);
-    }
-  });
+  // mainWindow.on('close', () => {
+  //   if (!serve && !nodaemon) {
+  //     shutdownDaemon(daemonIP, apiPort);
+  //   }
+  // });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
