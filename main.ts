@@ -134,46 +134,85 @@ function shutdownDaemon(daemonAddr, portNumber): void {
   req.write('true');
   req.end();
 
+//   const waitForShutdown = async () => {
+
+//     var shutDownCompleted = false;
+
+//     do {
+//       writeLog('Getting node status...');
+      
+//       var options = {
+//         hostname: daemonAddr,
+//         port: portNumber,
+//         path: '/api/node/status',
+//         method: 'GET'
+//       };
+      
+//       var req = http.request(options, res => {
+//         res.on('data', d => {
+//           writeLog('Node is still shutting down...');
+//         });
+//       });
+      
+//       req.on('error', error => {
+//         writeError('Node has shutdown...');
+//         shutDownCompleted = true;
+//       });
+      
+//       req.end();
+
+//       writeLog('Executing wait...');
+//       await sleep(1000);
+//       writeLog('Executing wait... done.');
+
+//       if(shutDownCompleted)
+//         break;
+
+//     } while (true);
+//   }
+
+//   waitForShutdown();
+}
+
+function waitForShutdown(daemonAddr, portNumber): boolean {
+
+  var shutDownCompleted = false;
+
   writeLog('Waiting for shutdown to end...');
+  
+  const http = require('http');
 
-  const waitForShutdown = async () => {
+  var options = {
+    hostname: daemonAddr,
+    port: portNumber,
+    path: '/api/node/status',
+    method: 'GET'
+  };
+  
+  do {
 
-    var shutDownCompleted = false;
-
-    do {
-      writeLog('Getting node status...');
-      
-      var options = {
-        hostname: daemonAddr,
-        port: portNumber,
-        path: '/api/node/status',
-        method: 'GET'
-      };
-      
-      var req = http.request(options, res => {
-        res.on('data', d => {
-          writeLog('Node is still shutting down...');
-        });
+    var callback = function(response) {
+      response.on('data', function (chunk) {
+        writeLog('Node is still shutting down...');
+        sleep(1000);
       });
-      
-      req.on('error', error => {
+
+      response.on('error', error => {
         writeError('Node has shutdown...');
         shutDownCompleted = true;
       });
-      
-      req.end();
+    
+      response.on('end', function () {
+        writeError('Call completed...');
+      });
+    }
+    
+    http.request(options, callback).end();
+    if(shutDownCompleted)
+      break;
+  } while(true)
 
-      writeLog('Executing wait...');
-      await sleep(1000);
-      writeLog('Executing wait... done.');
-
-      if(shutDownCompleted)
-        break;
-
-    } while (true);
-  }
-
-  waitForShutdown();
+  return true;
 }
 
 function startDaemon(): void {
@@ -333,9 +372,13 @@ app.on('ready', () => {
 
 /* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
-app.on('before-quit', () => {
+app.on('before-quit', (event) => {
   if (!serve && !nodaemon) {
+    event.preventDefault();
+
     shutdownDaemon(daemonIP, apiPort);
+    
+    waitForShutdown(daemonIP, apiPort);
   }
 });
 
