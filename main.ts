@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray, screen } from 'el
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
+import { AsyncPipe } from '@angular/common';
 
 // Initialize remote module
 require('@electron/remote/main').initialize();
@@ -14,7 +15,7 @@ const applicationName = 'Strax Wallet';
 const daemonName = 'Stratis.StraxD';
 
 const args = process.argv.slice(1);
-const serve = args.some(val => val === '--serve' || val === '-serve');
+const serve = false;// args.some(val => val === '--serve' || val === '-serve');
 const testnet = args.some(val => val === '--testnet' || val === '-testnet');
 let nodaemon = args.some(val => val === '--nodaemon' || val === '-nodaemon');
 const devtools = args.some(val => val === '--devtools' || val === '-devtools');
@@ -102,7 +103,9 @@ function createMenu(): void {
 }
 
 function shutdownDaemon(daemonAddr, portNumber): void {
+
   writeLog('Sending POST request to shut down daemon.');
+  
   const http = require('http');
   
   var options = {
@@ -272,6 +275,7 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+ 
   if (serve) {
     console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.');
   } else {
@@ -286,10 +290,6 @@ app.on('ready', () => {
   }
 });
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 /* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', async (event) => {
@@ -297,61 +297,38 @@ app.on('before-quit', async (event) => {
 
     shutdownDaemon(daemonIP, apiPort);
 
-    for (let index = 0; index < 5; index++) {
-      if(!waitForShutdown(daemonIP, apiPort))
-      {
-        event.preventDefault();
-        await sleep(1000);
-      }
-    }      
+    if(!shutdownComplete(daemonIP, apiPort))
+      event.preventDefault();
   }
 });
 
-function waitForShutdown(daemonAddr, portNumber): boolean {
+function shutdownComplete(daemonAddr, portNumber): boolean {
 
-  var shutDownCompleted = false;
+  var shutdownCompleted = false;
 
-  writeLog('Waiting for shutdown to end...');
+  writeLog('Waiting for shutdown to end...');  
+ 
+  var request = require('request'); //http wrapped module
   
-  const http = require('http');
+  function requestWrapper(url, callback) {
 
-  var options = {
-    hostname: daemonAddr,
-    port: portNumber,
-    path: '/api/node/status',
-    method: 'GET'
-  };
-  
-  var callback = function(response, error) {
-
-    writeLog(error);
-    
-    if(error)
-    {
-      shutDownCompleted = true;
-    }
-    else
-    {
-      writeLog(response.statusCode);
-
-      response.on('data', function (chunk) {
-        writeLog('Node is still shutting down...');
-      });
-
-      response.on('error', error => {
-        writeError('Node has shutdown...');
-        shutDownCompleted = true;
-      });
-    
-      response.on('end', function () {
-        writeLog('Call completed...');
-      });
-    }
+    request.get(url, function (err, response) {
+        if (err) {
+          writeLog('Node has shut down...');
+          shutdownCompleted = true;
+        } else {
+          writeLog('Executing delay as node is still shutting down...');
+          setTimeout(() => {
+            app.quit(); // Try and quit, this will fire the event 'before-quit' again.
+          }, 1000);
+        }
+    })
   }
-      
-  http.request(options, callback).end();
 
-  return shutDownCompleted;
+  var url = "http://" + daemonAddr + ":" + portNumber + '/api/node/status';
+  requestWrapper(url, null);
+
+  return shutdownCompleted;
 }
 
 // app.on('quit', () => {
