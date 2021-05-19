@@ -250,11 +250,11 @@ function createWindow(): void {
   }
 
   // Emitted when the window is going to close.
-  mainWindow.on('close', () => {
-    if (!serve && !nodaemon) {
-      shutdownDaemon(daemonIP, apiPort);
-    }
-  });
+  // mainWindow.on('close', () => {
+  //   if (!serve && !nodaemon) {
+  //     shutdownDaemon(daemonIP, apiPort);
+  //   }
+  // });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -286,22 +286,43 @@ app.on('ready', () => {
   }
 });
 
+var delayExecuted = false;
+
 /* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
-app.on('before-quit', () => {
-  if (!serve && !nodaemon) {
-    shutdownDaemon(daemonIP, apiPort);
+app.on('before-quit', (event) => {
+
+  if(!delayExecuted)
+  {
+    if (!serve && !nodaemon) {
+
+      shutdownDaemon(daemonIP, apiPort);
+
+      console.log('Executing delay shutdown delay, to ensure that node is disposed properly.');
+
+      setTimeout(function() { delayExecutionComplete();}, 5000); 
+  
+      event.preventDefault();
+    }
+  }
+  else {
+    console.log('Quitting...');
   }
 });
 
-app.on('quit', () => {
-  if (!serve && !nodaemon) {
-    shutdownDaemon(daemonIP, apiPort);
-  }
-});
+function delayExecutionComplete () {
+  console.log('Delay execution completed.');
+  delayExecuted = true;
+  app.quit();
+}
+
+// app.on('quit', (event) => {  
+//   writeLog("Quit event raised.");
+// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
+  writeLog("All windows closed, quitting application.");
   app.quit();
 });
 
