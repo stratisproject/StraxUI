@@ -249,13 +249,6 @@ function createWindow(): void {
     mainWindow.webContents.openDevTools();
   }
 
-  // Emitted when the window is going to close.
-  // mainWindow.on('close', () => {
-  //   if (!serve && !nodaemon) {
-  //     shutdownDaemon(daemonIP, apiPort);
-  //   }
-  // });
-
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store window
@@ -298,7 +291,7 @@ app.on('before-quit', (event) => {
 
       shutdownDaemon(daemonIP, apiPort);
 
-      console.log('Executing delay shutdown delay, to ensure that node is disposed properly.');
+      console.log('Executing shutdown delay to ensure that the node is disposed properly.');
 
       setTimeout(function() { delayExecutionComplete();}, 5000); 
   
@@ -315,10 +308,6 @@ function delayExecutionComplete () {
   delayExecuted = true;
   app.quit();
 }
-
-// app.on('quit', (event) => {  
-//   writeLog("Quit event raised.");
-// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
