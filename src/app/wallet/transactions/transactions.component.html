@@ -18,7 +18,7 @@
         </span>
       </td>
       <td class="text-left">{{transaction.transactionType == 'sent' ? '- ' : '+ '}}
-        <strong> {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
+        <strong> {{ transaction.transactionAmount | coinNotation }} {{ globalService.coinUnit }}</strong>
       </td>
       <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
       <td class="text-center"><span (click)="showTransactionDetails(transaction)" class="lnr-transaction lnr-menu-circle"></span></td>
