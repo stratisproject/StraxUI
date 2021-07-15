@@ -6,7 +6,7 @@ import { FormHelper } from '@shared/forms/form-helper';
 import { AddressLabel } from '@shared/models/address-label';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { Network } from '@shared/models/network';
-import { Transaction } from '@shared/models/transaction';
+import { InterFluxTransaction } from '@shared/models/transaction';
 import { TransactionResponse } from '@shared/models/transaction-response';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { GlobalService } from '@shared/services/global.service';
@@ -51,7 +51,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public interoperabilityFormErrors: any = {};
   private last: FeeEstimation = null;
-  private minimumInteroperabilityAmount = 90000;
+  private minimumInteroperabilityAmount = 250;
 
   constructor(private fb: FormBuilder,
               private globalService: GlobalService,
@@ -60,6 +60,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
               private taskBarService: TaskBarService,
               private activatedRoute: ActivatedRoute,
               private snackbarService: SnackbarService) {
+
     this.interoperabilityForm = this.buildInteroperabilityForm(fb);
 
     this.subscriptions.push(this.interoperabilityForm.valueChanges.pipe(debounceTime(500))
@@ -167,6 +168,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 
   public send(): void {
     this.isSending = true;
+
     this.walletService.sendTransaction(this.getTransaction())
       .then(transactionResponse => {
         this.resetInteroperabilityForm();
@@ -178,22 +180,22 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getTransaction(): Transaction {
+  private getTransaction(): InterFluxTransaction {
+
     const form = this.interoperabilityForm;
     this.hasCustomChangeAddress = form.get('changeAddress').value ? true : false;
 
-    return new Transaction(
-      this.globalService.getWalletName(),
-      this.globalService.getWalletAccount(),
-      form.get('password').value,
-      form.get('federationAddress').value.trim(),
-      form.get('amount').value,
-      // TO DO: use coin notation
-      this.estimatedSidechainFee / 100000000,
-      true,
-      null, // Shuffle Outputs
-      this.interoperabilityForm.get('destinationAddress').value.trim(),
-      null,
+    return new InterFluxTransaction(
+      this.globalService.getWalletName(), // Wallet Name
+      this.globalService.getWalletAccount(), // Wallet Account
+      form.get('password').value, // Wallet Password
+      form.get('federationAddress').value.trim(), // Federation Address
+      1, // DestinationChain - Hardcoded to Ethereum at present
+      this.interoperabilityForm.get('destinationAddress').value.trim(), // DestinationChain      
+      form.get('amount').value, // Amount
+      this.estimatedSidechainFee / 100000000, // Fee (TODO use coin notation)
+      true, // Allow Unconfirmed
+      true, // Shuffle Outputs      
       this.hasCustomChangeAddress ? form.get('changeAddress').value : null,
       true
     );

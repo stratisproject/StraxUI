@@ -23,6 +23,7 @@ import { AddressBookService } from '@shared/services/address-book-service';
 import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
 import { ExtPubKeyImport } from '@shared/models/extpubkey-import';
 import { LoggerService } from '@shared/services/logger.service';
+import { InterFluxTransaction } from '../models/transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -253,8 +254,11 @@ export class WalletService extends RestApi {
     );
   }
 
-  public sendTransaction(transaction: Transaction | OpreturnTransaction): Promise<TransactionResponse> {
-    return this.buildAndSendTransaction(transaction).toPromise();
+  public sendTransaction(transaction: Transaction | OpreturnTransaction | InterFluxTransaction): Promise<TransactionResponse> {
+    if(transaction instanceof InterFluxTransaction)
+      return this.buildAndSendInterFluxTransaction(transaction).toPromise();
+
+      return this.buildAndSendTransaction(transaction).toPromise();
   }
 
   public getTransactionCount(): Observable<number> {
@@ -282,6 +286,31 @@ export class WalletService extends RestApi {
           })
         );
       }),
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  private buildAndSendInterFluxTransaction(transaction: InterFluxTransaction): Observable<TransactionResponse> {
+    const observable = this.post<BuildTransactionResponse>('wallet/build-interflux-transaction', transaction);
+
+    return observable.pipe(
+
+      map(response => {
+        response.isSideChain = transaction.isSideChainTransaction;
+        return response;
+      }),
+
+      flatMap((buildTransactionResponse) => {
+        return this.post('wallet/send-transaction', new TransactionSending(buildTransactionResponse.hex)).pipe(
+          map(() => {
+            return new TransactionResponse(transaction, buildTransactionResponse.fee, buildTransactionResponse.isSideChain);
+          }),
+          tap(() => {
+            this.refreshWallet();
+          })
+        );
+      }),
+
       catchError(err => this.handleHttpError(err))
     );
   }
