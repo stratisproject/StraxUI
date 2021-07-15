@@ -10,7 +10,7 @@ import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
 import { Transaction } from '@shared/models/transaction';
-import { InterFluxTransaction } from '@shared/models/transaction';
+import { InterFluxTransaction } from '@shared/models/interflux-transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';

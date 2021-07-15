@@ -1,12 +1,4 @@
-export class Recipient {
-  constructor(destinationAddress: string, amount: string) {
-    this.destinationAddress = destinationAddress;
-    this.amount = amount;
-  }
-
-  destinationAddress: string;
-  amount: string;
-}
+import { Recipient } from '@shared/models/recipient';
 
 export class Transaction {
   constructor(
@@ -27,6 +19,26 @@ export class Transaction {
 
   public recipients: Recipient[];
   public sender: string;
+}
+
+export class InterFluxTransaction {
+  constructor(
+    public walletName: string,
+    public accountName: string,
+    public password: string,
+    public federationAddress: string,
+    public destinationChain : number,
+    public destinationAddress: string,    
+    public amount: string,
+    public feeAmount: number,
+    public allowUnconfirmed: boolean,
+    public shuffleOutputs: boolean,
+    public changeAddress?: string,
+    public isSideChainTransaction?: boolean) {
+    this.recipients = [new Recipient(federationAddress, amount)];
+  }
+
+  public recipients: Recipient[];
 }
 
 export class FeeTransaction extends Transaction {
