@@ -10,6 +10,7 @@ import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
 import { Transaction } from '@shared/models/transaction';
+import { InterFluxTransaction } from '@shared/models/transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';
@@ -23,7 +24,6 @@ import { AddressBookService } from '@shared/services/address-book-service';
 import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
 import { ExtPubKeyImport } from '@shared/models/extpubkey-import';
 import { LoggerService } from '@shared/services/logger.service';
-import { InterFluxTransaction } from '../models/transaction';
 
 @Injectable({
   providedIn: 'root'

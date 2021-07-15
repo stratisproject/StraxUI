@@ -21,7 +21,6 @@ export interface FeeStatus {
   estimating: boolean;
 }
 
-
 @Component({
   selector: 'app-send-interoperability',
   templateUrl: './send-interoperability.component.html',
