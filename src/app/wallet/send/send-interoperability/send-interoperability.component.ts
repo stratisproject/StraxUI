@@ -7,7 +7,7 @@ import { AddressLabel } from '@shared/models/address-label';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { Network } from '@shared/models/network';
 import { InterFluxTransaction } from '@shared/models/interflux-transaction';
-import { TransactionResponse } from '@shared/models/transaction-response';
+import { InterFluxTransactionResponse } from '@shared/models/transaction-response';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { GlobalService } from '@shared/services/global.service';
 import { TaskBarService } from '@shared/services/task-bar-service';
@@ -200,7 +200,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     );
   }
 
-  private openConfirmationModal(transactionResponse: TransactionResponse): void {
+  private openConfirmationModal(transactionResponse: InterFluxTransactionResponse): void {
     this.taskBarService.open(SendConfirmationComponent, {
       transaction: transactionResponse.transaction,
       transactionFee: transactionResponse.transactionFee,
