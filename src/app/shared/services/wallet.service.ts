@@ -254,11 +254,12 @@ export class WalletService extends RestApi {
     );
   }
 
-  public sendTransaction(transaction: Transaction | OpreturnTransaction | InterFluxTransaction): Promise<TransactionResponse> {
-    if(transaction instanceof InterFluxTransaction)
-      return this.buildAndSendInterFluxTransaction(transaction).toPromise();
-
+  public sendTransaction(transaction: Transaction | OpreturnTransaction): Promise<TransactionResponse> {
       return this.buildAndSendTransaction(transaction).toPromise();
+  }
+
+  public sendInterFluxTransaction(transaction: InterFluxTransaction): Promise<TransactionResponse> {    
+      return this.buildAndSendInterFluxTransaction(transaction).toPromise();
   }
 
   public getTransactionCount(): Observable<number> {

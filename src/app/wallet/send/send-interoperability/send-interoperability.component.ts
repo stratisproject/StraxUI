@@ -168,7 +168,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   public send(): void {
     this.isSending = true;
 
-    this.walletService.sendTransaction(this.getTransaction())
+    this.walletService.sendInterFluxTransaction(this.getTransaction())
       .then(transactionResponse => {
         this.resetInteroperabilityForm();
         this.openConfirmationModal(transactionResponse);
