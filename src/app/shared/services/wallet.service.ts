@@ -12,7 +12,7 @@ import { ErrorService } from '@shared/services/error-service';
 import { Transaction } from '@shared/models/transaction';
 import { InterFluxTransaction } from '@shared/models/interflux-transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
-import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
+import { BuildTransactionResponse, InterFluxTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { WalletResync } from '@shared/models/wallet-rescan';
@@ -258,7 +258,7 @@ export class WalletService extends RestApi {
       return this.buildAndSendTransaction(transaction).toPromise();
   }
 
-  public sendInterFluxTransaction(transaction: InterFluxTransaction): Promise<TransactionResponse> {    
+  public sendInterFluxTransaction(transaction: InterFluxTransaction): Promise<InterFluxTransactionResponse> {    
       return this.buildAndSendInterFluxTransaction(transaction).toPromise();
   }
 
@@ -291,7 +291,7 @@ export class WalletService extends RestApi {
     );
   }
 
-  private buildAndSendInterFluxTransaction(transaction: InterFluxTransaction): Observable<TransactionResponse> {
+  private buildAndSendInterFluxTransaction(transaction: InterFluxTransaction): Observable<InterFluxTransactionResponse> {
     const observable = this.post<BuildTransactionResponse>('wallet/build-interflux-transaction', transaction);
 
     return observable.pipe(
