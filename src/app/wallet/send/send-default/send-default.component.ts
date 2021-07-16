@@ -152,8 +152,8 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     this.isSending = true;
     this.walletService.sendTransaction(this.getTransaction())
       .then(transactionResponse => {
-        this.resetSendForm();
         this.openConfirmationModal(transactionResponse);
+        this.resetSendForm();
         this.isSending = false;
       }).catch(error => {
         this.isSending = false;
