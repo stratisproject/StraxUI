@@ -205,7 +205,8 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       transaction: transactionResponse.transaction,
       transactionFee: transactionResponse.transactionFee,
       hasCustomChangeAddress: this.hasCustomChangeAddress,
-      hasOpReturn: transactionResponse.isSideChain
+      hasOpReturn: transactionResponse.isSideChain,
+      destinationAddress : this.interoperabilityForm.get('destinationAddress').value.trim()
     }, {taskBarWidth: '600px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
     });

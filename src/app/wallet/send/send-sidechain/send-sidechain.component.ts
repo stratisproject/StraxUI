@@ -190,7 +190,8 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
       transactionFee: transactionResponse.transactionFee,
       sidechainEnabled: false,
       hasCustomChangeAddress: this.hasCustomChangeAddress,
-      hasOpReturn: transactionResponse.isSideChain
+      hasOpReturn: transactionResponse.isSideChain,
+      destinationAddress: transactionResponse.transaction.opReturnData
     }, {taskBarWidth: '600px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
     });

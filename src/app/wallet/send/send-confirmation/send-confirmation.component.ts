@@ -13,6 +13,7 @@ export class SendConfirmationComponent implements OnInit {
   @Input() transactionFee: any;
   @Input() hasOpReturn: boolean;
   @Input() hasCustomChangeAddress: boolean;
+  @Input() destinationAddress: string;
   @Output() closeClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private globalService: GlobalService) {
   }
