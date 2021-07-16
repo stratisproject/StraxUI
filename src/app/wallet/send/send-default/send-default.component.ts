@@ -185,7 +185,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
       transactionFee: transactionResponse.transactionFee,
       hasCustomChangeAddress: this.hasCustomChangeAddress,
       hasOpReturn: transactionResponse.isSideChain,
-      destinationAddress: transactionResponse.transaction.recipients[0].destinationAddress
+      destinationAddress: this.sendForm.get('address').value.trim()
     }, {taskBarWidth: '600px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
     });
