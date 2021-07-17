@@ -257,7 +257,9 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       // eslint-disable-next-line @typescript-eslint/unbound-method
       networkSelect: ['', Validators.compose([Validators.required])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      destinationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      destinationAddress: ['', Validators.compose([
+        Validators.pattern(/^0x([A-Fa-f0-9]{40})$/),
+        Validators.required])],
       changeAddressCheckbox: [false],
       changeAddress: ['', Validators.compose([Validators.minLength(26)])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -287,7 +289,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     },
     destinationAddress: {
       required: 'An address is required.',
-      minlength: 'An address is at least 26 characters long.'
+      pattern: 'Please enter a valid Ethereum address which starts with 0x and is 42 characters long.',
     },
     networkSelect: {
       required: 'Please select a network to send to.'
