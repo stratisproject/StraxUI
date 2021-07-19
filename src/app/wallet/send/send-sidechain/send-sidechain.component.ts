@@ -231,9 +231,9 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
       // eslint-disable-next-line @typescript-eslint/unbound-method
       networkSelect: ['', Validators.compose([Validators.required])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      destinationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      destinationAddress: ['', Validators.compose([Validators.required, Validators.pattern(/^C[1-9A-Za-z][^OIl]{20,40}/)])],
       changeAddressCheckbox: [false],
-      changeAddress: ['', Validators.compose([Validators.minLength(26)])],
+      changeAddress: ['', Validators.compose([Validators.pattern(/^C[1-9A-Za-z][^OIl]{20,40}/)])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
@@ -257,7 +257,8 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
   public sendToSidechainValidationMessages = {
     destinationAddress: {
       required: 'An address is required.',
-      minlength: 'An address is at least 26 characters long.'
+      //minlength: 'An address is at least 26 characters long.'
+      pattern: 'Invalid Address'
     },
     networkSelect: {
       required: 'Please select a network to send to.'
@@ -267,7 +268,8 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
       minlength: 'An address is at least 26 characters long.'
     },
     changeAddress: {
-      minlength: 'An address is at least 26 characters long.'
+      //minlength: 'An address is at least 26 characters long.'
+      pattern: 'Invalid Address'
     },
     amount: {
       required: 'An amount is required.',

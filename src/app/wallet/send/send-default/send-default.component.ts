@@ -220,9 +220,9 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
   private buildSendForm(fb: FormBuilder): FormGroup {
     return fb.group({
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      address: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      address: ['', Validators.compose([Validators.required, Validators.pattern(/^X[1-9A-Za-z][^OIl]{20,40}/)])],
       changeAddressCheckbox: [false],
-      changeAddress: ['', Validators.compose([Validators.minLength(26)])],
+      changeAddress: ['', Validators.compose([Validators.pattern(/^X[1-9A-Za-z][^OIl]{20,40}/)])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
@@ -238,10 +238,12 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
   public sendValidationMessages = {
     address: {
       required: 'An address is required.',
-      minlength: 'An address is at least 26 characters long.'
+      //minlength: 'An address is at least 26 characters long.',
+      pattern: 'Invalid Address'
     },
     changeAddress: {
-      minlength: 'An address is at least 26 characters long.'
+      //minlength: 'An address is at least 26 characters long.'
+      pattern: 'Invalid Address'
     },
     amount: {
       required: 'An amount is required.',
