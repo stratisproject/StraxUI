@@ -152,8 +152,8 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     this.isSending = true;
     this.walletService.sendTransaction(this.getTransaction())
       .then(transactionResponse => {
-        this.resetSendForm();
         this.openConfirmationModal(transactionResponse);
+        this.resetSendForm();
         this.isSending = false;
       }).catch(error => {
         this.isSending = false;
@@ -184,7 +184,8 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
       transaction: transactionResponse.transaction,
       transactionFee: transactionResponse.transactionFee,
       hasCustomChangeAddress: this.hasCustomChangeAddress,
-      hasOpReturn: transactionResponse.isSideChain
+      hasOpReturn: transactionResponse.isSideChain,
+      destinationAddress: this.sendForm.get('address').value.trim()
     }, {taskBarWidth: '600px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
     });
