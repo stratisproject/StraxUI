@@ -41,7 +41,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   public contractText: string;
   public ercContractAddress = "0xa3c22370de5f9544f0c4de126b1e46ceadf0a51b";
   public contact: AddressLabel;
-  public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
+  public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({ estimating: false });
   public coinUnit: string;
   public apiError: string;
   public isSending = false;
@@ -53,12 +53,12 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   private minimumInteroperabilityAmount = 250;
 
   constructor(private fb: FormBuilder,
-              private globalService: GlobalService,
-              public walletService: WalletService,
-              private addressBookService: AddressBookService,
-              private taskBarService: TaskBarService,
-              private activatedRoute: ActivatedRoute,
-              private snackbarService: SnackbarService) {
+    private globalService: GlobalService,
+    public walletService: WalletService,
+    private addressBookService: AddressBookService,
+    private taskBarService: TaskBarService,
+    private activatedRoute: ActivatedRoute,
+    private snackbarService: SnackbarService) {
 
     this.interoperabilityForm = this.buildInteroperabilityForm(fb);
 
@@ -82,13 +82,13 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     }
 
     if (this.address) {
-      this.interoperabilityForm.patchValue({'address': this.address});
+      this.interoperabilityForm.patchValue({ 'address': this.address });
     }
 
     this.getWalletBalance();
 
     if (this.address) {
-      this.interoperabilityForm.patchValue({'address': this.address});
+      this.interoperabilityForm.patchValue({ 'address': this.address });
     }
 
     this.testnetEnabled = this.globalService.getTestnetEnabled();
@@ -114,9 +114,9 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
 
   private networkSelectChanged(): void {
     if (this.interoperabilityForm.get('networkSelect').value && this.interoperabilityForm.get('networkSelect').value !== 'customNetwork') {
-      this.interoperabilityForm.patchValue({'federationAddress': this.interoperabilityForm.get('networkSelect').value});
+      this.interoperabilityForm.patchValue({ 'federationAddress': this.interoperabilityForm.get('networkSelect').value });
     } else if (this.interoperabilityForm.get('networkSelect').value && this.interoperabilityForm.get('networkSelect').value === 'customNetwork') {
-      this.interoperabilityForm.patchValue({'federationAddress': ''});
+      this.interoperabilityForm.patchValue({ 'federationAddress': '' });
     }
   }
 
@@ -139,24 +139,24 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     if (!transaction.equals(this.last)) {
       this.last = transaction;
       const progressDelay = setTimeout(() =>
-        this.status.next({estimating: true}), 100);
+        this.status.next({ estimating: true }), 100);
 
       this.walletService.estimateFee(transaction).toPromise()
         .then(response => {
           this.estimatedSidechainFee = response;
           this.last.response = response;
           clearTimeout(progressDelay);
-          this.status.next({estimating: false});
+          this.status.next({ estimating: false });
         },
-              error => {
-                clearTimeout(progressDelay);
-                this.status.next({estimating: false});
-                this.apiError = error.error.errors[0].message;
-                if (this.apiError == 'Invalid address') {
-                  this.interoperabilityFormErrors.destinationAddress = this.apiError;
-                  this.last.error = this.apiError;
-                }
-              }
+          error => {
+            clearTimeout(progressDelay);
+            this.status.next({ estimating: false });
+            this.apiError = error.error.errors[0].message;
+            if (this.apiError == 'Invalid address') {
+              this.interoperabilityFormErrors.destinationAddress = this.apiError;
+              this.last.error = this.apiError;
+            }
+          }
         );
     } else if (transaction.equals(this.last) && !this.status.value.estimating) {
       // Use the cached value
@@ -206,8 +206,8 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       transactionFee: transactionResponse.transactionFee,
       hasCustomChangeAddress: this.hasCustomChangeAddress,
       hasOpReturn: transactionResponse.isSideChain,
-      destinationAddress : this.interoperabilityForm.get('destinationAddress').value.trim()
-    }, {taskBarWidth: '600px'}).then(ref => {
+      destinationAddress: this.interoperabilityForm.get('destinationAddress').value.trim()
+    }, { taskBarWidth: '600px' }).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
     });
   }
@@ -255,7 +255,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
       // eslint-disable-next-line @typescript-eslint/unbound-method
       tacAgreed: ['', Validators.requiredTrue],
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      federationAddress: ['', Validators.compose([Validators.required, Validators.pattern(/^y[1-9A-Za-z][^OIl]{20,40}/)])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       networkSelect: ['', Validators.compose([Validators.required])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -263,12 +263,12 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
         Validators.pattern(/^0x([A-Fa-f0-9]{40})$/),
         Validators.required])],
       changeAddressCheckbox: [false],
-      changeAddress: ['', Validators.compose([Validators.minLength(26)])],
+      changeAddress: ['', Validators.compose([Validators.pattern(/^X[1-9A-Za-z][^OIl]{20,40}/)])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required,
-        Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
-        Validators.min(this.minimumInteroperabilityAmount),
-        (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedSidechainFee)(control)
+      Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
+      Validators.min(this.minimumInteroperabilityAmount),
+      (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedSidechainFee)(control)
       ])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       fee: ['medium', Validators.required],
@@ -278,11 +278,11 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   }
 
   public stratisInteropabilityNetworks: Network[] = [
-    { destinationName: 'Ethereum', federationAddress: 'yU2jNwiac7XF8rQvSk2bgibmwsNLkkhsHV', description: 'Ethereum'}
+    { destinationName: 'Ethereum', federationAddress: 'yU2jNwiac7XF8rQvSk2bgibmwsNLkkhsHV', description: 'Ethereum' }
   ];
 
   public stratisTestInteropabilityNetworks: Network[] = [
-    { destinationName: 'Ethereum Ropsten', federationAddress: 'tGWegFbA6e6QKZP7Pe3g16kFVXMghbSfY8', description: 'Ethereum Ropsten Testnet'}
+    { destinationName: 'Ethereum Ropsten', federationAddress: 'tGWegFbA6e6QKZP7Pe3g16kFVXMghbSfY8', description: 'Ethereum Ropsten Testnet' }
   ];
 
   public interoperabilityFormValidationMessages = {
@@ -298,10 +298,12 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     },
     federationAddress: {
       required: 'An address is required.',
-      minlength: 'An address is at least 26 characters long.'
+      //minlength: 'An address is at least 26 characters long.'
+      pattern: 'Invalid Address'
     },
     changeAddress: {
-      minlength: 'An address is at least 26 characters long.'
+      //minlength: 'An address is at least 26 characters long.'
+      pattern: 'Invalid Address'
     },
     amount: {
       required: 'An amount is required.',
