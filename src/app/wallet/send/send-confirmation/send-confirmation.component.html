@@ -30,15 +30,15 @@
     </ul>
     <ul *ngIf="!hasOpReturn" class="list-inline row">
       <li class="list-inline-item col blockLabel">Destination</li>
-      <li class="list-inline-item col-8 blockText">{{ transaction.recipients[0].destinationAddress }}</li>
+      <li class="list-inline-item col-8 blockText">{{ destinationAddress }}</li>
     </ul>
     <ul *ngIf="hasOpReturn" class="list-inline row">
       <li class="list-inline-item col blockLabel">Destination Federation</li>
       <li class="list-inline-item col-8 blockText">{{ transaction.recipients[0].destinationAddress }}</li>
-    </ul>
+    </ul>   
     <ul *ngIf="hasOpReturn" class="list-inline row">
       <li class="list-inline-item col blockLabel">Destination Address</li>
-      <li class="list-inline-item col-8 blockText">{{ transaction.opReturnData }}</li>
+      <li class="list-inline-item col-8 blockText">{{ destinationAddress }}</li>
     </ul>
     <ul *ngIf="hasCustomChangeAddress" class="list-inline row">
       <li class="list-inline-item col blockLabel">Change Address</li>

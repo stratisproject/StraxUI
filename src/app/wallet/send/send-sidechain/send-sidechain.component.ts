@@ -154,8 +154,8 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
     this.isSending = true;
     this.walletService.sendTransaction(this.getTransaction())
       .then(transactionResponse => {
-        this.resetSendToSidechainForm();
         this.openConfirmationModal(transactionResponse);
+        this.resetSendToSidechainForm();
         this.isSending = false;
       }).catch(error => {
         this.isSending = false;
@@ -190,7 +190,8 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
       transactionFee: transactionResponse.transactionFee,
       sidechainEnabled: false,
       hasCustomChangeAddress: this.hasCustomChangeAddress,
-      hasOpReturn: transactionResponse.isSideChain
+      hasOpReturn: transactionResponse.isSideChain,
+      destinationAddress: this.sendToSidechainForm.get('destinationAddress').value.trim()
     }, {taskBarWidth: '600px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
     });
