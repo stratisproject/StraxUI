@@ -30,11 +30,11 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
   @Input() address: string;
 
   constructor(private globalService: GlobalService,
-              private addressBookService: AddressBookService,
-              private activatedRoute: ActivatedRoute,
-              private fb: FormBuilder,
-              public walletService: WalletService,
-              private taskBarService: TaskBarService) {
+    private addressBookService: AddressBookService,
+    private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    public walletService: WalletService,
+    private taskBarService: TaskBarService) {
     this.sendForm = this.buildSendForm(fb);
 
     this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(500))
@@ -51,7 +51,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
   public apiError: string;
   public testnetEnabled: boolean;
   public contact: AddressLabel;
-  public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
+  public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({ estimating: false });
   private subscriptions: Subscription[] = [];
   public sendFormErrors: any = {};
   private hasCustomChangeAddress = false;
@@ -68,7 +68,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     this.getWalletBalance();
     this.coinUnit = this.globalService.getCoinUnit();
     if (this.address) {
-      this.sendForm.patchValue({'address': this.address});
+      this.sendForm.patchValue({ 'address': this.address });
     }
   }
 
@@ -86,24 +86,6 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
       console.log(e);
     }
   }
-
-  // NB: This is not currently used
-  // public getMaxBalance(): void {
-  //   let balanceResponse;
-  //   const walletRequest = new WalletInfoRequest(this.globalService.getWalletName(), this.globalService.getWalletAccount(), this.sendForm.get('fee').value);
-  //   this.apiService.getMaximumBalance(walletRequest)
-  //     .pipe(tap(
-  //       response => {
-  //         balanceResponse = response;
-  //       },
-  //       error => {
-  //       },
-  //       () => {
-  //         this.sendForm.patchValue({amount: +new CoinNotationPipe().transform(balanceResponse.maxSpendableAmount)});
-  //         this.estimatedFee = balanceResponse.fee;
-  //       }
-  //     )).toPromise();
-  // }
 
   public estimateFee(): void {
     this.hasCustomChangeAddress = this.sendForm.get('changeAddress').value ? true : false;
@@ -123,29 +105,34 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
     if (!transaction.equals(this.last)) {
       this.last = transaction;
       const progressDelay = setTimeout(() =>
-        this.status.next({estimating: true}), 100);
+        this.status.next({ estimating: true }), 100);
 
       this.walletService.estimateFee(transaction).toPromise()
         .then(response => {
           this.estimatedFee = response;
           this.last.response = response;
           clearTimeout(progressDelay);
-          this.status.next({estimating: false});
+          this.status.next({ estimating: false });
         },
-              error => {
-                clearTimeout(progressDelay);
-                this.status.next({estimating: false});
-                this.apiError = error.error.errors[0].message;
-                if (this.apiError == 'Invalid address') {
-                  this.sendFormErrors.address = this.apiError;
-                  this.last.error = this.apiError;
-                }
-              }
+          error => {
+            clearTimeout(progressDelay);
+            this.status.next({ estimating: false });
+            this.apiError = error.error.errors[0].message;
+            if (this.apiError == 'Invalid address') {
+              this.sendFormErrors.address = this.apiError;
+              this.last.error = this.apiError;
+            }
+          }
         );
     } else if (transaction.equals(this.last) && !this.status.value.estimating) {
       this.estimatedFee = this.last.response;
       this.sendFormErrors.address = this.last.error;
     }
+  }
+
+  public clearChangeAddress(): void {
+    if (this.sendForm.get('changeAddressCheckbox').value == false)
+      this.sendForm.controls.changeAddress.setValue('');
   }
 
   public send(): void {
@@ -186,7 +173,7 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
       hasCustomChangeAddress: this.hasCustomChangeAddress,
       hasOpReturn: transactionResponse.isSideChain,
       destinationAddress: this.sendForm.get('address').value.trim()
-    }, {taskBarWidth: '600px'}).then(ref => {
+    }, { taskBarWidth: '600px' }).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
     });
   }
@@ -219,13 +206,21 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
   }
 
   private buildSendForm(fb: FormBuilder): FormGroup {
+
+    var addressPattern = Validators.pattern(/^X[1-9A-Za-z][^OIl]{26,40}/);
+    this.testnetEnabled = this.globalService.getTestnetEnabled();
+    if (this.testnetEnabled) {
+      addressPattern = Validators.pattern(/^q[1-9A-Za-z][^OIl]{26,40}/);
+    }
+
     return fb.group({
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      address: ['', Validators.compose([Validators.required, Validators.pattern(/^X[1-9A-Za-z][^OIl]{20,40}/)])],
+      address: ['', Validators.compose([Validators.required, addressPattern])],
       changeAddressCheckbox: [false],
-      changeAddress: ['', Validators.compose([Validators.pattern(/^X[1-9A-Za-z][^OIl]{20,40}/)])],
+      changeAddress: ['', Validators.compose([addressPattern])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      amount: ['', Validators.compose([Validators.required,
+      amount: ['',
+        Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(0.00001),
         (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedFee)(control)])],
@@ -239,12 +234,10 @@ export class SendDefaultComponent implements OnInit, OnDestroy {
   public sendValidationMessages = {
     address: {
       required: 'An address is required.',
-      //minlength: 'An address is at least 26 characters long.',
-      pattern: 'Invalid Address'
+      pattern: "Invalid address, please check the length and verify that there aren't any invalid characters (spaces etc.)"
     },
     changeAddress: {
-      //minlength: 'An address is at least 26 characters long.'
-      pattern: 'Invalid Address'
+      pattern: "Invalid address, please check the length and verify that there aren't any invalid characters (spaces etc.)"
     },
     amount: {
       required: 'An amount is required.',

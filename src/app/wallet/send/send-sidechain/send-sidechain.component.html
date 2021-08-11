@@ -3,8 +3,11 @@
     <div class="form-group clearfix">
       <label for="amount">Amount</label>
       <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
-      <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.amount" [class.is-valid]="sendToSidechainForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
-      <div *ngIf="sendToSidechainFormErrors.amount" class="invalid-feedback">{{ sendToSidechainFormErrors.amount }}</div>
+      <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.amount"
+        [class.is-valid]="sendToSidechainForm.get('amount').valid" formControlName="amount"
+        placeholder="0.00 {{ coinUnit }}">
+      <div *ngIf="sendToSidechainFormErrors.amount" class="invalid-feedback">{{ sendToSidechainFormErrors.amount }}
+      </div>
     </div>
     <div class="form-group clearfix">
       <label for="networkSelect">Select destination network</label>
@@ -13,35 +16,49 @@
         <option *ngFor="let network of networks" [value]="network.federationAddress">{{ network.description }}</option>
         <option value="customNetwork">Custom...</option>
       </select>
-      <div *ngIf="sendToSidechainFormErrors.networkSelect" class="invalid-feedback">{{ sendToSidechainFormErrors.networkSelect }}</div>
+      <div *ngIf="sendToSidechainFormErrors.networkSelect" class="invalid-feedback">{{
+        sendToSidechainFormErrors.networkSelect }}</div>
     </div>
     <div class="form-group clearfix" *ngIf="sendToSidechainForm.get('networkSelect').value === 'customNetwork'">
       <label for="federationAddress">Mainchain federation address</label>
-      <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.federationAddress" [class.is-valid]="sendToSidechainForm.get('federationAddress').valid" formControlName="federationAddress" placeholder="Please enter the federation address here.">
-      <div *ngIf="sendToSidechainFormErrors.federationAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.federationAddress }}</div>
+      <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.federationAddress"
+        [class.is-valid]="sendToSidechainForm.get('federationAddress').valid" formControlName="federationAddress"
+        placeholder="Please enter the federation address here.">
+      <div *ngIf="sendToSidechainFormErrors.federationAddress" class="invalid-feedback">{{
+        sendToSidechainFormErrors.federationAddress }}</div>
     </div>
     <div class="form-group clearfix">
       <label for="destinationAddress">Sidechain destination address</label>
-      <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.destinationAddress" [class.is-valid]="sendToSidechainForm.get('destinationAddress').valid" formControlName="destinationAddress" placeholder="Please enter the sidechain destination address here.">
-      <div *ngIf="sendToSidechainFormErrors.destinationAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.destinationAddress }}</div>
+      <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.destinationAddress"
+        [class.is-valid]="sendToSidechainForm.get('destinationAddress').valid" formControlName="destinationAddress"
+        placeholder="Please enter the sidechain destination address here.">
+      <div *ngIf="sendToSidechainFormErrors.destinationAddress" class="invalid-feedback">{{
+        sendToSidechainFormErrors.destinationAddress }}</div>
     </div>
     <div class="form-group clearfix">
-      <div><input type="checkbox" formControlName="changeAddressCheckbox"> Set custom change address</div>
+      <div><input type="checkbox" formControlName="changeAddressCheckbox" (click)="clearChangeAddress()"> Set custom
+        change address</div>
       <div *ngIf="sendToSidechainForm.get('changeAddressCheckbox').value">
         <label for="changeAddress">Change address</label>
-        <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.changeAddress" [class.is-valid]="sendToSidechainForm.get('changeAddress').valid && sendToSidechainForm.get('changeAddress').value" formControlName="changeAddress" placeholder="Please enter a change address here.">
-        <div *ngIf="sendToSidechainFormErrors.changeAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.changeAddress }}</div>
+        <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.changeAddress"
+          [class.is-valid]="sendToSidechainForm.get('changeAddress').valid && sendToSidechainForm.get('changeAddress').value"
+          formControlName="changeAddress" placeholder="Please enter a change address here.">
+        <div *ngIf="sendToSidechainFormErrors.changeAddress" class="invalid-feedback">{{
+          sendToSidechainFormErrors.changeAddress }}</div>
       </div>
     </div>
     <div class="form-group clearfix">
       <ng-container *ngIf="status | async let _status">
         <label>Transaction Fee</label>
         <div *ngIf="!_status.estimating" style="height:35px">
-          <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and destination address and make sure you select a destination network to calculate the fee.</small>
-          <label *ngIf="estimatedSidechainFee" class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
+          <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and
+            destination address and make sure you select a destination network to calculate the fee.</small>
+          <label *ngIf="estimatedSidechainFee" class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }}
+            {{ coinUnit }}</label>
         </div>
         <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}" class="Loading LoadingSend">
-          <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
             <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
               <g id="anim" fill-rule="nonzero">
                 <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
@@ -61,16 +78,23 @@
     </div>
     <div class="form-group clearfix">
       <label for="walletPassword">Wallet Password</label>
-      <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password" formControlName="password" placeholder="Please enter your wallet password.">
-      <div *ngIf="sendToSidechainFormErrors.password" class="invalid-feedback">{{sendToSidechainFormErrors.password}}</div>
+      <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password"
+        formControlName="password" placeholder="Please enter your wallet password.">
+      <div *ngIf="sendToSidechainFormErrors.password" class="invalid-feedback">{{sendToSidechainFormErrors.password}}
+      </div>
     </div>
     <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
   </form>
   <div>
-    <div *ngIf="walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress" class="alert alert-warning">Please note that you can only send transactions when your wallet is completely synchronised.</div>
-    <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee || walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress" (click)="send()">Send</button>
+    <div *ngIf="walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress"
+      class="alert alert-warning">Please note that you can only send transactions when your wallet is completely
+      synchronised.</div>
+    <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200"
+      [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee || walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress"
+      (click)="send()">Send</button>
     <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
-      <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
         <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="anim" fill-rule="nonzero">
             <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
