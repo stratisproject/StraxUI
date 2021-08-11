@@ -4,17 +4,25 @@
       <div>
         <div class="alert alert-warning py-1" [innerHTML]="explanatoryText"></div>
         <div class="form-group clearfix">
-          <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="interoperabilityFormErrors.tacAgreed" [class.is-valid]="!interoperabilityFormErrors.tacAgreed && interoperabilityForm.get('tacAgreed').valid"
+          <input type="checkbox" class="form control form-control-success text-left"
+            [class.is-invalid]="interoperabilityFormErrors.tacAgreed"
+            [class.is-valid]="!interoperabilityFormErrors.tacAgreed && interoperabilityForm.get('tacAgreed').valid"
             formControlName="tacAgreed" id="tacAgreed">
-            I understand that a fee will be deducted from wSTRAX received. A fee upwards of $250 should be expected and will vary based on the volatility of the Ethereum gasPrice. Please check the box to accept this fee and responsibility for any funds lost.          <div *ngIf="interoperabilityFormErrors.tacAgreed" class="invalid-feedback">{{ interoperabilityFormErrors.tacAgreed }}</div>
+          I understand that a fee will be deducted from wSTRAX received. A fee upwards of $250 should be expected and
+          will vary based on the volatility of the Ethereum gasPrice. Please check the box to accept this fee and
+          responsibility for any funds lost. <div *ngIf="interoperabilityFormErrors.tacAgreed" class="invalid-feedback">
+            {{ interoperabilityFormErrors.tacAgreed }}</div>
         </div>
       </div>
     </div>
     <div class="form-group clearfix">
       <label for="amount">Amount</label>
       <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
-      <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.amount" [class.is-valid]="interoperabilityForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
-      <div *ngIf="interoperabilityFormErrors.amount" class="invalid-feedback">{{ interoperabilityFormErrors.amount }}</div>
+      <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.amount"
+        [class.is-valid]="interoperabilityForm.get('amount').valid" formControlName="amount"
+        placeholder="0.00 {{ coinUnit }}">
+      <div *ngIf="interoperabilityFormErrors.amount" class="invalid-feedback">{{ interoperabilityFormErrors.amount }}
+      </div>
     </div>
     <div class="form-group clearfix">
       <label for="networkSelect">Select destination network</label>
@@ -23,35 +31,49 @@
         <option *ngFor="let network of networks" [value]="network.federationAddress">{{ network.description }}</option>
         <!-- <option value="customNetwork">Custom...</option> -->
       </select>
-      <div *ngIf="interoperabilityFormErrors.networkSelect" class="invalid-feedback">{{ interoperabilityFormErrors.networkSelect }}</div>
+      <div *ngIf="interoperabilityFormErrors.networkSelect" class="invalid-feedback">{{
+        interoperabilityFormErrors.networkSelect }}</div>
     </div>
     <div class="form-group clearfix" *ngIf="interoperabilityForm.get('networkSelect').value === 'customNetwork'">
       <label for="federationAddress">Mainchain federation address</label>
-      <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.federationAddress" [class.is-valid]="interoperabilityForm.get('federationAddress').valid" formControlName="federationAddress" placeholder="Please enter the federation address here.">
-      <div *ngIf="interoperabilityFormErrors.federationAddress" class="invalid-feedback">{{ interoperabilityFormErrors.federationAddress }}</div>
+      <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.federationAddress"
+        [class.is-valid]="interoperabilityForm.get('federationAddress').valid" formControlName="federationAddress"
+        placeholder="Please enter the federation address here.">
+      <div *ngIf="interoperabilityFormErrors.federationAddress" class="invalid-feedback">{{
+        interoperabilityFormErrors.federationAddress }}</div>
     </div>
     <div class="form-group clearfix">
       <label for="destinationAddress">Destination address</label>
-      <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.destinationAddress" [class.is-valid]="interoperabilityForm.get('destinationAddress').valid" formControlName="destinationAddress" placeholder="Please enter the Ethereum destination address here.">
-      <div *ngIf="interoperabilityFormErrors.destinationAddress" class="invalid-feedback">{{ interoperabilityFormErrors.destinationAddress }}</div>
+      <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.destinationAddress"
+        [class.is-valid]="interoperabilityForm.get('destinationAddress').valid" formControlName="destinationAddress"
+        placeholder="Please enter the Ethereum destination address here.">
+      <div *ngIf="interoperabilityFormErrors.destinationAddress" class="invalid-feedback">{{
+        interoperabilityFormErrors.destinationAddress }}</div>
     </div>
     <div class="form-group clearfix">
-      <div><input type="checkbox" formControlName="changeAddressCheckbox"> Set custom change address</div>
+      <div><input type="checkbox" formControlName="changeAddressCheckbox" (click)="clearChangeAddress()"> Set custom
+        change address</div>
       <div *ngIf="interoperabilityForm.get('changeAddressCheckbox').value">
         <label for="changeAddress">Change address</label>
-        <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.changeAddress" [class.is-valid]="interoperabilityForm.get('changeAddress').valid && interoperabilityForm.get('changeAddress').value" formControlName="changeAddress" placeholder="Please enter a change address here.">
-        <div *ngIf="interoperabilityFormErrors.changeAddress" class="invalid-feedback">{{ interoperabilityFormErrors.changeAddress }}</div>
+        <input type="text" class="form-control" [class.is-invalid]="interoperabilityFormErrors.changeAddress"
+          [class.is-valid]="interoperabilityForm.get('changeAddress').valid && interoperabilityForm.get('changeAddress').value"
+          formControlName="changeAddress" placeholder="Please enter a change address here.">
+        <div *ngIf="interoperabilityFormErrors.changeAddress" class="invalid-feedback">{{
+          interoperabilityFormErrors.changeAddress }}</div>
       </div>
     </div>
     <div class="form-group clearfix">
       <ng-container *ngIf="status | async let _status">
         <label>Transaction Fee</label>
         <div *ngIf="!_status.estimating" style="height:35px">
-          <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and destination address and make sure you select a destination network to calculate the fee.</small>
-          <label *ngIf="estimatedSidechainFee" class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
+          <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and
+            destination address and make sure you select a destination network to calculate the fee.</small>
+          <label *ngIf="estimatedSidechainFee" class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }}
+            {{ coinUnit }}</label>
         </div>
         <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}" class="Loading LoadingSend">
-          <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
             <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
               <g id="anim" fill-rule="nonzero">
                 <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
@@ -68,21 +90,29 @@
       <div>
         <div class="alert alert-warning py-1" [innerHTML]="confirmationText"></div>
         <div class="alert alert-warning py-1" [innerHTML]="contractText"></div>
-        <button type="button" class="btn btn-primary right" ngxClipboard [cbContent]="ercContractAddress" (click)="onCopiedClick()">Copy contract address to clipboard</button>
+        <button type="button" class="btn btn-primary right" ngxClipboard [cbContent]="ercContractAddress"
+          (click)="onCopiedClick()">Copy contract address to clipboard</button>
       </div>
     </div>
     <div class="form-group clearfix">
       <label for="walletPassword">Wallet Password</label>
-      <input type="password" class="form-control" [class.is-invalid]="interoperabilityFormErrors.password" formControlName="password" placeholder="Please enter your wallet password.">
-      <div *ngIf="interoperabilityFormErrors.password" class="invalid-feedback">{{interoperabilityFormErrors.password}}</div>
+      <input type="password" class="form-control" [class.is-invalid]="interoperabilityFormErrors.password"
+        formControlName="password" placeholder="Please enter your wallet password.">
+      <div *ngIf="interoperabilityFormErrors.password" class="invalid-feedback">{{interoperabilityFormErrors.password}}
+      </div>
     </div>
     <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
   </form>
   <div>
-    <div *ngIf="walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress" class="alert alert-warning">Please note that you can only send transactions when your wallet is completely synchronised.</div>
-    <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200" [disabled]="!interoperabilityForm.valid || isSending || !estimatedSidechainFee || walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress" (click)="send()">Send</button>
+    <div *ngIf="walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress"
+      class="alert alert-warning">Please note that you can only send transactions when your wallet is completely
+      synchronised.</div>
+    <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200"
+      [disabled]="!interoperabilityForm.valid || isSending || !estimatedSidechainFee || walletService.isSyncing || walletService.ibdMode || walletService.rescanInProgress"
+      (click)="send()">Send</button>
     <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
-      <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
         <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="anim" fill-rule="nonzero">
             <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>

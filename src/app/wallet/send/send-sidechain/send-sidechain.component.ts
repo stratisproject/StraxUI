@@ -31,11 +31,11 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
   @Input() address: string;
 
   constructor(private fb: FormBuilder,
-              private globalService: GlobalService,
-              public walletService: WalletService,
-              private addressBookService: AddressBookService,
-              private taskBarService: TaskBarService,
-              private activatedRoute: ActivatedRoute) {
+    private globalService: GlobalService,
+    public walletService: WalletService,
+    private addressBookService: AddressBookService,
+    private taskBarService: TaskBarService,
+    private activatedRoute: ActivatedRoute) {
     this.sendToSidechainForm = this.buildSendToSidechainForm(fb);
 
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(500))
@@ -51,7 +51,7 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
   public estimatedSidechainFee = 0;
   public confirmationText: string;
   public contact: AddressLabel;
-  public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
+  public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({ estimating: false });
   public coinUnit: string;
   public apiError: string;
   public isSending = false;
@@ -71,7 +71,7 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
     }
 
     if (this.address) {
-      this.sendToSidechainForm.patchValue({'address': this.address});
+      this.sendToSidechainForm.patchValue({ 'address': this.address });
     }
 
     this.getWalletBalance();
@@ -99,9 +99,9 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
 
   private networkSelectChanged(): void {
     if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value !== 'customNetwork') {
-      this.sendToSidechainForm.patchValue({'federationAddress': this.sendToSidechainForm.get('networkSelect').value});
+      this.sendToSidechainForm.patchValue({ 'federationAddress': this.sendToSidechainForm.get('networkSelect').value });
     } else if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value === 'customNetwork') {
-      this.sendToSidechainForm.patchValue({'federationAddress': ''});
+      this.sendToSidechainForm.patchValue({ 'federationAddress': '' });
     }
   }
 
@@ -124,24 +124,24 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
     if (!transaction.equals(this.last)) {
       this.last = transaction;
       const progressDelay = setTimeout(() =>
-        this.status.next({estimating: true}), 100);
+        this.status.next({ estimating: true }), 100);
 
       this.walletService.estimateFee(transaction).toPromise()
         .then(response => {
           this.estimatedSidechainFee = response;
           this.last.response = response;
           clearTimeout(progressDelay);
-          this.status.next({estimating: false});
+          this.status.next({ estimating: false });
         },
-              error => {
-                clearTimeout(progressDelay);
-                this.status.next({estimating: false});
-                this.apiError = error.error.errors[0].message;
-                if (this.apiError == 'Invalid address') {
-                  this.sendToSidechainFormErrors.destinationAddress = this.apiError;
-                  this.last.error = this.apiError;
-                }
-              }
+          error => {
+            clearTimeout(progressDelay);
+            this.status.next({ estimating: false });
+            this.apiError = error.error.errors[0].message;
+            if (this.apiError == 'Invalid address') {
+              this.sendToSidechainFormErrors.destinationAddress = this.apiError;
+              this.last.error = this.apiError;
+            }
+          }
         );
     } else if (transaction.equals(this.last) && !this.status.value.estimating) {
       // Use the cached value
@@ -192,7 +192,7 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
       hasCustomChangeAddress: this.hasCustomChangeAddress,
       hasOpReturn: transactionResponse.isSideChain,
       destinationAddress: this.sendToSidechainForm.get('destinationAddress').value.trim()
-    }, {taskBarWidth: '600px'}).then(ref => {
+    }, { taskBarWidth: '600px' }).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
     });
   }
@@ -218,6 +218,11 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
     this.sendToSidechainForm.controls.address.setValue('');
   }
 
+  public clearChangeAddress(): void {
+    if (this.sendToSidechainForm.get('changeAddressCheckbox').value == false)
+      this.sendToSidechainForm.controls.changeAddress.setValue('');
+  }
+
   private resetSendToSidechainForm(): void {
     this.sendToSidechainForm.reset();
     this.sendToSidechainForm.get('networkSelect').patchValue('');
@@ -226,20 +231,30 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
   }
 
   private buildSendToSidechainForm(fb: FormBuilder): FormGroup {
+
+    var changeAddressStraxPattern = Validators.compose([Validators.pattern(/^X[1-9A-Za-z][^OIl]{26,40}/)]);
+    var destinationAddressCirrusPattern = Validators.compose([Validators.required, Validators.pattern(/^C[1-9A-Za-z][^OIl]{26,40}/)]);
+
+    this.testnetEnabled = this.globalService.getTestnetEnabled();
+    if (this.testnetEnabled) {
+      changeAddressStraxPattern = Validators.compose([Validators.pattern(/^q[1-9A-Za-z][^OIl]{26,40}/)]);
+      destinationAddressCirrusPattern = Validators.compose([Validators.required, Validators.pattern(/^t[1-9A-Za-z][^OIl]{26,40}/)]);
+    }
+
     return fb.group({
       // eslint-disable-next-line @typescript-eslint/unbound-method
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       networkSelect: ['', Validators.compose([Validators.required])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      destinationAddress: ['', Validators.compose([Validators.required, Validators.pattern(/^C[1-9A-Za-z][^OIl]{20,40}/)])],
+      destinationAddress: ['', destinationAddressCirrusPattern],
       changeAddressCheckbox: [false],
-      changeAddress: ['', Validators.compose([Validators.pattern(/^C[1-9A-Za-z][^OIl]{20,40}/)])],
+      changeAddress: ['', changeAddressStraxPattern],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required,
-        Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
-        Validators.min(1),
-        (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedSidechainFee)(control)])],
+      Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
+      Validators.min(1),
+      (control: AbstractControl) => Validators.max(this.spendableBalance - this.estimatedSidechainFee)(control)])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       fee: ['medium', Validators.required],
       // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -248,11 +263,11 @@ export class SendSidechainComponent implements OnInit, OnDestroy {
   }
 
   public stratisNetworks: Network[] = [
-    { destinationName: 'Cirrus', federationAddress: 'yU2jNwiac7XF8rQvSk2bgibmwsNLkkhsHV', description: 'Cirrus Sidechain'}
+    { destinationName: 'Cirrus', federationAddress: 'yU2jNwiac7XF8rQvSk2bgibmwsNLkkhsHV', description: 'Cirrus Sidechain' }
   ];
 
   public stratisTestNetworks: Network[] = [
-    { destinationName: 'CirrusTest', federationAddress: 'tGWegFbA6e6QKZP7Pe3g16kFVXMghbSfY8', description: 'Cirrus Test Sidechain'}
+    { destinationName: 'CirrusTest', federationAddress: 'tGWegFbA6e6QKZP7Pe3g16kFVXMghbSfY8', description: 'Cirrus Test Sidechain' }
   ];
 
   public sendToSidechainValidationMessages = {

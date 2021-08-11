@@ -50,7 +50,7 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public interoperabilityFormErrors: any = {};
   private last: FeeEstimation = null;
-  private minimumInteroperabilityAmount = 250;
+  private minimumInteroperabilityAmount = 1000;
 
   constructor(private fb: FormBuilder,
     private globalService: GlobalService,
@@ -233,6 +233,11 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
     this.interoperabilityForm.controls.address.setValue('');
   }
 
+  public clearChangeAddress(): void {
+    if (this.interoperabilityForm.get('changeAddressCheckbox').value == false)
+      this.interoperabilityForm.controls.changeAddress.setValue('');
+  }
+
   public onCopiedClick(): void {
     this.snackbarService.add({
       msg: `ERC-20 contract address has been copied to your clipboard`,
@@ -251,19 +256,25 @@ export class SendInteroperabilityComponent implements OnInit, OnDestroy {
   }
 
   public buildInteroperabilityForm(fb: FormBuilder): FormGroup {
+
+    var changeAddressStraxPattern = Validators.compose([Validators.pattern(/^X[1-9A-Za-z][^OIl]{26,40}/)]);
+
+    this.testnetEnabled = this.globalService.getTestnetEnabled();
+    if (this.testnetEnabled) {
+      changeAddressStraxPattern = Validators.compose([Validators.pattern(/^q[1-9A-Za-z][^OIl]{26,40}/)]);
+    }
+
     return fb.group({
       // eslint-disable-next-line @typescript-eslint/unbound-method
       tacAgreed: ['', Validators.requiredTrue],
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      federationAddress: ['', Validators.compose([Validators.required, Validators.pattern(/^y[1-9A-Za-z][^OIl]{20,40}/)])],
+      federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       networkSelect: ['', Validators.compose([Validators.required])],
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      destinationAddress: ['', Validators.compose([
-        Validators.pattern(/^0x([A-Fa-f0-9]{40})$/),
-        Validators.required])],
+      destinationAddress: ['', Validators.compose([Validators.pattern(/^0x([A-Fa-f0-9]{40})$/), Validators.required])],
       changeAddressCheckbox: [false],
-      changeAddress: ['', Validators.compose([Validators.pattern(/^X[1-9A-Za-z][^OIl]{20,40}/)])],
+      changeAddress: ['', changeAddressStraxPattern],
       // eslint-disable-next-line @typescript-eslint/unbound-method
       amount: ['', Validators.compose([Validators.required,
       Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
