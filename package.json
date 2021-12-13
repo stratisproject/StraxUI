@@ -51,6 +51,8 @@
   },
   "dependencies": {
     "@aspnet/signalr": "1.1.4",
+	
+	
     "electron-context-menu": "2.3.0",
     "@electron/remote": "1.0.4",
     "minimist": "1.2.5",
@@ -77,7 +79,7 @@
     "@angular/platform-browser": "11.2.9",
     "@angular/platform-browser-dynamic": "11.2.9",
     "@angular/router": "11.2.9",
-    "@ng-bootstrap/ng-bootstrap": "8.0.0",
+    "@ng-bootstrap/ng-bootstrap": "9.0.2",
     "@ngx-translate/core": "13.0.0",
     "@ngx-translate/http-loader": "6.0.0",
     "@types/jasmine": "3.6.9",
@@ -104,8 +106,9 @@
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.5.4",
     "mocha": "8.3.2",
+    "node-sass": "5.0.0",	
     "ngx-bootstrap": "6.2.0",
-    "ngx-clipboard": "14.0.1",
+    "ngx-clipboard": "14.0.2",
     "npm-run-all": "4.1.5",
     "rxjs": "6.6.7",
     "spectron": "14.0.0",
