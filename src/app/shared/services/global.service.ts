@@ -16,7 +16,7 @@ export class GlobalService {
     this.setDaemonIP();
   }
 
-  private applicationVersion = '1.4.1';
+  private applicationVersion = '1.5.0';
   private gitCommit = "";
   private testnet = false;
   private mainApiPort = 17103;
