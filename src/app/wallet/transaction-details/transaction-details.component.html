@@ -50,7 +50,8 @@
   </ul>
   <ul class="list-inline row">
     <li class="list-inline-item col blockLabel">Transaction ID</li>
-    <li class="list-inline-item col-8 blockTextSmall">{{ transaction.transactionId }}</li>
+
+    <li class="list-inline-item col-8 blockTextSmall text-primary" (click)="openTransactionId(transactionIdURL)" style="cursor: pointer;"><u>{{ transaction.transactionId }}</u></li>
   </ul>
   <ul class="list-inline row">
     <li class="list-inline-item col-12 right">

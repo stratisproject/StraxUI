@@ -16,7 +16,13 @@ import { ApiService } from '@shared/services/api.service';
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private globalService: GlobalService, private apiService: ApiService, private titleService: Title, private electronService: ElectronService, private nodeService: NodeService) {
+  constructor(
+    private router: Router, 
+    private globalService: GlobalService, 
+    private apiService: ApiService, 
+    private titleService: Title, 
+    private electronService: ElectronService, 
+    private nodeService: NodeService) {
   }
 
   public fullNodeEvent: Observable<FullNodeEventModel>;

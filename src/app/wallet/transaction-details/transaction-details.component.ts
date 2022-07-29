@@ -7,6 +7,7 @@ import { tap } from 'rxjs/operators';
 import { SnackbarService } from 'ngx-snackbar';
 import { AddNewAddressComponent } from '../address-book/add-new-address/add-new-address.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ElectronService } from '@shared/services/electron.service';
 
 @Component({
   selector: 'transaction-details',
@@ -19,6 +20,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private snackbarService: SnackbarService,
     private nodeService: NodeService,
+    private electronService: ElectronService, 
     private globalService: GlobalService,
     private modalService: NgbModal) {
   }
@@ -27,9 +29,16 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   public confirmations: number;
   private generalWalletInfoSubscription: Subscription;
   private lastBlockSyncedHeight: number;
+  public transactionIdURL : string;
 
   public ngOnInit(): void {
     this.coinUnit = this.globalService.getCoinUnit();
+    
+    if(this.globalService.getTestnetEnabled())
+      this.transactionIdURL = "https://chainz.cryptoid.info/strax-test/tx.dws?" + this.transaction.transactionId + ".htm";
+    else
+      this.transactionIdURL = "https://chainz.cryptoid.info/strax/tx.dws?" + this.transaction.transactionId + ".htm";
+
     this.subscribeToGeneralWalletInfo();
   }
 
@@ -78,5 +87,9 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     const addressLabel = this.modalService.open(AddNewAddressComponent,
                                                 {backdrop: 'static'}).componentInstance;
     addressLabel.addressForm.controls.address.setValue(address.split(' ')[0]);
+  }
+
+  public openTransactionId(url: string): void {
+    this.electronService.shell.openExternal(url);
   }
 }
