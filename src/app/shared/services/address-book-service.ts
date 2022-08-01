@@ -12,6 +12,7 @@ import { LoggerService } from './logger.service';
   providedIn: 'root'
 })
 export class AddressBookService extends RestApi {
+  private contactsList : any;
   private contactsSubject = new BehaviorSubject<AddressLabel[]>([]);
   public loading = new BehaviorSubject<boolean>(false);
 
@@ -20,7 +21,7 @@ export class AddressBookService extends RestApi {
               errorService: ErrorService,
               loggerService: LoggerService) {
     super(globalService, httpClient, errorService, loggerService);
-    this.getContacts();
+    
   }
 
   public findContactByAddress(address: string): AddressLabel {
@@ -28,6 +29,8 @@ export class AddressBookService extends RestApi {
   }
 
   public get contacts(): Observable<AddressLabel[]> {
+    this.getContacts();
+    
     return this.contactsSubject.asObservable();
   }
 
@@ -38,7 +41,8 @@ export class AddressBookService extends RestApi {
   private getContacts(): void {
     this.loading.next(true);
     this.get<any>('addressBook').toPromise().then(result => {
-      this.contactsSubject.next(result.addresses);
+      this.contactsList = result.addresses;
+      this.contactsSubject.next(this.contactsList);
       this.loading.next(false);
     });
   }
