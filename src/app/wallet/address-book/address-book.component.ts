@@ -28,7 +28,7 @@ export class AddressBookComponent implements OnInit {
   }
 
   private getAddressBookAddresses(): void {
-    this.addresses = this.addressBookService.contacts;
+      this.addresses = this.addressBookService.contacts;
   }
 
   public sendClicked(address: AddressLabel): void {
