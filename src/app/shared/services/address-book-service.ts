@@ -29,9 +29,8 @@ export class AddressBookService extends RestApi {
   }
 
   public get contacts(): Observable<AddressLabel[]> {
-    if(this.contactsList == null)
-      this.getContacts();
-  
+    this.getContacts();
+    
     return this.contactsSubject.asObservable();
   }
 
