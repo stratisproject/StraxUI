@@ -1,7 +1,7 @@
 {
   "name": "straxui",
   "description": "STRAX Wallet",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "author": {
     "name": "Stratis Group Ltd.",
     "email": "support@stratisplatform.com"
@@ -51,8 +51,6 @@
   },
   "dependencies": {
     "@aspnet/signalr": "1.1.4",
-	
-	
     "electron-context-menu": "2.3.0",
     "@electron/remote": "1.0.4",
     "minimist": "1.2.5",
@@ -106,7 +104,7 @@
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.5.4",
     "mocha": "8.3.2",
-    "node-sass": "5.0.0",	
+    "node-sass": "5.0.0",
     "ngx-bootstrap": "6.2.0",
     "ngx-clipboard": "14.0.2",
     "npm-run-all": "4.1.5",
