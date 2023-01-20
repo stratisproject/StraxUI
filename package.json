@@ -94,7 +94,7 @@
     "core-js": "3.8.1",
     "electron": "12.0.2",
     "electron-builder": "22.10.5",
-    "electron-reload": "1.5.1",
+    "electron-reload": "1.5.0",
     "eslint": "7.24.0",
     "eslint-plugin-import": "2.22.1",
     "git-describe": "4.0.4",
