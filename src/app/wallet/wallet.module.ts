@@ -39,6 +39,7 @@ import { SendDefaultComponent } from './send/send-default/send-default.component
 import { SendSidechainComponent } from './send/send-sidechain/send-sidechain.component';
 import { SendInteroperabilityComponent } from './send/send-interoperability/send-interoperability.component';
 import { RemoveWalletComponent } from './advanced/components/remove-wallet/remove-wallet.component';
+import { VoteComponent } from './vote/vote.component';
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import { RemoveWalletComponent } from './advanced/components/remove-wallet/remov
     SendDefaultComponent,
     SendSidechainComponent,
     SendInteroperabilityComponent,
-    RemoveWalletComponent
+    RemoveWalletComponent,
+    VoteComponent
   ],
   providers: [
     AccountSidebarItem,
@@ -111,6 +113,9 @@ export class WalletModule {
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
+
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Vote', '/wallet/vote', ['side-bar-item-vote']));
 
     sidebarItems.setSelected({
       route : '/wallet/dashboard'
