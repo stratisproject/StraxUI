@@ -5,8 +5,8 @@
     </div>
     <div *ngIf="hasVoted; else notVotedTemplate">
       You have successfully voted for supporting StratisEVM.
-      <div *ngIf="voteResult === Yes">You choose to support our StratisEVM.</div>
-      <div *ngIf="voteResult === No">You choose not to support our StratisEVM.</div>
+      <div *ngIf="voteResult === 'Yes'">You choose to support our StratisEVM.</div>
+      <div *ngIf="voteResult === 'No'">You choose not to support our StratisEVM.</div>
     </div>
     <ng-template #notVotedTemplate>
       <div *ngIf="!noBalance; else noBalanceTemplate">

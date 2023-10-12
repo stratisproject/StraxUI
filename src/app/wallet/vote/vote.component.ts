@@ -50,7 +50,7 @@ export class VoteComponent implements OnInit, OnDestroy {
   }
 
   private getMaximumAmount(): void {
-    this.walletInfoRequest = new WalletInfoRequest(this.globalService.getWalletName(), 0, "low");
+    this.walletInfoRequest = new WalletInfoRequest(this.globalService.getWalletName(), "account 0", "low");
     this.maximumBalanceSubscription = this.apiService.getMaximumBalance(this.walletInfoRequest)
       .subscribe(
         response => {
