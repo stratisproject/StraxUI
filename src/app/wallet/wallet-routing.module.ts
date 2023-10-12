@@ -13,6 +13,7 @@ import { SendComponent } from './send/send.component';
 import { StakingComponent } from './staking/staking.component';
 import { ColdStakingComponent } from './cold-staking/cold-staking.component';
 import { AuthenticationGuard } from '@shared/guards/auth.guard';
+import { VoteComponent } from './vote/vote.component';
 
 const routes: Routes = [
   {
@@ -34,7 +35,8 @@ const routes: Routes = [
           {path: 'resync', component: ResyncComponent, canActivate: [AuthenticationGuard]}
         ]
       },
-      {path: 'address-book', component: AddressBookComponent, canActivate: [AuthenticationGuard]}
+      {path: 'address-book', component: AddressBookComponent, canActivate: [AuthenticationGuard]},
+      {path: 'vote', component: VoteComponent, canActivate: [AuthenticationGuard]}
     ]
   },
 ];

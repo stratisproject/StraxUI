@@ -24,6 +24,7 @@ import { AddressBookService } from '@shared/services/address-book-service';
 import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
 import { ExtPubKeyImport } from '@shared/models/extpubkey-import';
 import { LoggerService } from '@shared/services/logger.service';
+import { VoteRequest } from '@shared/models/vote-request';
 
 @Injectable({
   providedIn: 'root'
@@ -186,7 +187,7 @@ export class WalletService extends RestApi {
 
   public getHistory(): void {
     this.loadingSubject.next(true);
-  
+
      let extra = Object.assign({}, {
       skip: 0,
       take: 1000
@@ -258,7 +259,7 @@ export class WalletService extends RestApi {
       return this.buildAndSendTransaction(transaction).toPromise();
   }
 
-  public sendInterFluxTransaction(transaction: InterFluxTransaction): Promise<InterFluxTransactionResponse> {    
+  public sendInterFluxTransaction(transaction: InterFluxTransaction): Promise<InterFluxTransactionResponse> {
       return this.buildAndSendInterFluxTransaction(transaction).toPromise();
   }
 
@@ -267,6 +268,12 @@ export class WalletService extends RestApi {
       .pipe(map(result => {
         return result.transactionCount as number;
       }), catchError(err => this.handleHttpError(err)));
+  }
+
+  public vote(voteRequest: VoteRequest): Observable<string> {
+    return this.post('wallet/vote', voteRequest).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
   private buildAndSendTransaction(transaction: Transaction | OpreturnTransaction): Observable<TransactionResponse> {
