@@ -21,7 +21,7 @@ export class VoteComponent implements OnInit, OnDestroy {
   public noBalance: boolean;
   public isVoting = false;
   public hasVoted = false;
-  public voteResult: string;
+  public voteResult = '';
   private walletInfoRequest: WalletInfoRequest;
   public maxAmount: number;
   public fee: number;
@@ -36,12 +36,13 @@ export class VoteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (localStorage.getItem('hasVoted') === "true") {
-      this.hasVoted = true;
-      this.voteResult = localStorage.getItem('voteResult') ?? '';
-    } else {
-      this.hasVoted = false;
-    }
+    // TODO: revert this if we want to prevent multi-vote
+    // if (localStorage.getItem('hasVoted') === "true") {
+    //   this.hasVoted = true;
+    //   this.voteResult = localStorage.getItem('voteResult') ?? '';
+    // } else {
+    //   this.hasVoted = false;
+    // }
     this.getMaximumAmount();
   }
 
@@ -76,20 +77,20 @@ export class VoteComponent implements OnInit, OnDestroy {
       voteToBoolean = false;
     }
 
-    let voteRequest = new VoteRequest(this.globalService.getWalletName(), this.voteForm.get('walletPassword').value, voteToBoolean)
+    const voteRequest = new VoteRequest(this.globalService.getWalletName(), this.voteForm.get('walletPassword').value, voteToBoolean)
 
     this.isVoting = true;
     this.walletService.vote(voteRequest).toPromise()
       .then(transactionResponse => {
-        this.isVoting=false;
-        this.hasVoted=true;
+        this.isVoting = false;
+        this.hasVoted = true;
         localStorage.setItem('hasVoted', "true");
-        localStorage.setItem('voteResult', this.voteForm.get('vote').value)
+        localStorage.setItem('voteResult', this.voteForm.get('vote').value);
       }).catch(error => {
         this.isVoting = false;
-        this.hasVoted=false;
+        this.hasVoted = false;
         this.apiError = error.error.errors[0].message;
-    })
+      });
   }
 
   private buildVoteForm(): void {
