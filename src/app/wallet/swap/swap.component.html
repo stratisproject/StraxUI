@@ -21,7 +21,7 @@
           </div>
           <div class="form-group col-12" *ngIf="maxAmount && fee && maxAmount > 0">
             <div class="row">
-                <div class='col-3 blockLabel'>Total balance to swap:</div>
+                <div class='col-3 blockLabel'>Amount to swap:</div>
                 <div class='col-4 blockText'>{{ maxAmount | coinNotation }} {{ globalService.coinUnit }}</div>
             </div>
             <div class="row">
@@ -39,7 +39,7 @@
             <div class="form-group col-12">
               <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="formErrors.exchangeAgreed" [class.is-valid]="!formErrors.exchangeAgreed && swapForm.get('exchangeAgreed').valid"
                 formControlName="exchangeAgreed" id="exchangeAgreed">
-                By completing the above fields and selecting the 'SWAP' button, you consent to us exchanging your STRAX Tokens for StrarisEVM Tokens and acknowledge that you will lose your right to cancel the Token Swap.
+                By completing the above fields and selecting the 'SWAP' button, you consent to us exchanging your STRAX Tokens for StratisEVM Tokens and acknowledge that you will lose your right to cancel the Token Swap.
               <div *ngIf="formErrors.exchangeAgreed" class="invalid-feedback">{{ formErrors.exchangeAgreed }}</div>
             </div>
             <div class="form-group col-12">

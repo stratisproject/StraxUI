@@ -124,6 +124,8 @@ export class SwapComponent implements OnInit, OnDestroy {
 
     this.formValueChanges$ = this.swapForm.valueChanges
       .subscribe(() => this.onValueChanged());
+
+    this.getMaximumAmount();
   }
 
   onValueChanged(): void {
@@ -167,10 +169,10 @@ export class SwapComponent implements OnInit, OnDestroy {
       required: 'You must agree to the terms and conditions.'
     },
     burnAgreed: {
-      required: 'You must confirm that your STRATIS Legacy Tokens will be irreversibly destroyed.'
+      required: 'You must confirm that your STRAX Tokens will be irreversibly destroyed.'
     },
     exchangeAgreed: {
-      required: 'You must confirm your consent for us to exchange your STRATIS Legacy Tokens and acknowledge your right to cancel will be lost.'
+      required: 'You must confirm your consent for us to exchange your STRAX Tokens and acknowledge your right to cancel will be lost.'
     }
   };
 
