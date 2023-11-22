@@ -1539,6 +1539,10 @@ app-side-bar {
       content: "\e810";
     }
 
+    .side-bar-item-swap:before {
+      content: "\e862";
+    }
+
     .side-bar-item-vote:before {
       content: "\e872";
     }

@@ -14,6 +14,7 @@ import { StakingComponent } from './staking/staking.component';
 import { ColdStakingComponent } from './cold-staking/cold-staking.component';
 import { AuthenticationGuard } from '@shared/guards/auth.guard';
 import { VoteComponent } from './vote/vote.component';
+import { SwapComponent } from './swap/swap.component';
 
 const routes: Routes = [
   {
@@ -36,7 +37,8 @@ const routes: Routes = [
         ]
       },
       {path: 'address-book', component: AddressBookComponent, canActivate: [AuthenticationGuard]},
-      {path: 'vote', component: VoteComponent, canActivate: [AuthenticationGuard]}
+      {path: 'vote', component: VoteComponent, canActivate: [AuthenticationGuard]},
+      {path: 'swap', component: SwapComponent, canActivate: [AuthenticationGuard]},
     ]
   },
 ];
