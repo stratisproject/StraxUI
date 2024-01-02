@@ -78,7 +78,7 @@ export class SwapComponent implements OnInit, OnDestroy {
   }
 
   public openTerms(): void {
-    this.electronService.shell.openExternal('https://www.stratisplatform.com/wp-content/uploads/2020/10/Strax-Token-Swap-Terms-and-Conditions.pdf');
+    this.electronService.shell.openExternal('https://www.stratisplatform.com/wp-content/uploads/2024/01/STRAT-TokenSwap-Terms.pdf');
   }
 
   private getTransaction(): OpreturnTransaction {
