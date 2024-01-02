@@ -40,6 +40,8 @@ import { SendSidechainComponent } from './send/send-sidechain/send-sidechain.com
 import { SendInteroperabilityComponent } from './send/send-interoperability/send-interoperability.component';
 import { RemoveWalletComponent } from './advanced/components/remove-wallet/remove-wallet.component';
 import { VoteComponent } from './vote/vote.component';
+import { SwapComponent } from './swap/swap.component';
+import { SwapConfirmationComponent } from './swap/swap-confirmation/swap-confirmation.component';
 
 @NgModule({
   imports: [
@@ -78,7 +80,9 @@ import { VoteComponent } from './vote/vote.component';
     SendSidechainComponent,
     SendInteroperabilityComponent,
     RemoveWalletComponent,
-    VoteComponent
+    VoteComponent,
+    SwapComponent,
+    SwapConfirmationComponent
   ],
   providers: [
     AccountSidebarItem,
@@ -114,8 +118,12 @@ export class WalletModule {
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
 
+    // TODO: check if vote is still needed
+    // sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+    //   'Vote', '/wallet/vote', ['side-bar-item-vote']));
+
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-      'Vote', '/wallet/vote', ['side-bar-item-vote']));
+      'Token Swap', '/wallet/swap', ['side-bar-item-swap']));
 
     sidebarItems.setSelected({
       route : '/wallet/dashboard'
